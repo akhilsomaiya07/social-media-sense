@@ -90,29 +90,18 @@ footer{color:#c1cee1}
 .sleep-shield>h3{margin-top:0}.sleep-shield .shield-short-summary{margin-top:8px}.sleep-shield .shield-timeline{padding:8px 12px}.sleep-shield .shield-timeline p{margin:5px 0}.sleep-shield .shield-disclosure{margin-top:10px;border-top:1px solid #526f76;padding-top:8px}.sleep-shield .shield-disclosure>summary{font-size:13px;min-height:36px;display:list-item;line-height:1.5;color:#d9e6e6}.sleep-shield .shield-completed-row{border-bottom:1px solid #526f76;padding:10px 0}.sleep-shield .shield-night h4{margin-top:4px}.sleep-shield .shield-night button+button{margin-left:8px}.sleep-shield #shield-track{margin-top:4px}.sleep-shield .goal-note:empty{display:none}
 
 
-/* Step 2 research reference points: educational context, not a health score. */
-.usage-reference{margin:0 0 20px;padding:17px 16px;border:1px solid #d7e1e2;border-radius:12px;background:#f8fbfa;color:#173d40}
-.usage-reference-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
-.usage-reference-kicker{display:block;font-size:10px;font-weight:750;letter-spacing:1.4px;color:#607477;margin-bottom:4px}
-.usage-reference h3{margin:0;font-size:16px;line-height:1.35;letter-spacing:-.2px}
-.usage-reference-current{flex-shrink:0;font-size:22px;line-height:1;color:#173f41;font-variant-numeric:tabular-nums}
-.usage-reference-scale{position:relative;height:74px;margin:18px 2px 4px}
-.usage-reference-track{position:absolute;left:0;right:0;top:16px;height:7px;border-radius:999px;background:#dfe7e7}
-#usage-reference-fill{display:block;height:100%;width:0;border-radius:999px;background:#6c8f90;transition:width .2s ease}
-.usage-reference-marker{position:absolute;top:-5px;width:2px;height:17px;background:#365f61;border-radius:2px}
-.marker-30{left:12.5%}.marker-2h{left:50%}.marker-3h{left:75%}
-.usage-reference-user{position:absolute;top:-6px;width:18px;height:18px;border-radius:50%;background:#173f41;border:3px solid #fff;box-shadow:0 1px 5px rgba(23,63,65,.24);transform:translateX(-50%);left:0;transition:left .2s ease}
-.usage-reference-label{position:absolute;top:34px;font-size:11px;font-weight:700;color:#36595b;transform:translateX(-50%);white-space:nowrap;text-align:center}
-.usage-reference-label small{display:block;font-size:9px;font-weight:500;color:#718487;margin-top:2px}
-.label-30{left:12.5%}.label-2h{left:50%}.label-3h{left:75%}.label-end{right:0;transform:none}
-.usage-reference-message{margin:10px 0 5px;font-size:13px;font-weight:600;line-height:1.55;color:#294f51}
-.usage-reference-note{margin:0;font-size:11px;line-height:1.55;color:#667b7e}
-.usage-reference-details{margin-top:12px;color:#445f62}
-.usage-reference-details summary{font-size:12px;font-weight:650;color:#294f51}
-.usage-reference-details p{font-size:12px;line-height:1.6;color:#566c70}
-.usage-reference-details a{color:#1b5557;font-weight:650}
-.usage-reference.above-2h{border-color:#e0c98e;background:#fffaf0}
-.usage-reference.above-3h{border-color:#d6b8a6;background:#fff8f4}
-@media(max-width:480px){.usage-reference{padding:15px 13px}.usage-reference-head{gap:10px}.usage-reference-current{font-size:20px}.usage-reference-scale{height:82px}.usage-reference-label small{max-width:74px;white-space:normal;line-height:1.15}.label-end{top:36px}}
-@media(prefers-reduced-motion:reduce){#usage-reference-fill,.usage-reference-user{transition:none!important}}
-@media(forced-colors:active){.usage-reference{background:Canvas;color:CanvasText;border-color:CanvasText}.usage-reference-track{background:CanvasText}#usage-reference-fill,.usage-reference-marker,.usage-reference-user{background:CanvasText}.usage-reference-user{border-color:Canvas}}
+/* Per-app research context markers for Step 2 sliders. */
+.platform-reference-legend{margin:0 0 10px;padding:12px 14px;border:1px solid #d7e1e2;border-radius:10px;background:#f8fbfa;color:#294f51;font-size:12px;line-height:1.55}
+.platform-reference-info{margin:0 0 18px;color:#445f62}
+.platform-reference-info summary{font-size:12px;font-weight:650;color:#294f51}
+.platform-reference-info p{font-size:12px;line-height:1.6;color:#566c70}
+.platform-reference-info a{color:#1b5557;font-weight:650}
+.platform-slider-limits{position:relative;height:30px}
+.platform-slider-limits>span:first-child{position:absolute;left:0;top:0}
+.platform-slider-limits>span:last-child{position:absolute;right:0;top:0}
+.platform-ref-marker{position:absolute;top:0;transform:translateX(-50%);font-weight:700;color:#36595b;font-variant-numeric:tabular-nums}
+.platform-ref-marker::before{content:"";position:absolute;left:50%;top:-14px;width:2px;height:10px;background:#365f61;border-radius:2px;transform:translateX(-50%)}
+.platform-ref-marker.ref-30{left:4.1667%}
+.platform-ref-marker.ref-2h{left:16.6667%}
+@media(max-width:680px){.platform-ref-marker{font-size:11px}.platform-reference-legend{font-size:11px}}
+@media(forced-colors:active){.platform-reference-legend{background:Canvas;color:CanvasText;border-color:CanvasText}.platform-ref-marker,.platform-ref-marker::before{color:CanvasText;background:CanvasText}}
