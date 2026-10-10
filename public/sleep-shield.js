@@ -9,14 +9,22 @@ function shieldComparison(nights){const complete=nights.filter(validateShieldNig
 function shieldOpportunity(result){const late=result.reasons.find(r=>r.text==='You said social media kept you up later than intended.');if(!result.reasons.length)return {heading:'Keep your current bedtime routine',text:'Your answers do not currently suggest much bedtime disruption from social media. Sleep Shield can help you maintain that routine.'};if(late)return {heading:late.frequency==='Often'?'Reduce late-night scrolling':'Protect your bedtime',text:`You reported that social media ${late.frequency.toLowerCase()} keeps you awake later than intended. Late-night social media may be one area worth reviewing.`};return {heading:result.prebed==='Never'?'Keep your current bedtime routine':'Create a screen-free wind-down',text:'You did not report social media keeping you up later than intended. You can use this plan as a practical way to protect your bedtime routine.'};}
 let shieldResearchId=0,shieldResearchAbort;
 function renderSleepShield(result){
- const root=document.getElementById('sleep-shield-content');root.replaceChildren();
+ const section=document.getElementById('sleep-shield'),root=document.getElementById('sleep-shield-content');
+ const late=result.reasons.find(r=>r.text==='You said social media kept you up later than intended.')?.frequency||'Never';
+ const prebed=['Sometimes','Often'].includes(result.prebed);
+ const sleepRelated=prebed||['Sometimes','Often'].includes(late);
+ if(!sleepRelated){section.hidden=true;root.replaceChildren();shieldResearchId++;shieldResearchAbort?.abort();return;}
+ section.hidden=false;root.replaceChildren();
  const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
  const add=(tag,text,cls,parent=root)=>{const n=el(tag,text,cls);parent.append(n);return n;};
  let stored={};try{stored=JSON.parse(localStorage.getItem(sleepShieldKey)||'{}')||{};}catch{}
  let nights=Array.from({length:7},(_,i)=>validateShieldNight(stored.nights?.[i])?stored.nights[i]:null);
  const state={window:shieldWindows.includes(stored.window)?stored.window:30,activity:['Read','Stretch','Shower','Prepare for tomorrow','Journal','Relax','Listen to calm audio','Talk with family','Breathing or relaxation','Other'].includes(stored.activity)?stored.activity:'Read',other:typeof stored.other==='string'?stored.other.slice(0,80):'',parking:['In my bed','Beside my bed','Across the room','Outside the bedroom'].includes(stored.parking)?stored.parking:''};
- const sleepMinutes=Math.round(result.sleep*60),opportunity=shieldOpportunity(result),late=result.reasons.find(r=>r.text==='You said social media kept you up later than intended.')?.frequency||'Never';
- add('p',late==='Never'?'Your answers do not currently suggest much social-media-related bedtime disruption.':`You reported ${shieldDuration(sleepMinutes)} of sleep and said social media ${late.toLowerCase()} keeps you up later than intended.`,'shield-short-summary');
+ const sleepMinutes=Math.round(result.sleep*60),opportunity=shieldOpportunity(result);
+ const intro=late!=='Never'
+  ?`You mentioned that social media ${late.toLowerCase()} keeps you up later than planned. Here’s one small experiment you can try tonight.`
+  :`You said you ${String(result.prebed).toLowerCase()} use social media during the hour before bed. Here’s one small experiment you can try tonight.`;
+ add('p',intro,'shield-short-summary');
  add('h4',"Tonight's suggestion");const startNote=add('p','');
  const timeline=add('div',undefined,'shield-timeline');timeline.setAttribute('aria-live','polite');
  function select(label,options,value,parent=root){const wrapper=add('label',label,undefined,parent),input=el('select');for(const [v,t] of options){const o=el('option',t);o.value=v;input.append(o);}input.value=value;wrapper.append(input);return input;}
