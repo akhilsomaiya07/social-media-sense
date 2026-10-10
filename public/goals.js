@@ -70,9 +70,12 @@ if(typeof document!=='undefined'){
  document.addEventListener('checkin:complete',event=>{
   if(!event.detail.assessment)return;const assessment=event.detail.assessment;
   current={id:typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+(++sequence),date:new Date().toISOString(),daily:assessment.daily,platforms:assessment.platforms.map(p=>({...p})),sleepMinutes:assessment.sleepMinutes,activityMinutes:assessment.activityMinutes,behaviors:{...assessment.behaviors},opportunity:biggestOpportunity(assessment),reductionGoal:null};
-  stale=false;saved=false;goalChosen=Number(goalSlider.value)>0;message('');loadHistory();
+  const showCutback=assessment.daily>120;
+  stale=false;saved=false;
+  if(!showCutback)goalSlider.value='0';
+  goalChosen=showCutback&&Number(goalSlider.value)>0;message('');loadHistory();
   get('opportunity-area').textContent=current.opportunity.area;get('opportunity-why').textContent=current.opportunity.explanation;get('opportunity-platform').textContent=current.opportunity.platformNote;get('opportunity-platform').hidden=!current.opportunity.platformNote;
-  for(const id of ['biggest-opportunity','cutback','goal-progress'])get(id).hidden=false;updateProjection();renderProgress();
+  get('biggest-opportunity').hidden=false;get('goal-progress').hidden=false;get('cutback').hidden=!showCutback;updateProjection();renderProgress();
  });
  goalSlider.addEventListener('input',()=>{if(current&&!stale)updateProjection(true);});
  get('checkin').addEventListener('input',()=>{if(!current)return;stale=true;updateProjection();renderProgress();message('Your answers changed. Complete the check-in again before saving.');});
