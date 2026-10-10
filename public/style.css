@@ -107,3 +107,26 @@ footer{color:#c1cee1}
 .platform-scale-end{position:absolute;right:0;top:2px;color:#566c70;font-size:12px;font-weight:500}
 @media(max-width:680px){.platform-ref-marker{font-size:11px}.platform-reference-legend{font-size:11px}}
 @media(forced-colors:active){.platform-reference-legend{background:Canvas;color:CanvasText;border-color:CanvasText}.platform-ref-marker,.platform-ref-marker::before{color:CanvasText;background:CanvasText}}
+
+
+/* Neutral, one-shot feedback at the existing research reference points. */
+.platform-ref-marker.reference-hit{color:#28464e;text-shadow:0 0 .35px currentColor;outline:1px solid #8fa6b0;outline-offset:3px;border-radius:2px}
+@media(prefers-reduced-motion:no-preference){
+ .platform-slider::-webkit-slider-thumb{transition:transform 90ms ease-out,box-shadow 90ms ease-out}
+ .platform-slider::-moz-range-thumb{transition:transform 90ms ease-out,box-shadow 90ms ease-out}
+ .platform-slider.reference-press::-webkit-slider-thumb{transform:translateY(1px) scale(.94);box-shadow:inset 0 1px 2px rgba(15,34,45,.25),0 0 2px rgba(23,63,65,.2)}
+ .platform-slider.reference-press::-moz-range-thumb{transform:translateY(1px) scale(.94);box-shadow:inset 0 1px 2px rgba(15,34,45,.25),0 0 2px rgba(23,63,65,.2)}
+ .platform-slider.reference-rebound::-webkit-slider-thumb{transform:translateY(-.4px) scale(1.025)}
+ .platform-slider.reference-rebound::-moz-range-thumb{transform:translateY(-.4px) scale(1.025)}
+ .platform-ref-marker.reference-hit{animation:reference-lift 360ms ease-out}
+ .platform-ref-marker.reference-hit::after{content:"";position:absolute;inset:-4px;border:1px solid #8fa6b0;border-radius:5px;pointer-events:none;animation:reference-ring 400ms ease-out forwards}
+}
+@keyframes reference-lift{0%,100%{translate:0 0}35%{translate:0 -1.5px}}
+@keyframes reference-ring{0%{opacity:.45;scale:.96}100%{opacity:0;scale:1.2}}
+@media(prefers-reduced-motion:reduce){
+ .platform-slider::-webkit-slider-thumb{transition:none!important;transform:none!important;animation:none!important}
+ .platform-slider::-moz-range-thumb{transition:none!important;transform:none!important;animation:none!important}
+ .platform-ref-marker.reference-hit{animation:none!important;translate:none!important}
+ .platform-ref-marker.reference-hit::after{content:none;animation:none!important}
+}
+@media(forced-colors:active){.platform-ref-marker.reference-hit{color:CanvasText;outline-color:Highlight}}
