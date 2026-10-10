@@ -30,6 +30,24 @@ function setupPlatformInputs(){
  function refresh(){
   for(const row of rows){const minutes=Number(row.slider.value),h=Math.floor(minutes/60),m=minutes%60;row.output.textContent=platformTime(minutes);row.slider.style.setProperty('--usage',`${minutes/720*100}%`);row.slider.setAttribute('aria-label',`${row.nameInput?row.nameInput.value.trim()||'Other':row.name} daily usage`);row.slider.setAttribute('aria-valuetext',`${h} hours ${m} minutes per day`);}
   const summary=platformSummary(readEntries());get('platform-total').textContent=summary.fieldsValid?`Total reported social media time: ${platformTime(summary.total)} / 24h`:'Total reported social media time: check the invalid app times.';
+  const reference=get('usage-reference');
+  if(reference){
+   const total=summary.fieldsValid?summary.total:0,age=Number(get('age')?.value),adolescent=Number.isInteger(age)&&age>=13&&age<=17,max=240;
+   get('usage-reference-current').textContent=summary.fieldsValid?platformTime(total):'—';
+   get('usage-reference-fill').style.width=`${Math.min(total,max)/max*100}%`;
+   get('usage-reference-user').style.left=`${Math.min(total,max)/max*100}%`;
+   const marker3=get('usage-reference-marker-3h'),label3=get('usage-reference-label-3h'),youthSource=get('usage-reference-youth-source');
+   marker3.hidden=label3.hidden=youthSource.hidden=!adolescent;
+   let message='Move the sliders to see how your reported time compares with research reference points.';
+   if(summary.fieldsValid&&total>0&&total<=30)message='Your reported time is at or below a 30-minute target that has been studied in some young-adult research. That does not make it a universal health limit.';
+   else if(summary.fieldsValid&&total<=120)message='Your reported time is above the 30-minute studied target. Time alone does not determine whether your social media use is harmful.';
+   else if(summary.fieldsValid&&adolescent&&total>180)message='Your reported time is above 3 hours per day. For adolescents, the U.S. Surgeon General cites research associating more than 3 hours per day with higher mental-health risk. This is an association, not a diagnosis.';
+   else if(summary.fieldsValid&&total>120)message='Your reported time is above 2 hours per day. Use this as a reflection point: consider whether social media affects sleep, activity, responsibilities, or time with other people.';
+   get('usage-reference-message').textContent=message;
+   reference.classList.toggle('above-30',summary.fieldsValid&&total>30);
+   reference.classList.toggle('above-2h',summary.fieldsValid&&total>120);
+   reference.classList.toggle('above-3h',summary.fieldsValid&&adolescent&&total>180);
+  }
   const over=summary.fieldsValid&&summary.total>1440,near=summary.fieldsValid&&summary.total>=1200&&!over;
   get('platform-total-wrap').classList.toggle('near-limit',near);get('platform-total-wrap').classList.toggle('over-limit',over);
   get('platform-limit-status').hidden=!near;get('platform-limit-status').textContent=summary.total===1440?'At the 24-hour daily limit.':'Approaching the 24-hour daily limit.';
@@ -41,7 +59,7 @@ function setupPlatformInputs(){
   const summary=platformSummary(entries);if(!summary.fieldsValid)throw new Error(Object.values(summary.errors).join(' '));
   reset();for(const entry of entries){let row=rows.find(r=>!r.nameInput&&r.name===entry.name);if(!row){row=rows.find(r=>r.nameInput&&!r.nameInput.value&&r.slider.value==='0');if(!row){addRow(entry.name||'Other',true);row=rows.at(-1);}row.nameInput.value=entry.name||'Other';}row.slider.value=String(Number(entry.hours)*60+Number(entry.minutes));}refresh();
  }
- list.addEventListener('input',refresh);get('add-platform').addEventListener('click',()=>{const nameInput=addRow('Other',true);refresh();nameInput.focus();});
+ list.addEventListener('input',refresh);get('age')?.addEventListener('input',refresh);get('add-platform').addEventListener('click',()=>{const nameInput=addRow('Other',true);refresh();nameInput.focus();});
  reset();refresh();return {readEntries,setEntries};
 }
 if(typeof module!=='undefined')module.exports={platformSummary,socialPlatforms,platformTime};
