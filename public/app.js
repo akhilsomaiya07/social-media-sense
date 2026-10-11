@@ -90,6 +90,7 @@ if(typeof document!=='undefined'){
   const reference=sleepReference(data.age),sleepTime=routineTime(data,'sleep');
   $('sleep-age-reference').hidden=!reference;
   $('sleep-age-guidance').textContent=reference?.guidance||'';
+  $('sleep-age-scope').textContent=reference?.group==='Teen'?'This reference covers total sleep over 24 hours. This check-in asks about nighttime sleep only, so daytime naps may also matter.':'';
   const context=Object.keys(sleepTime.errors).length?null:sleepContext(data.age,sleepTime.total);
   $('sleep-age-feedback').textContent=context?.text||'';
   for(const prefix of ['sleep','activity']){const time=routineTime(data,prefix);$(prefix+'-selected').textContent=Object.keys(time.errors).length?'Enter valid hours and minutes to see your total.':duration(time.total)+(prefix==='sleep'?' per night':' of physical activity per day');}
