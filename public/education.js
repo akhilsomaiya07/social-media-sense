@@ -67,7 +67,12 @@ function showHealthFallback(result){
  };
  for(const [kind,items] of Object.entries(verifiedHealthFallback)){
   const list=get('education-'+kind);list.replaceChildren();
-  const ranked=items.map((item,index)=>({item,index,reason:result.reasons.find(r=>(notes[item.noteId]||[]).includes(r.text))})).sort((a,b)=>Number(Boolean(b.reason))-Number(Boolean(a.reason))||a.index-b.index);
+  const frequencyScore=value=>value==='Often'?2:value==='Sometimes'?1:0;
+  const ranked=items.map((item,index)=>{
+   const matches=result.reasons.filter(r=>(notes[item.noteId]||[]).includes(r.text));
+   const reason=matches.sort((a,b)=>frequencyScore(b.frequency)-frequencyScore(a.frequency))[0];
+   return {item,index,reason};
+  }).sort((a,b)=>Number(Boolean(b.reason))-Number(Boolean(a.reason))||a.index-b.index);
   for(const {item,reason} of ranked){
    const li=document.createElement('li'),heading=document.createElement('h4'),text=document.createElement('p');heading.textContent=item.heading;text.textContent=item.statement;li.append(heading,text);
    if(reason){const personal=document.createElement('p');personal.className='education-personal';personal.textContent=`Your check-in: “${reason.frequency}”. ${reason.text} This may be an area of your routine to review.`;li.append(personal)}
