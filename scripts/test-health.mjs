@@ -7,7 +7,7 @@ assert.equal(config.path,'/api/health-information');
 const savedRuntime={base:process.env.OPENAI_BASE_URL,key:process.env.OPENAI_API_KEY};
 delete process.env.OPENAI_BASE_URL;delete process.env.OPENAI_API_KEY;
 const origin='https://room.example';const request=data=>new Request(origin+'/api/health-information',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify(data)});
-const context={ageGroup:'Adults',topics:['screen use and sleep','social media risks and digital well-being'],dailyMinutes:240,disruption:{bedtime:'Often',movement:'Never',longer:'Never',tasks:'Never'}};
+const context={ageGroup:'Adults',topics:['screen use and sleep','social media risks and digital well-being'],dailyMinutes:240,disruption:{bedtime:'Often',movement:'Never',people:'Never',longer:'Never',tasks:'Never'}};
 assert.equal((await api.health(request(context),{})).status,503);
 assert.equal((await api.health(new Request(origin+'/api/health-information'),{})).status,405);
 assert.equal((await api.health(new Request(origin+'/api/health-information',{method:'POST',headers:{Origin:'https://elsewhere.example'}}),{})).status,403);
@@ -81,7 +81,7 @@ await client.renderHealthEducation({age:40,daily:240,reasons:[],worthReviewing:f
 assert.equal(ids['health-resource-list'].children.length,1,'Live nodes replace fallback reading rather than appending to it');
 assert(ids['education-risks-section'].hidden);assert(!ids['education-checked'].hidden);
 const balanceSandbox={module:{exports:{}}};vm.createContext(balanceSandbox);vm.runInContext(await readFile('public/balance.js','utf8'),balanceSandbox);
-const balanced={daily:240,behaviors:{bedtime:'Never',tasks:'Never',movement:'Never',longer:'Never'}};
+const balanced={daily:240,behaviors:{bedtime:'Never',tasks:'Never',movement:'Never',people:'Never',longer:'Never'}};
 assert.equal(balanceSandbox.module.exports.balanceExperience(balanced),'positive');
 assert.equal(balanceSandbox.module.exports.balanceExperience({...balanced,worthReviewing:true}),'hidden');
 console.log('PASS: live sources replace fallback resources; celebration respects the concern flag.');

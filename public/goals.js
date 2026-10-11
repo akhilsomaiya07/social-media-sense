@@ -1,6 +1,7 @@
 'use strict';
 const checkinStorageKey='room.saved-checkins.v1';
-const behaviorKeys=['bedtime','tasks','movement','longer'];
+const behaviorKeys=['bedtime','tasks','movement','people','longer'];
+const legacyBehaviorKeys=['bedtime','tasks','movement','longer'];
 function goalTime(minutes){const h=Math.floor(minutes/60),m=minutes%60;return (h?h+'h':'')+(h&&m?' ':'')+(m?m+'m':'')||'0m';}
 function goalProjection(daily,requested){const reduction=Math.min(daily,Math.max(0,Math.round(Number(requested)||0)));return {daily,reduction,target:daily-reduction,week:reduction*7/60,month:reduction*30/60,year:reduction*365/60,days:reduction*365/1440};}
 function groupedPlatforms(platforms){const totals=new Map();for(const p of platforms){const key=p.name.trim().toLowerCase();const existing=totals.get(key)||{name:p.name.trim(),minutes:0};existing.minutes+=p.minutes;totals.set(key,existing);}return [...totals.values()].sort((a,b)=>b.minutes-a.minutes);}
@@ -9,7 +10,8 @@ function biggestOpportunity(assessment){
   {key:'bedtime',area:'Late-night scrolling',why:'social media keeps you up later than intended.',start:'Choosing a time to stop scrolling before bed may be a practical place to start.'},
   {key:'longer',area:'Scrolling longer than intended',why:'you scroll longer than planned.',start:'A small daily time goal may be a practical place to start.'},
   {key:'tasks',area:'Time for everyday responsibilities',why:'social media interrupts school, work, or everyday responsibilities.',start:'Choosing a task to do without checking social media may be a practical place to start.'},
-  {key:'movement',area:'Time for activity or other people',why:'social media takes the place of physical activity or time with others.',start:'Choosing one offline activity you want to make time for may be a practical place to start.'}
+  {key:'movement',area:'Time for physical activity',why:'social media takes time away from physical activity.',start:'Choosing one active offline activity you want to make time for may be a practical place to start.'},
+  {key:'people',area:'Time with other people',why:'social media takes time away from people you wanted to spend time with.',start:'Choosing one person or offline moment you want to protect may be a practical place to start.'}
  ];
  const score=value=>value==='Often'?2:value==='Sometimes'?1:0;
  const selected=choices.sort((a,b)=>score(assessment.behaviors[b.key])-score(assessment.behaviors[a.key]))[0];
@@ -22,7 +24,7 @@ function biggestOpportunity(assessment){
 function dailyChange(previous,current){const difference=current-previous;const percent=previous>0?difference/previous*100:current===0?0:null;return {difference,percent};}
 function validSavedCheckin(record){
  const minutes=n=>Number.isInteger(n)&&n>=0&&n<=1440;
- return !!record&&typeof record.id==='string'&&record.id.length>0&&record.id.length<=100&&typeof record.date==='string'&&Number.isFinite(Date.parse(record.date))&&minutes(record.daily)&&minutes(record.sleepMinutes)&&minutes(record.activityMinutes)&&Array.isArray(record.platforms)&&record.platforms.every(p=>p&&typeof p.name==='string'&&p.name.trim().length>0&&p.name.length<=60&&minutes(p.minutes))&&record.platforms.reduce((sum,p)=>sum+p.minutes,0)===record.daily&&record.behaviors&&behaviorKeys.every(key=>['Never','Sometimes','Often'].includes(record.behaviors[key]))&&record.opportunity&&typeof record.opportunity.area==='string'&&typeof record.opportunity.explanation==='string'&&(record.reductionGoal===null||(minutes(record.reductionGoal)&&record.reductionGoal<=record.daily));
+ return !!record&&typeof record.id==='string'&&record.id.length>0&&record.id.length<=100&&typeof record.date==='string'&&Number.isFinite(Date.parse(record.date))&&minutes(record.daily)&&minutes(record.sleepMinutes)&&minutes(record.activityMinutes)&&Array.isArray(record.platforms)&&record.platforms.every(p=>p&&typeof p.name==='string'&&p.name.trim().length>0&&p.name.length<=60&&minutes(p.minutes))&&record.platforms.reduce((sum,p)=>sum+p.minutes,0)===record.daily&&record.behaviors&&legacyBehaviorKeys.every(key=>['Never','Sometimes','Often'].includes(record.behaviors[key]))&&(record.behaviors.people===undefined||['Never','Sometimes','Often'].includes(record.behaviors.people))&&record.opportunity&&typeof record.opportunity.area==='string'&&typeof record.opportunity.explanation==='string'&&(record.reductionGoal===null||(minutes(record.reductionGoal)&&record.reductionGoal<=record.daily));
 }
 function createCheckinStore(getStorage){
  function read(){const raw=getStorage().getItem(checkinStorageKey);if(raw===null)return [];const saved=JSON.parse(raw);if(!saved||saved.version!==1||!Array.isArray(saved.checkins)||!saved.checkins.every(validSavedCheckin))throw new Error('Saved check-ins could not be read. Clear them to start a new history.');return saved.checkins;}

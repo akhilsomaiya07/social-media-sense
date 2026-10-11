@@ -2,7 +2,7 @@
 // A presentation rule for this card only, not a health threshold or assessment score.
 function balanceExperience(assessment){
  if(!assessment||!Number.isInteger(assessment.daily)||assessment.daily<0||assessment.daily>1440)return 'hidden';
- const answers=['bedtime','tasks','movement','longer'].map(key=>assessment.behaviors?.[key]);
+ const answers=['bedtime','tasks','movement','people','longer'].map(key=>assessment.behaviors?.[key]);
  if(answers.some(answer=>!['Never','Sometimes','Often'].includes(answer)))return 'hidden';
  const disruptions=answers.filter(answer=>answer!=='Never').length;
  if(answers.includes('Often')||disruptions>1)return 'hidden';
