@@ -90,18 +90,42 @@ footer{color:#c1cee1}
 .sleep-shield>h3{margin-top:0}.sleep-shield .shield-short-summary{margin-top:8px}.sleep-shield .shield-timeline{padding:8px 12px}.sleep-shield .shield-timeline p{margin:5px 0}.sleep-shield .shield-disclosure{margin-top:10px;border-top:1px solid #526f76;padding-top:8px}.sleep-shield .shield-disclosure>summary{font-size:13px;min-height:36px;display:list-item;line-height:1.5;color:#d9e6e6}.sleep-shield .shield-completed-row{border-bottom:1px solid #526f76;padding:10px 0}.sleep-shield .shield-night h4{margin-top:4px}.sleep-shield .shield-night button+button{margin-left:8px}.sleep-shield #shield-track{margin-top:4px}.sleep-shield .goal-note:empty{display:none}
 
 
-/* Combined-total research context and simple per-app slider scale. */
+/* Combined-total research context plus per-app navigation reference points. */
+.platform-slider-reference-note{margin:0 0 10px;padding:10px 12px;border:1px solid #d7e1e2;border-radius:10px;background:#fbfcfc;color:#445f62;font-size:12px;line-height:1.55}
 .platform-reference-legend{margin:0 0 10px;padding:12px 14px;border:1px solid #d7e1e2;border-radius:10px;background:#f8fbfa;color:#294f51;font-size:12px;line-height:1.55}
 .platform-reference-legend p{margin:6px 0 0}
 .platform-reference-info{margin:0 0 18px;color:#445f62}
 .platform-reference-info summary{font-size:12px;font-weight:650;color:#294f51}
 .platform-reference-info p{font-size:12px;line-height:1.6;color:#566c70}
 .platform-reference-info a{color:#1b5557;font-weight:650}
-.platform-slider-limits{position:relative;height:24px;margin-top:2px}
+.platform-slider-limits{position:relative;height:34px;margin-top:2px}
 .platform-scale-start,.platform-scale-end{position:absolute;top:2px;color:#566c70;font-size:12px;font-weight:500}
 .platform-scale-start{left:0}.platform-scale-end{right:0}
-@media(max-width:680px){.platform-reference-legend{font-size:11px}}
-@media(forced-colors:active){.platform-reference-legend{background:Canvas;color:CanvasText;border-color:CanvasText}}
+.platform-ref-marker{position:absolute;top:2px;font-weight:700;color:#36595b;font-variant-numeric:tabular-nums;line-height:1}
+.platform-ref-marker::before{content:"";position:absolute;left:50%;top:-14px;width:2px;height:9px;background:#365f61;border-radius:2px;transform:translateX(-50%)}
+.platform-ref-marker.ref-30{left:calc(4.1667% + 11px);transform:translateX(-50%)}
+.platform-ref-marker.ref-2h{left:calc(16.6667% + 8px);transform:translateX(-50%)}
+.platform-ref-marker.reference-hit{color:#28464e;text-shadow:0 0 .35px currentColor;outline:1px solid #8fa6b0;outline-offset:3px;border-radius:2px}
+@media(prefers-reduced-motion:no-preference){
+ .platform-slider::-webkit-slider-thumb{transition:transform 90ms ease-out,box-shadow 90ms ease-out}
+ .platform-slider::-moz-range-thumb{transition:transform 90ms ease-out,box-shadow 90ms ease-out}
+ .platform-slider.reference-press::-webkit-slider-thumb{transform:translateY(1px) scale(.94);box-shadow:inset 0 1px 2px rgba(15,34,45,.25),0 0 2px rgba(23,63,65,.2)}
+ .platform-slider.reference-press::-moz-range-thumb{transform:translateY(1px) scale(.94);box-shadow:inset 0 1px 2px rgba(15,34,45,.25),0 0 2px rgba(23,63,65,.2)}
+ .platform-slider.reference-rebound::-webkit-slider-thumb{transform:translateY(-.4px) scale(1.025)}
+ .platform-slider.reference-rebound::-moz-range-thumb{transform:translateY(-.4px) scale(1.025)}
+ .platform-ref-marker.reference-hit{animation:reference-lift 360ms ease-out}
+ .platform-ref-marker.reference-hit::after{content:"";position:absolute;inset:-4px;border:1px solid #8fa6b0;border-radius:5px;pointer-events:none;animation:reference-ring 400ms ease-out forwards}
+}
+@keyframes reference-lift{0%,100%{translate:0 0}35%{translate:0 -1.5px}}
+@keyframes reference-ring{0%{opacity:.45;scale:.96}100%{opacity:0;scale:1.2}}
+@media(prefers-reduced-motion:reduce){
+ .platform-slider::-webkit-slider-thumb{transition:none!important;transform:none!important;animation:none!important}
+ .platform-slider::-moz-range-thumb{transition:none!important;transform:none!important;animation:none!important}
+ .platform-ref-marker.reference-hit{animation:none!important;translate:none!important}
+ .platform-ref-marker.reference-hit::after{content:none;animation:none!important}
+}
+@media(max-width:680px){.platform-ref-marker,.platform-reference-legend,.platform-slider-reference-note{font-size:11px}}
+@media(forced-colors:active){.platform-reference-legend,.platform-slider-reference-note{background:Canvas;color:CanvasText;border-color:CanvasText}.platform-ref-marker,.platform-ref-marker::before{color:CanvasText;background:CanvasText}.platform-ref-marker.reference-hit{color:CanvasText;outline-color:Highlight}}
 
 .sleep-reference-card{margin:14px 0;padding:14px 16px;border:1px solid #d7e1e2;border-radius:10px;background:#f8fbfa;color:#294f51;font-size:13px;line-height:1.6}
 .sleep-reference-card h3{margin:0 0 6px;font-size:14px}.sleep-reference-card p{margin:0 0 8px}.sleep-reference-card a{font-size:12px;color:#1b5557;text-decoration:underline}#sleep-context a{font-size:12px;color:#d9f786;text-decoration:underline}
