@@ -12,6 +12,10 @@ function sleepContext(age,minutes){
  const reference=sleepReference(age);
  if(!reference||!Number.isInteger(minutes)||minutes<0||minutes>1440)return null;
  const time=(Math.floor(minutes/60)?Math.floor(minutes/60)+'h':'')+(minutes>=60&&minutes%60?' ':'')+(minutes%60?minutes%60+'m':'')||'0m';
+ if(reference.group==='Teen'){
+  const interpretation='The CDC reference for ages 13–17 is 8–10 hours over a full 24-hour day. Because this check-in asks about nighttime sleep only, it does not label this amount as below or within that reference; daytime naps may also contribute to total sleep.';
+  return {...reference,status:'not-comparable',time,interpretation,text:`You reported ${time} of nighttime sleep. ${interpretation}`};
+ }
  const below=minutes<reference.min;
  const status=below?'below':reference.max!==null&&minutes>reference.max?'above':'within';
  let interpretation;
@@ -32,7 +36,7 @@ function sleepShieldIntro(result){
 function renderSleepContext(result){
  const context=sleepContext(result.age,Math.round(result.sleep*60));
  const root=document.getElementById('sleep-context');root.hidden=!context;if(!context)return;
- document.getElementById('sleep-context-reported').textContent='Reported sleep: '+context.time;
+ document.getElementById('sleep-context-reported').textContent=(context.group==='Teen'?'Reported nighttime sleep: ':'Reported sleep: ')+context.time;
  document.getElementById('sleep-context-reference').textContent='Age-based reference: '+context.reference;
  document.getElementById('sleep-context-interpretation').textContent=context.interpretation;
  const noConnection=document.getElementById('sleep-context-connection');noConnection.hidden=sleepBedtimeConnection(result).related;
