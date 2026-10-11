@@ -4,11 +4,12 @@ function healthSearchContext(result){
  const topics=['social media benefits and online social connection','social media risks and digital well-being'];
  const texts=result.reasons.map(r=>r.text);
  if(texts.includes('You said social media kept you up later than intended.'))topics.push('screen use and sleep');
- if(texts.includes('You said social media took the place of activity or time with others.'))topics.push('sedentary behavior and physical activity');
+ if(texts.includes('You said social media took time away from physical activity.'))topics.push('sedentary behavior and physical activity');
+ if(texts.includes('You said social media took time away from people you wanted to spend time with.'))topics.push('offline social connection and relationships');
  if(texts.includes('You said you spent longer scrolling than planned.'))topics.push('problematic or compulsive social media use');
  if(texts.includes('You said social media interrupted your everyday responsibilities.'))topics.push('school work and everyday responsibilities');
  if(!result.reasons.length)topics.push('social comparison and cyberbullying');
- const reportTexts={bedtime:'You said social media kept you up later than intended.',movement:'You said social media took the place of activity or time with others.',longer:'You said you spent longer scrolling than planned.',tasks:'You said social media interrupted your everyday responsibilities.'};
+ const reportTexts={bedtime:'You said social media kept you up later than intended.',movement:'You said social media took time away from physical activity.',people:'You said social media took time away from people you wanted to spend time with.',longer:'You said you spent longer scrolling than planned.',tasks:'You said social media interrupted your everyday responsibilities.'};
  const disruption=Object.fromEntries(Object.entries(reportTexts).map(([key,text])=>[key,result.reasons.find(r=>r.text===text)?.frequency||'Never']));
  return {ageGroup,topics,dailyMinutes:result.daily,disruption};
 }
@@ -59,14 +60,14 @@ function balancedFallbackResources(result){
 function showHealthFallback(result){
  const get=id=>document.getElementById(id);
  const notes={
-  'education-bedtime':'You said social media kept you up later than intended.',
-  'education-movement':'You said social media took the place of activity or time with others.',
-  'education-longer':'You said you spent longer scrolling than planned.',
-  'education-tasks':'You said social media interrupted your everyday responsibilities.'
+  'education-bedtime':['You said social media kept you up later than intended.'],
+  'education-movement':['You said social media took time away from physical activity.','You said social media took time away from people you wanted to spend time with.'],
+  'education-longer':['You said you spent longer scrolling than planned.'],
+  'education-tasks':['You said social media interrupted your everyday responsibilities.']
  };
  for(const [kind,items] of Object.entries(verifiedHealthFallback)){
   const list=get('education-'+kind);list.replaceChildren();
-  const ranked=items.map((item,index)=>({item,index,reason:result.reasons.find(r=>r.text===notes[item.noteId])})).sort((a,b)=>Number(Boolean(b.reason))-Number(Boolean(a.reason))||a.index-b.index);
+  const ranked=items.map((item,index)=>({item,index,reason:result.reasons.find(r=>(notes[item.noteId]||[]).includes(r.text))})).sort((a,b)=>Number(Boolean(b.reason))-Number(Boolean(a.reason))||a.index-b.index);
   for(const {item,reason} of ranked){
    const li=document.createElement('li'),heading=document.createElement('h4'),text=document.createElement('p');heading.textContent=item.heading;text.textContent=item.statement;li.append(heading,text);
    if(reason){const personal=document.createElement('p');personal.className='education-personal';personal.textContent=`Your check-in: “${reason.frequency}”. ${reason.text} This may be an area of your routine to review.`;li.append(personal)}
