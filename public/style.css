@@ -105,8 +105,8 @@ footer{color:#c1cee1}
 .platform-ref-marker::before{content:"";position:absolute;left:50%;top:-14px;width:2px;height:9px;background:#365f61;border-radius:2px;transform:translateX(-50%)}
 /* Offset crowded text only; compensate the tick back to its true track value.
    Container units refer to this slider's scale, not the viewport. */
-.platform-ref-marker.ref-30{--tick-position:calc(4.1667cqw + 11px);--label-min:44px;left:max(var(--label-min),var(--tick-position));transform:translateX(-50%)}
-.platform-ref-marker.ref-2h{--tick-position:calc(16.6667cqw + 8px);--label-min:84px;left:max(var(--label-min),var(--tick-position));transform:translateX(-50%)}
+.platform-ref-marker.ref-30{--tick-position:calc(4.1667cqw + 11px);--label-min:64px;left:max(var(--label-min),var(--tick-position));transform:translateX(-50%)}
+.platform-ref-marker.ref-2h{--tick-position:calc(16.6667cqw + 8px);--label-min:120px;left:max(var(--label-min),var(--tick-position));transform:translateX(-50%)}
 .platform-ref-marker::before{left:calc(50% + min(0px,var(--tick-position) - var(--label-min)))}
 .platform-ref-marker.reference-hit{color:#28464e;text-shadow:0 0 .35px currentColor;outline:1px solid #8fa6b0;outline-offset:3px;border-radius:2px}
 @media(prefers-reduced-motion:no-preference){
