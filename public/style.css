@@ -130,3 +130,7 @@ footer{color:#c1cee1}
  .platform-ref-marker.reference-hit::after{content:none;animation:none!important}
 }
 @media(forced-colors:active){.platform-ref-marker.reference-hit{color:CanvasText;outline-color:Highlight}}
+
+
+.sleep-reference-card{margin:14px 0;padding:14px 16px;border:1px solid #d7e1e2;border-radius:10px;background:#f8fbfa;color:#294f51;font-size:13px;line-height:1.6}
+.sleep-reference-card h3{margin:0 0 6px;font-size:14px}.sleep-reference-card p{margin:0 0 8px}.sleep-reference-card a{font-size:12px;color:#1b5557;text-decoration:underline}#sleep-context a{font-size:12px;color:#d9f786;text-decoration:underline}
