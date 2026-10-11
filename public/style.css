@@ -135,3 +135,46 @@ footer{color:#c1cee1}
 .sleep-reference-card h3{margin:0 0 6px;font-size:14px}.sleep-reference-card p{margin:0 0 8px}.sleep-reference-card a{font-size:12px;color:#1b5557;text-decoration:underline}#sleep-context a{font-size:12px;color:#d9f786;text-decoration:underline}
 
 
+
+
+/* A connected, three-part report. All selectors are scoped to results. */
+#result .report-group{margin-top:26px;padding-top:24px;border-top:1px solid #456365;min-width:0}
+#result .report-group>h3{font-size:20px;line-height:1.4;margin:0 0 18px;letter-spacing:-.3px}
+#result .report-group h4{font-size:16px;line-height:1.5;margin:0 0 8px}
+#result .report-group p{font-size:14px;line-height:1.6;margin:8px 0;color:#d4e1e1;overflow-wrap:anywhere}
+#result .report-group .goal-note{font-size:12px;color:#c2d5d5}
+#result .report-group .result-sub{margin:0 0 18px}
+#result .snapshot-totals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+#result .snapshot-totals>div{min-width:0}
+#result .snapshot-totals strong{display:block;font-size:clamp(23px,3vw,32px);line-height:1.3;margin:8px 0;color:#e0fb9e;letter-spacing:-.5px;overflow-wrap:anywhere}
+#result .snapshot-totals small{font-size:12px;color:#c2d5d5}
+#result .platform-breakdown,#result .review,#result .opportunity-card,#result .balance-card,#result .sleep-shield{background:none;border:0;border-radius:0;padding:0;margin:20px 0}
+#result .platform-breakdown ol{padding-left:22px;margin:8px 0}
+#result .platform-breakdown li+li{margin-top:4px}
+#result .report-text-button{font:inherit;font-size:13px;min-height:44px;padding:10px 0;border:0;background:none;color:#e0fb9e;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+#result .goal-section,#result .health-education{border:0;padding:0;margin-top:20px}
+#result #sleep-context{margin:0}
+#result .report-subsection{margin-top:20px}
+#result .report-emphasis{font-weight:600;color:#e0fb9e}
+#result #opportunity-area{margin-bottom:4px}
+#result details{margin-top:10px}
+#result summary{min-height:44px;padding:11px 0;font-size:14px;line-height:1.5;color:#e1ebeb;overflow-wrap:anywhere}
+#result .report-disclosure{border-top:1px solid #456365;margin-top:12px;padding-top:2px}
+#result .report-disclosure>summary{font-weight:600}
+#result details[open]>summary{margin-bottom:8px}
+#result #assumption{border:0;padding:0;margin:12px 0}
+#result #review>p:last-child{font-size:12px;color:#c2d5d5}
+#result #cutback .goal-comparison{margin:14px 0;gap:16px;grid-template-columns:repeat(2,minmax(0,1fr))}
+#result #cutback .goal-compare-card{border:0;border-radius:0;padding:0;background:none}
+#result #cutback .goal-compare-card strong{font-size:22px}
+#result #cutback .goal-bar{margin-top:10px}
+#result #cutback .goal-comparison p{font-size:13px}
+#result .health-education .education-cards{grid-template-columns:1fr;gap:0}
+#result .health-education .education-cards>li{background:none;border:0;border-top:1px solid #456365;border-radius:0;padding:16px 0}
+#result .health-education .education-source,#result .health-education .education-scope{font-size:12px;color:#c2d5d5}
+#result .health-education .education-citation-detail summary{font-size:12px}
+#result .new-checkin-actions{margin-top:26px;padding-top:20px;border-top:1px solid #456365}
+#result :is(button,summary,a,input,select,textarea):focus-visible{outline:3px solid #d9f786;outline-offset:3px}
+#result a{overflow-wrap:anywhere}
+@media(max-width:480px){#result .snapshot-totals{grid-template-columns:1fr;gap:12px}#result .snapshot-totals>div{display:grid;grid-template-columns:82px minmax(0,1fr);gap:0 10px;align-items:center}#result .snapshot-totals strong{font-size:27px;margin:0}#result .snapshot-totals small{grid-column:2}#result .goal-metrics{grid-template-columns:1fr}#result .shield-night .two{grid-template-columns:1fr}#result .report-group>h3{font-size:19px}#result .shield-night button+button{margin:8px 0 0}#result .shield-night button{width:100%}}
+@media(forced-colors:active){#result .report-group p,#result .report-group .goal-note,#result summary,#result .snapshot-totals strong{color:CanvasText}#result .report-disclosure,#result .report-group{border-color:CanvasText}}
