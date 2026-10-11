@@ -98,13 +98,16 @@ footer{color:#c1cee1}
 .platform-reference-info summary{font-size:12px;font-weight:650;color:#294f51}
 .platform-reference-info p{font-size:12px;line-height:1.6;color:#566c70}
 .platform-reference-info a{color:#1b5557;font-weight:650}
-.platform-slider-limits{position:relative;height:34px;margin-top:2px}
+.platform-slider-limits{position:relative;height:34px;margin-top:2px;container-type:inline-size}
 .platform-scale-start,.platform-scale-end{position:absolute;top:2px;color:#566c70;font-size:12px;font-weight:500}
 .platform-scale-start{left:0}.platform-scale-end{right:0}
 .platform-ref-marker{position:absolute;top:2px;font-weight:700;color:#36595b;font-variant-numeric:tabular-nums;line-height:1}
 .platform-ref-marker::before{content:"";position:absolute;left:50%;top:-14px;width:2px;height:9px;background:#365f61;border-radius:2px;transform:translateX(-50%)}
-.platform-ref-marker.ref-30{left:calc(4.1667% + 11px);transform:translateX(-50%)}
-.platform-ref-marker.ref-2h{left:calc(16.6667% + 8px);transform:translateX(-50%)}
+/* Offset crowded text only; compensate the tick back to its true track value.
+   Container units refer to this slider's scale, not the viewport. */
+.platform-ref-marker.ref-30{--tick-position:calc(4.1667cqw + 11px);--label-min:44px;left:max(var(--label-min),var(--tick-position));transform:translateX(-50%)}
+.platform-ref-marker.ref-2h{--tick-position:calc(16.6667cqw + 8px);--label-min:84px;left:max(var(--label-min),var(--tick-position));transform:translateX(-50%)}
+.platform-ref-marker::before{left:calc(50% + min(0px,var(--tick-position) - var(--label-min)))}
 .platform-ref-marker.reference-hit{color:#28464e;text-shadow:0 0 .35px currentColor;outline:1px solid #8fa6b0;outline-offset:3px;border-radius:2px}
 @media(prefers-reduced-motion:no-preference){
  .platform-slider::-webkit-slider-thumb{transition:transform 90ms ease-out,box-shadow 90ms ease-out}
@@ -129,3 +132,4 @@ footer{color:#c1cee1}
 
 .sleep-reference-card{margin:14px 0;padding:14px 16px;border:1px solid #d7e1e2;border-radius:10px;background:#f8fbfa;color:#294f51;font-size:13px;line-height:1.6}
 .sleep-reference-card h3{margin:0 0 6px;font-size:14px}.sleep-reference-card p{margin:0 0 8px}.sleep-reference-card a{font-size:12px;color:#1b5557;text-decoration:underline}#sleep-context a{font-size:12px;color:#d9f786;text-decoration:underline}
+
