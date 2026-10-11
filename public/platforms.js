@@ -13,9 +13,20 @@ function platformSummary(entries){
  if(fieldsValid&&total>1440)errors['platform-total']='Your entries add up to more than 24 hours in one day. Some app usage may overlap. Adjust the times so your total reflects your actual day.';
  return {total,errors,fieldsValid,platforms:platforms.sort((a,b)=>b.minutes-a.minutes)};
 }
+// Native range positions are presentation coordinates, never stored usage minutes.
+// Each third of the track covers 0–30m, 30–120m, then 120–720m.
+// 1080 positions let every 5-minute selection map to an exact integer position.
+function platformPosition(minutes){return minutes<=30?minutes*12:minutes<=120?360+(minutes-30)*4:720+(minutes-120)*0.6;}
+function platformMinutes(position){
+ const p=Math.max(0,Math.min(1080,Number(position)));
+ const minutes=p<=360?p/12:p<=720?30+(p-360)/4:120+(p-720)/0.6;
+ return Math.round(minutes/5)*5;
+}
 function setupPlatformInputs(){
- const get=id=>document.getElementById(id),list=get('platform-list');let rows=[];
- // Visual feedback only: never change the range value or intercept native input.
+ const get=id=>document.getElementById(id),list=get('platform-list');let rows=[],pointerSlider=null;
+ const rowMinutes=row=>row.nameInput?Number(row.slider.value):platformMinutes(row.slider.value);
+ const setMinutes=(row,minutes)=>{row.slider.value=String(row.nameInput?minutes:platformPosition(minutes));};
+ // Feedback observes actual minutes, not nonlinear presentation coordinates.
  function clearReferenceFeedback(row){
   for(const timer of row.feedbackTimers||[])clearTimeout(timer);
   row.feedbackTimers=[];
@@ -23,7 +34,7 @@ function setupPlatformInputs(){
   row.marker30.classList.remove('reference-hit');row.marker2h.classList.remove('reference-hit');
  }
  function referenceFeedback(row,previous){
-  const minutes=Number(row.slider.value);
+  const minutes=rowMinutes(row);
   if(previous===minutes)return;
   clearReferenceFeedback(row);
   if(row.nameInput||(minutes!==30&&minutes!==120))return;
@@ -43,14 +54,14 @@ function setupPlatformInputs(){
   if(custom){const label=document.createElement('label');label.textContent=index===socialPlatforms.length?'Other':'Another platform';nameInput=document.createElement('input');nameInput.type='text';nameInput.maxLength=60;nameInput.placeholder='Platform name (optional)';nameInput.value=name==='Other'?'':name;label.append(nameInput);title.append(label);}else title.textContent=name;
   const output=document.createElement('output');output.className='platform-selected-time';output.setAttribute('for',`platform-${index}-time`);output.textContent='0m';heading.append(title,output);row.append(heading);
   const label=document.createElement('label');const caption=document.createElement('span');caption.className='sr-only';caption.textContent=`${name} daily usage`;
-  const slider=document.createElement('input');slider.type='range';slider.className='platform-slider';slider.id=`platform-${index}-time`;slider.min='0';slider.max='720';slider.step='5';slider.value='0';slider.setAttribute('aria-label',`${name} daily usage`);label.append(caption,slider);row.append(label);
+  const slider=document.createElement('input');slider.type='range';slider.className='platform-slider';slider.id=`platform-${index}-time`;slider.min='0';slider.max=custom?'720':'1080';slider.step=custom?'5':'1';slider.value='0';slider.setAttribute('aria-label',`${name} daily usage`);slider.setAttribute('aria-valuemin','0');slider.setAttribute('aria-valuemax','720');if(!custom)slider.setAttribute('aria-describedby','platform-scale-help');label.append(caption,slider);row.append(label);
   const limits=document.createElement('div');limits.className='platform-slider-limits';const startLabel=document.createElement('span');startLabel.className='platform-scale-start';startLabel.textContent='0m';const marker30=document.createElement('span');marker30.className='platform-ref-marker ref-30';marker30.textContent='30m';const marker2h=document.createElement('span');marker2h.className='platform-ref-marker ref-2h';marker2h.textContent='2h';const endLabel=document.createElement('span');endLabel.className='platform-scale-end';endLabel.textContent='12h';limits.append(startLabel,marker30,marker2h,endLabel);row.append(limits);
-  if(custom){marker30.hidden=true;marker2h.hidden=true;}
+  if(custom){marker30.hidden=true;marker2h.hidden=true;limits.classList.add('platform-custom-scale');}
   list.append(row);rows.push({name,nameInput,slider,output,marker30,marker2h,previousMinutes:0,feedbackTimers:[]});return nameInput;
  }
- function readEntries(){return rows.map(row=>{const minutes=Number(row.slider.value);return {name:row.nameInput?row.nameInput.value||'Other':row.name,hours:Math.floor(minutes/60),minutes:minutes%60};});}
+ function readEntries(){return rows.map(row=>{const minutes=rowMinutes(row);return {name:row.nameInput?row.nameInput.value||'Other':row.name,hours:Math.floor(minutes/60),minutes:minutes%60};});}
  function refresh(){
-  for(const row of rows){const minutes=Number(row.slider.value),h=Math.floor(minutes/60),m=minutes%60;row.output.textContent=platformTime(minutes);row.slider.style.setProperty('--usage',`${minutes/720*100}%`);row.slider.setAttribute('aria-label',`${row.nameInput?row.nameInput.value.trim()||'Other':row.name} daily usage`);row.slider.setAttribute('aria-valuetext',`${h} hours ${m} minutes per day`);row.previousMinutes=minutes;}
+  for(const row of rows){const minutes=rowMinutes(row),h=Math.floor(minutes/60),m=minutes%60;row.output.textContent=platformTime(minutes);row.slider.style.setProperty('--usage',`${Number(row.slider.value)/Number(row.slider.max)*100}%`);row.slider.setAttribute('aria-label',`${row.nameInput?row.nameInput.value.trim()||'Other':row.name} daily usage`);row.slider.setAttribute('aria-valuenow',String(minutes));row.slider.setAttribute('aria-valuetext',`${h} hours ${m} minutes per day`);row.previousMinutes=minutes;}
   const summary=platformSummary(readEntries());get('platform-total').textContent=summary.fieldsValid?`Total reported social media time: ${platformTime(summary.total)} / 24h`:'Total reported social media time: check the invalid app times.';
   const over=summary.fieldsValid&&summary.total>1440,near=summary.fieldsValid&&summary.total>=1200&&!over;
   get('platform-total-wrap').classList.toggle('near-limit',near);get('platform-total-wrap').classList.toggle('over-limit',over);
@@ -61,10 +72,31 @@ function setupPlatformInputs(){
  function reset(){for(const row of rows)clearReferenceFeedback(row);list.replaceChildren();rows=[];for(const name of socialPlatforms)addRow(name);addRow('Other',true);}
  function setEntries(entries){
   const summary=platformSummary(entries);if(!summary.fieldsValid)throw new Error(Object.values(summary.errors).join(' '));
-  reset();for(const entry of entries){let row=rows.find(r=>!r.nameInput&&r.name===entry.name);if(!row){row=rows.find(r=>r.nameInput&&!r.nameInput.value&&r.slider.value==='0');if(!row){addRow(entry.name||'Other',true);row=rows.at(-1);}row.nameInput.value=entry.name||'Other';}row.slider.value=String(Number(entry.hours)*60+Number(entry.minutes));}refresh();
+  reset();for(const entry of entries){let row=rows.find(r=>!r.nameInput&&r.name===entry.name);if(!row){row=rows.find(r=>r.nameInput&&!r.nameInput.value&&r.slider.value==='0');if(!row){addRow(entry.name||'Other',true);row=rows.at(-1);}row.nameInput.value=entry.name||'Other';}setMinutes(row,Number(entry.hours)*60+Number(entry.minutes));}refresh();
  }
- list.addEventListener('input',event=>{const row=rows.find(item=>item.slider===event.target),previous=row?.previousMinutes;refresh();if(row)referenceFeedback(row,previous);});get('add-platform').addEventListener('click',()=>{const nameInput=addRow('Other',true);refresh();nameInput.focus();});
+ // Keep native pointer/touch dragging; snap its position to an actual 5-minute value.
+ list.addEventListener('pointerdown',event=>{pointerSlider=event.target.closest('.platform-slider');});
+ for(const type of ['pointerup','pointercancel','blur'])window.addEventListener(type,()=>{pointerSlider=null;});
+ list.addEventListener('input',event=>{
+  const row=rows.find(item=>item.slider===event.target),previous=row?.previousMinutes;
+  if(row&&!row.nameInput){
+   const position=Number(row.slider.value);let minutes=platformMinutes(position);
+   // Native assistive-technology increment/decrement actions can use the raw
+   // range step. Ensure these also advance 5 minutes in the expanded sections.
+   if(pointerSlider!==row.slider&&minutes===previous&&position!==platformPosition(previous))minutes=Math.max(0,Math.min(720,previous+Math.sign(position-platformPosition(previous))*5));
+   setMinutes(row,minutes);
+  }
+  refresh();if(row)referenceFeedback(row,previous);
+ });
+ list.addEventListener('keydown',event=>{
+  const row=rows.find(item=>item.slider===event.target);if(!row||row.nameInput)return;
+  const current=rowMinutes(row),values={ArrowRight:current+5,ArrowUp:current+5,ArrowLeft:current-5,ArrowDown:current-5,PageUp:current+60,PageDown:current-60,Home:0,End:720};
+  if(!(event.key in values))return;
+  event.preventDefault();setMinutes(row,Math.max(0,Math.min(720,values[event.key])));
+  row.slider.dispatchEvent(new Event('input',{bubbles:true}));row.slider.dispatchEvent(new Event('change',{bubbles:true}));
+ });get('add-platform').addEventListener('click',()=>{const nameInput=addRow('Other',true);refresh();nameInput.focus();});
  reset();refresh();return {readEntries,setEntries};
 }
-if(typeof module!=='undefined')module.exports={platformSummary,socialPlatforms,platformTime};
+if(typeof module!=='undefined')module.exports={platformSummary,socialPlatforms,platformTime,platformPosition,platformMinutes};
+
 
