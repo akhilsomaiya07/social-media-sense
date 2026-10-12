@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "node scripts/validate-project.mjs",
-    "test": "node scripts/test-health.mjs && node scripts/test-sleep-shield.mjs && node scripts/test-sleep-context.mjs && node scripts/test-platform-scale.mjs",
+    "test": "node scripts/test-health.mjs && node scripts/test-sleep-shield.mjs && node scripts/test-sleep-context.mjs && node scripts/test-platform-scale.mjs && node scripts/test-platform-removal.mjs",
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "check:cloudflare": "wrangler deploy --dry-run --outdir .cloudflare-build"
@@ -20,5 +20,6 @@
     "wrangler": "4.149.0"
   }
 }
+
 
 
