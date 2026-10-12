@@ -186,3 +186,7 @@ footer{color:#c1cee1}
 .platform-remove-confirm{margin-top:12px;padding:12px;border:1px solid #cbd9da;border-radius:8px;background:#f5f8f8}
 .platform-remove-confirm p{font-size:13px;line-height:1.5;margin:0;color:#36575a}
 .platform-remove-confirm .platform-remove{margin-right:8px}
+
+/* Equal navigation columns only when Back is visible (Steps 2–5). */
+.flow-actions:has(> #flow-back:not([hidden])){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+.flow-actions:has(> #flow-back:not([hidden]))>button{width:100%;min-width:0;padding-inline:12px;text-align:center}
