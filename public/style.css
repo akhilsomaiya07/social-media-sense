@@ -178,3 +178,11 @@ footer{color:#c1cee1}
 #result a{overflow-wrap:anywhere}
 @media(max-width:480px){#result .snapshot-totals{grid-template-columns:1fr;gap:12px}#result .snapshot-totals>div{display:grid;grid-template-columns:82px minmax(0,1fr);gap:0 10px;align-items:center}#result .snapshot-totals strong{font-size:27px;margin:0}#result .snapshot-totals small{grid-column:2}#result .goal-metrics{grid-template-columns:1fr}#result .shield-night .two{grid-template-columns:1fr}#result .report-group>h3{font-size:19px}#result .shield-night button+button{margin:8px 0 0}#result .shield-night button{width:100%}}
 @media(forced-colors:active){#result .report-group p,#result .report-group .goal-note,#result summary,#result .snapshot-totals strong{color:CanvasText}#result .report-disclosure,#result .report-group{border-color:CanvasText}}
+
+/* Custom platform removal stays inside its own row. */
+.platform-custom-row .platform-remove{justify-self:start;font:inherit;font-size:13px;min-height:44px;padding:10px 14px;border:1px solid #b9cbcc;border-radius:8px;color:#36575a;background:transparent;cursor:pointer;margin-top:12px}
+.platform-custom-row .platform-remove:hover{background:#edf3f3}
+.platform-custom-row .platform-remove:focus-visible{outline:3px solid #365f61;outline-offset:3px}
+.platform-remove-confirm{margin-top:12px;padding:12px;border:1px solid #cbd9da;border-radius:8px;background:#f5f8f8}
+.platform-remove-confirm p{font-size:13px;line-height:1.5;margin:0;color:#36575a}
+.platform-remove-confirm .platform-remove{margin-right:8px}

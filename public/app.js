@@ -109,7 +109,7 @@ if(typeof document!=='undefined'){
  document.dispatchEvent(new CustomEvent('checkin:complete',{detail:{daily:result.daily,assessment:{sleepBedtime:result.sleepBedtime,prebed:result.prebed,daily:result.daily,worthReviewing:result.worthReviewing,platforms:platformUI.readEntries().map(p=>({name:String(p.name||'Other').trim().slice(0,60)||'Other',minutes:Number(p.hours)*60+Number(p.minutes)})),sleepMinutes:Math.round(result.sleep*60),activityMinutes:result.activity,behaviors:Object.fromEntries(questions.map(q=>[q.id,form.querySelector(`input[name="${q.id}"]:checked`)?.value]))}}}));
  }
  function resetAssessment(){
-  latest=null;form.reset();platformUI.setEntries([]);refreshRoutineTimes();$('goal-reduction').value='0';form.dispatchEvent(new Event('input',{bubbles:true}));
+  latest=null;form.reset();platformUI.reset();refreshRoutineTimes();$('goal-reduction').value='0';form.dispatchEvent(new Event('input',{bubbles:true}));
  }
  setupAssessmentFlow({form,read,calculate:calculateWithRoutine,render,clearFieldErrors,showFieldErrors,resetAssessment});
  form.addEventListener('input',()=>{if(latest){$('state-label').textContent='ANSWERS CHANGED';$('result-sub').textContent='These are your previous results. Select “See My Results” to update them.'}});
