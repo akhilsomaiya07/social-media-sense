@@ -95,7 +95,7 @@ footer{color:#c1cee1}
 .platform-reference-legend{margin:0 0 10px;padding:12px 14px;border:1px solid #d7e1e2;border-radius:10px;background:#f8fbfa;color:#294f51;font-size:12px;line-height:1.55}
 .platform-reference-legend p{margin:6px 0 0}
 .platform-reference-info{margin:0 0 18px;color:#445f62}
-.platform-reference-info summary{font-size:12px;font-weight:650;color:#294f51}
+.platform-reference-info summary{min-height:44px;padding:12px 0;font-size:12px;font-weight:650;color:#294f51}
 .platform-reference-info p{font-size:12px;line-height:1.6;color:#566c70}
 .platform-reference-info a{color:#1b5557;font-weight:650}
 /* Scale positions follow the native thumb's 24px inset travel area. */
