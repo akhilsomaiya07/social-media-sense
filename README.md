@@ -71,6 +71,10 @@ The repository also retains Netlify configuration and function files from the ea
 └── netlify.toml
 ```
 
+## Slider scale (developer notes)
+
+Fixed platform sliders use equal track sections for 0–30m, 30m–2h, and 2h–12h. Native positions 0–1080 map to daily minutes through `platformPosition` and `platformMinutes` in `public/platforms.js`. Selected times and arrow-key changes use 5-minute increments. Custom platforms retain a linear 0–720-minute scale. The slider accessibility description remains outside the research disclosure.
+
 ## Run locally
 
 Requires Node.js 22 or newer.
