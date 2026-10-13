@@ -1,5 +1,5 @@
 'use strict';
-const assessmentStepFields=[['age'],['hours','minutes'],['sleep','sleep-hours','sleep-minutes','sleep-bedtime','prebed'],['activity','activity-hours','activity-minutes'],['bedtime','tasks','movement','people','longer']];
+const assessmentStepFields=[['age'],['hours','minutes'],['sleep','sleep-hours','sleep-minutes','prebed'],['activity','activity-hours','activity-minutes'],['bedtime','tasks','movement','people','longer']];
 function fieldAssessmentStep(key){return key.startsWith('platform-')?2:assessmentStepFields.findIndex(fields=>fields.includes(key))+1;}
 function assessmentErrorsForStep(calculate,data,step){
  try{calculate(data);return {}}catch(error){if(!error.fields)throw error;return Object.fromEntries(Object.entries(error.fields).filter(([key])=>fieldAssessmentStep(key)===step));}
@@ -47,3 +47,4 @@ function setupAssessmentFlow({form,read,calculate,render,clearFieldErrors,showFi
  move(1,false);
 }
 if(typeof module!=='undefined')module.exports={assessmentErrorsForStep,setupAssessmentFlow};
+
