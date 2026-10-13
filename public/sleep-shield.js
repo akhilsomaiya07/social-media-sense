@@ -14,19 +14,21 @@ function savedShieldBedtime(stored,result){
  return candidates.find(validShieldBedtime)||'';
 }
 function renderSleepShield(result){
- const section=document.getElementById('sleep-shield'),root=document.getElementById('sleep-shield-content');
- shieldResearchId++;shieldResearchAbort?.abort();section.hidden=false;root.replaceChildren();
- const related=sleepBedtimeConnection(result).related;
- const container=document.createElement(related?'div':'details');container.className='shield-optional';root.append(container);
- const title=document.createElement(related?'h4':'summary');title.textContent='Sleep Shield · Optional';container.append(title);
- const invite=document.createElement('p');const late=result.reasons.find(r=>r.text==='You said social media kept you up later than intended.');
- invite.textContent=late?`You reported that social media ${late.frequency.toLowerCase()} keeps you up later than intended. Want to try setting a scrolling cutoff before bed?`:related?'You reported social media use before bed. If useful, you can try a scrolling cutoff; this does not mean that habit is causing harm.':'Want to try setting a scrolling cutoff before bed?';container.append(invite);
- const open=document.createElement('button');open.type='button';open.id='shield-open';open.className='goal-button';open.textContent='Create My Bedtime Plan';open.setAttribute('aria-expanded','false');open.setAttribute('aria-controls','shield-planner');container.append(open);
- const planner=document.createElement('div');planner.id='shield-planner';planner.hidden=true;container.append(planner);let built=false;
- open.addEventListener('click',()=>{if(!built){buildSleepShield(result,planner);built=true;}planner.hidden=false;open.setAttribute('aria-expanded','true');document.getElementById('shield-bedtime').focus();});
- const close=document.createElement('button');close.type='button';close.className='goal-button goal-secondary';close.textContent='Close bedtime plan';
- close.addEventListener('click',()=>{planner.hidden=true;open.setAttribute('aria-expanded','false');open.focus();});
- planner.addEventListener('shield:ready',()=>planner.append(close),{once:true});
+ const get=id=>document.getElementById(id),section=get('sleep-shield'),root=get('sleep-shield-content'),report=get('result'),open=get('shield-open');
+ shieldResearchId++;shieldResearchAbort?.abort();section.hidden=true;root.replaceChildren();
+ const late=result.reasons.find(r=>r.text==='You said social media kept you up later than intended.');
+ const invite=get('shield-invitation');invite.hidden=!late;invite.textContent=late?`You reported that social media ${late.frequency.toLowerCase()} keeps you up later than intended.`:'';
+ let built=false,reportScroll=0,shieldScroll=0;
+ open.onclick=()=>{
+  reportScroll=window.scrollY;
+  if(!built){buildSleepShield(result,root);built=true;}
+  report.hidden=true;section.hidden=false;
+  get('sleep-shield-title').focus({preventScroll:true});window.scrollTo({top:shieldScroll,behavior:'instant'});
+ };
+ get('shield-back').onclick=()=>{
+  shieldScroll=window.scrollY;section.hidden=true;report.hidden=false;
+  open.focus({preventScroll:true});window.scrollTo({top:reportScroll,behavior:'instant'});
+ };
 }
 function buildSleepShield(result,root){
  const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
