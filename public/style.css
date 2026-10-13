@@ -190,3 +190,75 @@ footer{color:#c1cee1}
 /* Equal navigation columns only when Back is visible (Steps 2–5). */
 .flow-actions:has(> #flow-back:not([hidden])){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
 .flow-actions:has(> #flow-back:not([hidden]))>button{width:100%;min-width:0;padding-inline:12px;text-align:center}
+
+
+/* Layout refinement: fewer competing surfaces, consistent rhythm, clearer disclosure. */
+header{gap:18px}
+header .brand{min-width:0;flex-wrap:wrap;row-gap:2px}
+header .brand-name{overflow-wrap:anywhere}
+header .brand-sub{margin-left:0;flex-basis:100%;padding-left:44px}
+header>.badge{flex-shrink:0}
+main{width:min(100% - 40px,1192px);margin-inline:auto}
+.intro{gap:28px}
+.intro>div:first-child{min-width:0}
+.intro h1{max-width:650px}
+.workspace.flow-active{grid-template-columns:minmax(0,680px)}
+.workspace.results-only{grid-template-columns:minmax(0,800px)}
+#checkin{box-shadow:0 12px 36px rgba(4,13,28,.12)}
+#checkin .assessment-step>.help{margin:9px 0 14px;line-height:1.55}
+#checkin .assessment-step>.help+.help{margin-top:-6px}
+#checkin .section-title{align-items:center;margin-bottom:18px}
+#checkin .section-title h2{line-height:1.35}
+#checkin .two{gap:16px}
+#checkin .platform-reference-legend{margin-top:16px}
+#checkin .platform-reference-legend strong{font-size:13px}
+#checkin .platform-reference-legend p{margin-top:8px}
+#checkin .platform-reference-info{padding:0 2px}
+#checkin .platform-reference-info summary{font-size:13px}
+#checkin .platform-row{margin-bottom:10px}
+#checkin .platform-total-wrap{margin:18px 0 14px}
+#checkin .flow-actions{padding-top:6px}
+#result{box-shadow:0 16px 42px rgba(4,13,28,.18)}
+#result .result-top{flex-wrap:wrap;row-gap:6px}
+#result>h2{margin:14px 0 4px;font-size:clamp(23px,3vw,30px)}
+#result .report-group{margin-top:30px;padding-top:22px}
+#result .report-group>h3{font-size:21px;margin-bottom:14px}
+#result .snapshot-totals{gap:12px}
+#result .snapshot-totals>div{padding:14px;border:1px solid #456365;border-radius:11px}
+#result .snapshot-totals strong{margin:7px 0 4px}
+#result .review{margin:12px 0 18px}
+#result .review h3{margin:4px 0}
+#result .report-disclosure>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:14px;cursor:pointer}
+#result .report-disclosure>summary::-webkit-details-marker{display:none}
+#result .report-disclosure>summary::after{content:"+";flex:none;font-size:21px;font-weight:400;line-height:1;color:#d9f786}
+#result .report-disclosure[open]>summary::after{content:"−"}
+#result .report-disclosure[open]{padding-bottom:10px}
+#result #report-sleep{margin-top:14px}
+#result .health-education .education-cards>li{padding:13px 0}
+#result .new-checkin-actions{margin-top:30px}
+#result .new-checkin-actions button{max-width:340px;width:100%}
+@media(max-width:850px){
+ header .brand-sub{display:none}
+ main{width:min(100% - 36px,1192px)}
+ #checkin,#result{padding:24px}
+}
+@media(max-width:680px){
+ header{padding:0 18px}
+ header>.badge{display:none}
+ main{width:auto;margin:0;padding:26px 16px 0}
+ .intro{margin-bottom:22px}
+ .intro h1{font-size:clamp(29px,7vw,36px)}
+ .privacy{margin-top:14px}
+ #checkin,#result{padding:22px 18px}
+ #checkin .two{gap:12px}
+ #result .snapshot-totals{grid-template-columns:1fr;gap:8px}
+ #result .snapshot-totals>div{grid-template-columns:90px minmax(0,1fr);padding:11px 14px}
+ #result .report-group{margin-top:25px}
+ #result .report-group>h3{font-size:19px}
+ #result #cutback .goal-comparison{gap:10px}
+}
+@media(max-width:380px){
+ #checkin .two{grid-template-columns:1fr}
+ #result #cutback .goal-comparison{grid-template-columns:1fr}
+}
+@media(forced-colors:active){#result .snapshot-totals>div{border-color:CanvasText}}
