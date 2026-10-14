@@ -52,8 +52,9 @@ function buildSleepShield(result,root){
  const activity=select('Instead of scrolling',activities.map(t=>[t,t]),state.activity);activity.id='shield-activity';
  const otherLabel=add('label','Your wind-down activity'),other=el('input');other.type='text';other.maxLength=80;other.value=state.other;otherLabel.append(other);other.id='shield-other';
  const parkingNote=add('p','','goal-note');
- const use=add('button','Use This Plan','goal-button');use.type='button';use.id='shield-use';
- const track=add('button','Track My Sleep Tonight','goal-button');track.type='button';track.id='shield-track';
+ const actions=add('div',undefined,'shield-plan-actions');
+ const use=add('button','Use This Plan','goal-button',actions);use.type='button';use.id='shield-use';
+ const track=add('button','Track My Sleep Tonight','goal-button',actions);track.type='button';track.id='shield-track';
  const nightStatus=add('p','','goal-note');nightStatus.setAttribute('role','status');
  const nightList=add('div',undefined,'shield-nights');nightList.hidden=true;
  const compactComparison=add('p','','goal-note');compactComparison.hidden=true;
