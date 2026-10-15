@@ -40,10 +40,11 @@ if(typeof document!=='undefined'){
  function changeText(before,after,unit){const diff=after-before;return diff===0?`No change ${unit}.`:`${Math.abs(diff)} ${Math.abs(diff)===1?'minute':'minutes'} ${diff<0?'less':'more'} ${unit}.`;}
  function addCompare(parent,before,after,beforeLabel,afterLabel){const grid=element('div',undefined,'goal-comparison');for(const [label,value,date] of [[beforeLabel,goalTime(before.daily)+'/day',before.date],[afterLabel,goalTime(after.daily)+'/day',after.date]]){const card=element('div',undefined,'goal-compare-card');card.append(element('span',label,'goal-label'),element('strong',value));const time=element('time',new Date(date).toLocaleString());time.dateTime=date;card.append(time);grid.append(card);}parent.append(grid);}
  function renderProgress(){
-  if(!current)return;const area=get('goal-progress-content');area.replaceChildren();get('clear-checkins').disabled=!history.length&&!historyError;get('save-checkin').disabled=stale||saved||historyError;
-  if(historyError){area.append(element('p','Saved history is unavailable. You can still use the current results and projections.'));return;}
+  if(!current)return;const area=get('goal-progress-content');area.replaceChildren();const summary=get('progress-summary'),details=get('progress-details');summary.textContent='';details.hidden=true;get('clear-checkins').disabled=!history.length&&!historyError;get('save-checkin').disabled=stale||saved||historyError;
+  if(historyError){summary.textContent='Saved history is unavailable. You can still use the current results and projections.';return;}
   const previous=history.filter(item=>item.id!==current.id).at(-1);
-  if(!previous){area.append(element('p',saved?'Check-in saved. Complete another assessment later to compare it with this one.':'This is your first saved check-in. Save it now and come back later to compare your progress.'));return;}
+  if(!previous){summary.textContent=saved?'Check-in saved. Complete another assessment later to compare it with this one.':'This is your first saved check-in. Save it now and come back later to compare your progress.';return;}
+  details.hidden=false;summary.textContent=changeText(previous.daily,current.daily,'per day')+' Compared with your previous saved check-in.';
   addCompare(area,previous,current,'PREVIOUS CHECK-IN','CURRENT CHECK-IN');
   const change=dailyChange(previous.daily,current.daily);let text=changeText(previous.daily,current.daily,'per day');
   if(change.percent===null)text+=' Percentage change is not defined because previous use was 0.';
@@ -92,3 +93,4 @@ if(typeof document!=='undefined'){
  });
  window.addEventListener('storage',event=>{if((event.key===checkinStorageKey||event.key===null)&&current){loadHistory();saved=history.some(item=>item.id===current.id&&item.reductionGoal===current.reductionGoal);renderProgress();}});
 }
+
