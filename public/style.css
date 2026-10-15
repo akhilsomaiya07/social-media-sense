@@ -206,3 +206,18 @@ footer{color:#c1cee1}
 /* Plan activation and tracking share a responsive, evenly spaced action row. */
 .sleep-shield .shield-plan-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px;align-items:stretch}
 .sleep-shield .shield-plan-actions>.goal-button{margin:0;min-width:0;display:flex;align-items:center;justify-content:center;text-align:center}
+
+/* Report hierarchy: optional tools retain their existing controls and state. */
+#result .snapshot-totals{grid-template-columns:repeat(2,minmax(0,1fr))}
+#result .report-year strong{display:block;font-size:24px;color:#e0fb9e;margin:6px 0}
+#result .report-year small{font-size:12px;color:#c2d5d5}
+#result #report-next>.goal-section,#result #report-next>#report-health{border-top:1px solid #456365;padding-top:14px;margin-top:16px}
+#result #report-next>#cutback{border:0;padding-top:0}
+#result #progress-summary{font-weight:600}
+#result .goal-save-actions{align-items:stretch;gap:14px}
+#result #clear-checkins{margin-left:auto;background:transparent}
+#result #report-health>summary,#result #report-cutback-tool>summary{font-size:16px}
+.shield-screen h3{font-size:20px;margin:22px 0 12px;line-height:1.4}
+.shield-screen .shield-plan-editor[hidden]{display:none}
+.shield-screen .shield-plan-actions{margin-top:18px}
+@media(max-width:480px){#result .snapshot-totals{grid-template-columns:1fr}#result #clear-checkins{margin-left:0}#result .goal-save-actions{flex-direction:column}#result #cutback .goal-comparison{grid-template-columns:1fr}}
