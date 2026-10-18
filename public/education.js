@@ -112,5 +112,5 @@ async function renderHealthEducation(result){
  }catch{if(requestId===healthRequest){showHealthFallback(result);status.hidden=false;status.textContent='Live sources could not be refreshed right now.';}}
  finally{clearTimeout(timeout)}
 }
-if(typeof document!=='undefined')document.getElementById('checkin').addEventListener('input',()=>{healthRequest++;healthAbort?.abort();});
 if(typeof module!=='undefined')module.exports={healthSearchContext,showHealthFallback,renderHealthEducation,balancedHealthPresentation};
+

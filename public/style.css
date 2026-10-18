@@ -223,3 +223,24 @@ footer{color:#c1cee1}
 .shield-screen .shield-plan-editor[hidden]{display:none}
 .shield-screen .shield-plan-actions{margin-top:18px}
 @media(max-width:480px){#result .snapshot-totals{grid-template-columns:1fr}#result #clear-checkins{margin-left:0}#result .goal-save-actions{flex-direction:column}#result #cutback .goal-comparison{grid-template-columns:1fr}}
+
+/* Home and optional tools reuse the existing visual identity. */
+.home-screen{max-width:760px;margin:0 auto 24px;padding:28px;background:#f8fbfa;border:1px solid #d7e1e2;border-radius:20px}
+.home-screen p{font-size:14px;line-height:1.6}.home-screen h2{line-height:1.4}
+.home-actions,.home-return-actions,.tool-actions,.tool-nav{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.home-actions .primary{width:auto;margin:0}.home-actions .flow-back{margin:0}
+.home-return-actions .report-text-button,.assessment-nav .report-text-button{font:inherit;font-size:13px;color:#1b5557;border:0;background:none;padding:10px 0;min-height:44px;text-decoration:underline;cursor:pointer}
+.home-return-actions button:focus-visible,.assessment-nav button:focus-visible{outline:3px solid #365f61;outline-offset:3px}
+.tool-screen{background:#163f41;color:#fff;border-radius:20px;padding:30px;min-width:0;width:100%}
+.tool-screen h2{font-size:26px;margin:24px 0 12px;line-height:1.3}.tool-screen h3{font-size:18px;margin:18px 0 10px;line-height:1.4}.tool-screen h4{font-size:16px}
+.tool-screen p{font-size:14px;line-height:1.6;color:#d4e1e1;overflow-wrap:anywhere}.tool-screen .goal-note{font-size:12px;color:#c2d5d5}
+.tool-screen label{display:block;margin:18px 0 8px}.tool-screen select{width:100%;min-width:0;min-height:46px;padding:12px;font:inherit;font-size:16px;color:#193e40;background:#fcfdfd;border:1px solid #c8d3d5;border-radius:9px}
+.tool-screen summary{min-height:44px;padding:11px 0;font-size:14px;line-height:1.5;color:#e1ebeb;cursor:pointer}
+.tool-screen details{border-top:1px solid #456365;margin-top:14px}.tool-screen .goal-section{margin-top:20px}.tool-screen .goal-save-actions{gap:14px;flex-wrap:wrap}
+.tool-screen :is(button,summary,a,input,select):focus-visible{outline:3px solid #d9f786;outline-offset:3px}
+.tool-screen #report-weekly-saving,.tool-screen #progress-summary{font-weight:600;color:#e0fb9e}.tool-screen #clear-checkins{margin-left:auto}
+.tools-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:24px}.tools-grid section{min-width:0;display:flex;flex-direction:column;border-top:1px solid #456365;padding-top:12px}.tools-grid p{flex:1}.tools-grid .goal-button{width:100%}
+.tool-screen .goal-comparison{gap:16px}.tool-screen #cutback{border:0}.tool-screen .goal-compare-card{min-width:0}.tool-screen .goal-compare-card strong{overflow-wrap:anywhere}
+.tool-actions{margin:20px 0}.assessment-nav{margin-bottom:12px}
+@media(max-width:680px){.tools-grid{grid-template-columns:1fr;gap:12px}.tool-screen,.home-screen{padding:23px 20px;border-radius:16px}}
+@media(max-width:480px){.tool-actions,.tool-nav,.home-actions{flex-direction:column;align-items:stretch}.tool-screen .goal-comparison,.tool-screen .goal-metrics{grid-template-columns:1fr}.tool-screen .goal-save-actions{flex-direction:column}.tool-screen #clear-checkins{margin-left:0}.tool-screen .goal-save-actions button{width:100%}}

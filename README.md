@@ -36,9 +36,9 @@ Live health information is selected from credible sources such as government/pub
 
 1. **About you** — optional name/nickname and age
 2. **Social media time** — per-platform daily usage sliders
-3. **Sleep** — usual sleep duration, planned bedtime, and pre-bed social media use
+3. **Sleep** — usual sleep duration and pre-bed social media use
 4. **Physical activity** — average daily activity
-5. **Past-week routine check-in** — four Never / Sometimes / Often questions
+5. **Past-week routine check-in** — Never / Sometimes / Often routine-disruption questions
 
 After a short loading transition, the assessment is hidden and a dedicated results screen is shown.
 
@@ -70,10 +70,6 @@ The repository also retains Netlify configuration and function files from the ea
 ├── wrangler.jsonc
 └── netlify.toml
 ```
-
-## Slider scale (developer notes)
-
-Fixed platform sliders use equal track sections for 0–30m, 30m–2h, and 2h–12h. Native positions 0–1080 map to daily minutes through `platformPosition` and `platformMinutes` in `public/platforms.js`. Selected times and arrow-key changes use 5-minute increments. Custom platforms retain a linear 0–720-minute scale. The slider accessibility description remains outside the research disclosure.
 
 ## Run locally
 
@@ -114,3 +110,8 @@ This project was built iteratively: the first working assessment was tested, val
 ## Creator
 
 **Made with ❤️ by Akhil Somaiya**
+
+
+## Report and optional tools
+
+The homepage opens the five-step assessment or My Tools. Completed reports are read-only snapshots. Sleep Shield, Reduction Goal, and Progress are separate in-app views; returning to a report does not recalculate it. Saved records are shown as recorded fields, never reconstructed full reports. See [TOOLS-ARCHITECTURE.md](TOOLS-ARCHITECTURE.md) for navigation, storage compatibility, and testing.
