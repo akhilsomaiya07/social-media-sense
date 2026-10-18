@@ -15,11 +15,10 @@ if(typeof document!=='undefined'){
  function reset(){clearTimeout(timer);busy=false;button.disabled=false;button.textContent='Celebrate My Balance 🎉';confetti.replaceChildren();get('balance-celebration-status').textContent='';}
  document.addEventListener('checkin:complete',event=>{
   reset();const assessment=event.detail.assessment,mode=balanceExperience(assessment);card.hidden=mode==='hidden';button.hidden=mode!=='positive';if(card.hidden)return;
-  const name=get('name').value.trim().slice(0,60);
+  const name=String(assessment.name||'').trim().slice(0,60);
   get('balance-title').textContent=mode==='positive'?(name?`Nice work, ${name}! 🎉`:'Nice work! 🎉'):'Your routine check-in';
   get('balance-message').textContent=mode==='positive'?'Your answers suggest that social media is not currently causing much disruption to your everyday routine. Keeping that balance is worth maintaining.':Object.values(assessment.behaviors).every(answer=>answer==='Never')?'You reported no routine disruption. Keep considering how your reported time fits with the rest of your day.':'Your answers are mixed: you reported occasional disruption in one area. The personalized guidance above can help you decide whether to make a change.';
  });
- get('checkin').addEventListener('input',()=>{reset();card.hidden=true;});
  button.addEventListener('click',()=>{
   if(busy||card.hidden||button.hidden)return;
   busy=true;button.disabled=true;
@@ -33,3 +32,4 @@ if(typeof document!=='undefined'){
   timer=setTimeout(()=>{confetti.replaceChildren();button.textContent='Keep It Going! ✓';get('balance-celebration-status').textContent='Keep it going!';timer=setTimeout(reset,1600);},reducedMotion?0:1700);
  });
 }
+
