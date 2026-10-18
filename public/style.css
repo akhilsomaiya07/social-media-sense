@@ -94,10 +94,12 @@ footer{color:#c1cee1}
 .platform-slider-reference-note{margin:0 0 10px;padding:10px 12px;border:1px solid #d7e1e2;border-radius:10px;background:#fbfcfc;color:#445f62;font-size:12px;line-height:1.55}
 .platform-reference-legend{margin:0 0 10px;padding:12px 14px;border:1px solid #d7e1e2;border-radius:10px;background:#f8fbfa;color:#294f51;font-size:12px;line-height:1.55}
 .platform-reference-legend p{margin:6px 0 0}
-.platform-reference-info{margin:0 0 18px;color:#445f62}
-.platform-reference-info summary{min-height:44px;padding:12px 0;font-size:12px;font-weight:650;color:#294f51}
-.platform-reference-info p{font-size:12px;line-height:1.6;color:#566c70}
-.platform-reference-info a{color:#1b5557;font-weight:650}
+.platform-reference-info{margin:0 0 18px;padding:10px 14px;border:1px solid #d7e1e2;border-radius:10px;background:#f8fbfa;color:#445f62;min-width:0}
+.platform-reference-info h3{margin:0 0 4px;font-size:12px;font-weight:650;line-height:1.5;color:#294f51}
+.platform-reference-info p{margin:0;font-size:12px;line-height:1.6}
+.platform-reference-info p+p{margin-top:4px}
+.platform-reference-info a{display:inline-block;padding:3px 0;color:#1b5557;font-weight:650;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
+.platform-reference-info a:focus-visible{outline:2px solid #365f61;outline-offset:3px;border-radius:2px}
 /* Scale positions follow the native thumb's 24px inset travel area. */
 .platform-slider-limits{position:relative;height:34px;margin:2px 12px 0}
 .platform-scale-start,.platform-scale-end{position:absolute;top:2px;color:#566c70;font-size:12px;font-weight:500;line-height:1;transform:translateX(-50%)}
