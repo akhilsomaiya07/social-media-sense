@@ -244,3 +244,19 @@ footer{color:#c1cee1}
 .tool-actions{margin:20px 0}.assessment-nav{margin-bottom:12px}
 @media(max-width:680px){.tools-grid{grid-template-columns:1fr;gap:12px}.tool-screen,.home-screen{padding:23px 20px;border-radius:16px}}
 @media(max-width:480px){.tool-actions,.tool-nav,.home-actions{flex-direction:column;align-items:stretch}.tool-screen .goal-comparison,.tool-screen .goal-metrics{grid-template-columns:1fr}.tool-screen .goal-save-actions{flex-direction:column}.tool-screen #clear-checkins{margin-left:0}.tool-screen .goal-save-actions button{width:100%}}
+
+/* Homepage: reuse the introduction as a single open hero. */
+.homepage .home-screen{max-width:none;margin:24px 0 40px;padding:36px 0;background:none;border:0;border-radius:0;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(240px,1fr);gap:24px 56px;align-items:center;color:#f2f5fc}
+.homepage .intro{display:block;margin:0}.homepage .intro .privacy{display:none}
+.homepage .intro h1{font-size:clamp(36px,4.5vw,60px);line-height:1.12;letter-spacing:-1.5px;margin:20px 0 24px;max-width:680px}
+.homepage .intro p:last-child{font-size:18px;max-width:570px;line-height:1.65}
+.homepage .home-actions{flex-direction:column;align-items:stretch;gap:16px;max-width:330px;width:100%;justify-self:end}
+.homepage .home-actions .primary{background:#d9f786;color:#173f41;min-height:52px;width:100%;font-weight:700}.homepage .home-actions .primary:hover{background:#e0fb9e}
+.home-tools-link{font:inherit;font-size:15px;color:#d4e1e1;text-decoration:underline;text-underline-offset:4px;background:none;border:0;min-height:44px;padding:10px;cursor:pointer}
+.homepage .home-reassurance{font-size:13px;color:#c9d5e6;text-align:center;margin:0;line-height:1.6}
+.homepage .home-return-actions{grid-column:1/-1}.homepage .home-return-actions .report-text-button{color:#c9d5e6}
+.homepage button:focus-visible{outline:3px solid #d9f786;outline-offset:4px}
+@media(max-width:850px){.homepage .home-screen{grid-template-columns:minmax(0,1fr);gap:28px;margin:0 0 24px;padding:24px 0}.homepage .home-actions{justify-self:start;max-width:360px}.homepage .intro h1{font-size:clamp(34px,6vw,48px)}.homepage .intro p:last-child{font-size:16px}}
+@media(forced-colors:active){.homepage .home-screen,.homepage .intro p:last-child,.homepage .home-reassurance,.homepage .home-tools-link,.homepage .home-return-actions .report-text-button{color:CanvasText}.homepage .home-actions .primary{background:ButtonFace;color:ButtonText;border:1px solid ButtonText}}
+
+.homepage .intro h1{text-wrap:balance}.homepage .intro h1 br{display:none}

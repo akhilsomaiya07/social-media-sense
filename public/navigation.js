@@ -11,12 +11,10 @@ const appViews=(()=>{
   try{const h=JSON.parse(localStorage.getItem('room.saved-checkins.v1')||'null');saved=!!h?.checkins?.length;}catch{storageProblem=true;}
   try{const p=JSON.parse(localStorage.getItem('social-media-sense.sleep-shield.v1')||'null');plan=!!p&&(validShieldBedtime(p.bedtime)||p.nights?.some(n=>validShieldBedtime(n?.plan?.bedtime)));}catch{storageProblem=true;}
   get('tools-report').hidden=!hasReport;get('home-report').hidden=!hasReport;
-  get('home-resume-plan').hidden=!plan;get('home-saved-progress').hidden=!saved;
   get('shield-open').textContent=plan?'Resume My Plan':'Open Sleep Shield';
   get('home-start').textContent=assessmentStarted&&!completed?'Continue My Check-In':hasReport?'Start a New Check-In':'Start My Check-In';
   const note=hasReport?'Your current report is available during this visit. Save it in Progress if you want to keep its check-in values.':saved?'Saved check-ins are available in Progress. They are not complete historical assessment reports.':plan?'Your saved Sleep Shield plan is available. You do not need another assessment to resume it.':'No assessment is required to explore My Tools. Reduction Goal needs a current or saved check-in.';
-  get('home-state').textContent=storageProblem?'Some saved data could not be read. Open the relevant tool for details; nothing has been replaced.':note;
-  get('tools-state').textContent=note;
+  get('tools-state').textContent=storageProblem?'Some saved data could not be read. Open the relevant tool for details; nothing has been replaced.':note;
  }
  function show(view,focus=true){
   if(view==='report'&&!hasReport)view='tools';
@@ -25,7 +23,11 @@ const appViews=(()=>{
   document.dispatchEvent(new CustomEvent('view:before',{detail:{view}}));
   for(const [key,id] of Object.entries(ids))get(id).hidden=key!==view;
   current=view;
-  document.querySelector('.intro').hidden=view!=='home'&&view!=='assessment';
+  const intro=document.querySelector('.intro'),home=get('home-screen');
+  if(view==='home')home.prepend(intro);else home.before(intro);
+  intro.hidden=view!=='home'&&view!=='assessment';
+  intro.querySelector('h1+p').textContent=view==='home'?'Take a five-step check-in to understand your social media time and how it fits into your daily routine.':'A few details. A clearer picture. No scores or labels.';
+  document.body.classList.toggle('homepage',view==='home');
   const workspace=get('checkin').closest('.workspace');workspace.hidden=view==='home';
   workspace.classList.toggle('flow-active',view==='assessment'||view==='loading');workspace.classList.toggle('results-only',view!=='assessment'&&view!=='loading');
   document.body.classList.toggle('results-screen',view!=='home'&&view!=='assessment');
