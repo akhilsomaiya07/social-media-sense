@@ -1,0 +1,87 @@
+{
+  "fixture": "Synthetic Demo, age 30; 240m prior / 180m current; fixed Jan 2026 UTC dates",
+  "research": "503 fixture: existing fallback guidance, no successful live retrieval",
+  "browser": "153.0.8010.0",
+  "captures": [
+    {
+      "file": "homepage.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "framing": "viewport (scrollable content may continue below)",
+      "bytes": 594892,
+      "sha256": "ff5b8ae6091f16c849f93e2da552958e377f88d5a5dc67cffb04c0acedf12cb3"
+    },
+    {
+      "file": "assessment-step-2.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "framing": "viewport (scrollable content may continue below)",
+      "bytes": 386284,
+      "sha256": "ae146fdbdfcb2944fb134ba2546791f270e4dbdcdec6939e24ec04d2b72252ca"
+    },
+    {
+      "file": "results-report.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "framing": "#result",
+      "bytes": 135237,
+      "sha256": "d94af45fc46fdacb3e3755d21db57ec43e4e94e0f921580a7502fe594391bf27"
+    },
+    {
+      "file": "mobile-results.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "framing": "viewport (scrollable content may continue below)",
+      "bytes": 105969,
+      "sha256": "bd716b6d7b8e3441ed93b7c49b78810050745bfe87a31e7fc906d680b54aadab"
+    },
+    {
+      "file": "my-tools.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "framing": "viewport (scrollable content may continue below)",
+      "bytes": 407082,
+      "sha256": "ffe5638b72b6dfc83d2887054ea6a6a96d7f901b6c47a327685c3c348e67da7a"
+    },
+    {
+      "file": "sleep-shield.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "framing": "viewport (scrollable content may continue below)",
+      "bytes": 348898,
+      "sha256": "b06862679e292b58f726fcbe1912b450e100586889ce3118f522caf5264bc9ff"
+    },
+    {
+      "file": "reduction-goal.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "framing": "viewport (scrollable content may continue below)",
+      "bytes": 354219,
+      "sha256": "e74db88888ec7de592c0d8edff552d9cec1ee3735b21a46a969c7fe0752fbb88"
+    },
+    {
+      "file": "progress.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "framing": "viewport (scrollable content may continue below)",
+      "bytes": 365952,
+      "sha256": "2bb86ad54d90c4d1e95b25efa2f44200f563df8da9e21ee8b38bcf34c42b1824"
+    }
+  ]
+}

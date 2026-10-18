@@ -4,6 +4,36 @@ A responsive digital-wellness check-in that helps people understand how social m
 
 **Live demo:** https://social-media-sense.akhilsomaiya7.workers.dev/
 
+## See SOCIAL MEDIA SENSE in Action
+
+Actual browser captures using fictional check-ins and local storage. Research is shown in fallback mode; these screenshots do not claim a successful live search.
+
+![Homepage with Start My Check-In and Explore My Tools](docs/screenshots/homepage.png)
+
+Start a five-step check-in or explore the optional tools without an account.
+
+<details>
+<summary>Assessment, report and tools gallery</summary>
+
+| Assessment and report | Optional tools |
+| --- | --- |
+| ![Step 2 per-app sliders](docs/screenshots/assessment-step-2.png) **Daily app use.** Set per-app time with a live combined total. This view is scrolled to the app controls. | ![My Tools hub](docs/screenshots/my-tools.png) **My Tools.** Open Sleep Shield, Reduction Goal or Progress. |
+| ![Read-only personalized report](docs/screenshots/results-report.png) **Your report.** Review your time snapshot, personal insights and an optional next step. | ![Sleep Shield bedtime plan](docs/screenshots/sleep-shield.png) **Sleep Shield.** Create a bedtime cutoff and record nights separately from the assessment. |
+| ![Reduction Goal projection](docs/screenshots/reduction-goal.png) **Reduction Goal.** Explore a target and projected time savings without changing reported usage. | ![Saved check-in comparison](docs/screenshots/progress.png) **Your Progress.** Save check-ins locally and compare reported values over time. |
+
+</details>
+
+<details>
+<summary>Mobile example</summary>
+
+<img src="docs/screenshots/mobile-results.png" alt="Top of the personalized results report on a 390-pixel mobile viewport" width="300">
+
+The report continues below this mobile viewport.
+
+</details>
+
+[Capture instructions and screenshot CI workflow](docs/SCREENSHOTS.md)
+
 ## What it does
 
 Social Media Sense turns a short five-step check-in into a practical snapshot of daily social media habits. It combines self-reported app usage with sleep, physical activity, and routine-disruption questions, then shows time calculations, personalized opportunities, reduction projections, Sleep Shield guidance, and current health resources.
@@ -13,12 +43,14 @@ Social Media Sense turns a short five-step check-in into a practical snapshot of
 - Five-step guided assessment with field-specific validation
 - Per-app social media sliders with a 24-hour combined daily limit
 - Daily, weekly, and yearly usage calculations
-- Top-platform breakdown and personalized result summary
+- Read-only report with Your Social Media Snapshot, Your Personal Insights and personalized Your Next Steps
+- Top-platform breakdown
+- **My Tools** hub, accessible independently of the assessment
 - Behavior-based interpretation instead of judging users by time alone
-- **Your Biggest Opportunity** card based on the strongest reported routine disruption
-- **What if I cut back?** projections for time saved per day, week, month, and year
+- **One Place to Start** within **Your Personal Insights**, using the existing routine-context rules
+- Separate **Reduction Goal** tool for optional time-saving projections (available above 120 reported minutes/day)
 - **Sleep Shield** with a personalized pre-bed plan and seven-night local tracker
-- Saved check-ins and progress comparisons using browser local storage
+- **Your Progress** for explicitly saved check-ins and comparisons using browser local storage
 - Balanced-use celebration for users reporting little routine disruption
 - Live, age-aware health research with source links and verified fallback guidance
 - Responsive layout for desktop and mobile
