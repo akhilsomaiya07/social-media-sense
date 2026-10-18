@@ -116,7 +116,13 @@ if(typeof document!=='undefined'){
   if(linked)recordArea.append(element('p',`Separately saved goal: ${goalTime(linked.reduction)} less per day · ${new Date(linked.updatedAt).toLocaleString()}. This is a target, not a change in reported use.`,'goal-note'));
   const orphans=goals.filter(g=>!history.some(r=>r.id===g.checkinId));if(orphans.length)message('Some goals have no matching saved check-in, possibly from a change in another tab. Clear saved history and linked goals to remove them; they cannot be used as baselines.');
  }
- function changed(){document.dispatchEvent(new Event('tools:data-changed'));}
+ function changed(){
+  let saved=false;try{saved=!!current&&store.read().some(r=>r.id===current.id);}catch{}
+  document.dispatchEvent(new CustomEvent('checkin:save-state',{detail:{saved}}));
+  document.dispatchEvent(new Event('tools:data-changed'));
+ }
+ // Report shortcuts always open their submitted baseline, not a prior selection.
+ document.addEventListener('click',event=>{const button=event.target.closest('[data-current-checkin]');if(!button||!current)return;if(button.dataset.view==='progress')progressId=current.id;if(button.dataset.view==='reduction')goalId=current.id;},true);
  document.addEventListener('checkin:complete',event=>{
   if(!event.detail.assessment)return;const a=event.detail.assessment;
   current=freezeCheckin({id:typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+(++sequence),date:new Date().toISOString(),daily:a.daily,platforms:a.platforms.map(p=>({...p})),sleepMinutes:a.sleepMinutes,activityMinutes:a.activityMinutes,behaviors:{...a.behaviors},opportunity:biggestOpportunity(a),reductionGoal:null});
