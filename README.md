@@ -23,15 +23,6 @@ Start a five-step check-in or explore the optional tools without an account.
 
 </details>
 
-<details>
-<summary>Mobile example</summary>
-
-<img src="docs/screenshots/mobile-results.png" alt="Top of the personalized results report on a 390-pixel mobile viewport" width="300">
-
-The report continues below this mobile viewport.
-
-</details>
-
 [Capture instructions and screenshot CI workflow](docs/SCREENSHOTS.md)
 
 ## What it does
