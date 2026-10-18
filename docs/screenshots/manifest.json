@@ -29,9 +29,9 @@
         "width": 1280,
         "height": 900
       },
-      "framing": "#result",
-      "bytes": 135237,
-      "sha256": "d94af45fc46fdacb3e3755d21db57ec43e4e94e0f921580a7502fe594391bf27"
+      "framing": "viewport (scrollable content may continue below)",
+      "bytes": 383345,
+      "sha256": "f9f90243685e21bc4601b4c423d2e3c5367b1c938d15e899912de8ec54a97413"
     },
     {
       "file": "mobile-results.png",

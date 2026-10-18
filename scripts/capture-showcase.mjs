@@ -54,7 +54,7 @@ try{
  await page.clock.setFixedTime(new Date('2026-01-22T12:00:00Z'));await begin();
  await usePlatform('Facebook',60);await usePlatform('Instagram',90);await usePlatform('YouTube',30);
  await capture('assessment-step-2');await finishAssessment(60);assert.equal(await page.locator('#daily').textContent(),'3h');
- await capture('results-report','#result');await page.setViewportSize({width:390,height:844});await capture('mobile-results');await page.setViewportSize({width:1280,height:900});
+ await capture('results-report');await page.setViewportSize({width:390,height:844});await capture('mobile-results');await page.setViewportSize({width:1280,height:900});
  await page.click('#explore-tools');await capture('my-tools');await tool('shield');
  await page.fill('#shield-bedtime','23:00');await page.selectOption('#shield-window','30');await page.selectOption('#shield-activity','Read');await page.click('#shield-use');await capture('sleep-shield');
  await hub();await tool('reduction');await page.locator('#goal-reduction').fill('30');await capture('reduction-goal');

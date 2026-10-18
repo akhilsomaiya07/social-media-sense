@@ -8,18 +8,52 @@ A responsive digital-wellness check-in that helps people understand how social m
 
 Actual browser captures using fictional check-ins and local storage. Research is shown in fallback mode; these screenshots do not claim a successful live search.
 
-![Homepage with Start My Check-In and Explore My Tools](docs/screenshots/homepage.png)
+All previews use the same 1280 × 900 capture size and display width. Click an image to open it at full size.
 
-Start a five-step check-in or explore the optional tools without an account.
+**Homepage**
+
+<a href="docs/screenshots/homepage.png"><img src="docs/screenshots/homepage.png" alt="Homepage" width="640"></a>
+
+Start a five-step check-in or explore optional tools without an account.
 
 <details>
 <summary>Assessment, report and tools gallery</summary>
 
-| Assessment and report | Optional tools |
-| --- | --- |
-| ![Step 2 per-app sliders](docs/screenshots/assessment-step-2.png) **Daily app use.** Set per-app time with a live combined total. This view is scrolled to the app controls. | ![My Tools hub](docs/screenshots/my-tools.png) **My Tools.** Open Sleep Shield, Reduction Goal or Progress. |
-| ![Read-only personalized report](docs/screenshots/results-report.png) **Your report.** Review your time snapshot, personal insights and an optional next step. | ![Sleep Shield bedtime plan](docs/screenshots/sleep-shield.png) **Sleep Shield.** Create a bedtime cutoff and record nights separately from the assessment. |
-| ![Reduction Goal projection](docs/screenshots/reduction-goal.png) **Reduction Goal.** Explore a target and projected time savings without changing reported usage. | ![Saved check-in comparison](docs/screenshots/progress.png) **Your Progress.** Save check-ins locally and compare reported values over time. |
+**Daily app use**
+
+<a href="docs/screenshots/assessment-step-2.png"><img src="docs/screenshots/assessment-step-2.png" alt="Daily app use" width="640"></a>
+
+Set per-app time with a live combined total. This view is scrolled to the app controls.
+
+**Your report**
+
+<a href="docs/screenshots/results-report.png"><img src="docs/screenshots/results-report.png" alt="Your report" width="640"></a>
+
+Review your time snapshot, personal insights and an optional next step. More content continues below this viewport.
+
+**My Tools**
+
+<a href="docs/screenshots/my-tools.png"><img src="docs/screenshots/my-tools.png" alt="My Tools" width="640"></a>
+
+Open Sleep Shield, Reduction Goal or Progress.
+
+**Sleep Shield**
+
+<a href="docs/screenshots/sleep-shield.png"><img src="docs/screenshots/sleep-shield.png" alt="Sleep Shield" width="640"></a>
+
+Create a bedtime cutoff and record nights separately from the assessment.
+
+**Reduction Goal**
+
+<a href="docs/screenshots/reduction-goal.png"><img src="docs/screenshots/reduction-goal.png" alt="Reduction Goal" width="640"></a>
+
+Explore a target and projected time savings without changing reported usage.
+
+**Your Progress**
+
+<a href="docs/screenshots/progress.png"><img src="docs/screenshots/progress.png" alt="Your Progress" width="640"></a>
+
+Save check-ins locally and compare reported values over time.
 
 </details>
 
