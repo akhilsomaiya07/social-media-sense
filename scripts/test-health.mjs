@@ -39,7 +39,7 @@ assert.equal(ids['education-risks'].children.length,7);assert.equal(ids['educati
 sandbox.fetch=async()=>({ok:true,json:async()=>({broken:true})});await client.renderHealthEducation({age:40,reasons:[{text:'You said you spent longer scrolling than planned.',frequency:'Often'}]});assert.equal(ids['education-risks'].children[0].children[0].textContent,'Losing track of time or scrolling longer than intended');assert(ids['education-risks'].children[0].children.some(n=>n.className==='education-personal'));
 await client.renderHealthEducation({age:70,reasons:[]});assert(ids['education-age'].textContent.includes('no routine disruption'));assert(ids['education-age'].textContent.includes('older adults'));
 sandbox.fetch=async()=>{throw new DOMException('Timed out','TimeoutError')};await client.renderHealthEducation({age:15,reasons:[]});assert.equal(ids['education-risks'].children.length,7);
-let finish;sandbox.fetch=()=>new Promise(resolve=>finish=resolve);const pending=client.renderHealthEducation({age:30,reasons:[]});ids.checkin.events.input();finish({ok:true,json:async()=>({benefits:[item],risks:[item],resources:api.verifiedResult(response).resources,checkedAt:new Date().toISOString()})});await pending;assert.equal(ids['education-benefits'].children.length,5);
+let finish;sandbox.fetch=()=>new Promise(resolve=>finish=resolve);const pending=client.renderHealthEducation({age:30,reasons:[]});const finishOld=finish;sandbox.fetch=async()=>({ok:false,json:async()=>({code:'test'})});await client.renderHealthEducation({age:30,reasons:[]});finishOld({ok:true,json:async()=>({benefits:[item],risks:[item],resources:api.verifiedResult(response).resources,checkedAt:new Date().toISOString()})});await pending;assert.equal(ids['education-benefits'].children.length,5);
 console.log('PASS: source gates, failures, age/topic privacy, fresh requests, safe rendering, stale-response cancellation. Live API retrieval remains unverified.');
 
 delete process.env.OPENAI_BASE_URL;delete process.env.OPENAI_API_KEY;
@@ -85,3 +85,4 @@ const balanced={daily:240,behaviors:{bedtime:'Never',tasks:'Never',movement:'Nev
 assert.equal(balanceSandbox.module.exports.balanceExperience(balanced),'positive');
 assert.equal(balanceSandbox.module.exports.balanceExperience({...balanced,worthReviewing:true}),'hidden');
 console.log('PASS: live sources replace fallback resources; celebration respects the concern flag.');
+
