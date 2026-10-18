@@ -28,23 +28,56 @@ function validSavedCheckin(record){
 }
 function createCheckinStore(getStorage){
  function read(){const raw=getStorage().getItem(checkinStorageKey);if(raw===null)return [];const saved=JSON.parse(raw);if(!saved||saved.version!==1||!Array.isArray(saved.checkins)||!saved.checkins.every(validSavedCheckin))throw new Error('Saved check-ins could not be read. Clear them to start a new history.');return saved.checkins;}
- return {read,save(record){if(!validSavedCheckin(record))throw new Error('This check-in could not be saved. Complete the assessment again.');const history=read(),index=history.findIndex(item=>item.id===record.id);if(index<0)history.push(record);else history[index]=record;getStorage().setItem(checkinStorageKey,JSON.stringify({version:1,checkins:history}));return history;},clear(){getStorage().removeItem(checkinStorageKey);}};
+ return {read,save(record){if(!validSavedCheckin(record))throw new Error('This check-in could not be saved. Complete the assessment again.');const history=read(),index=history.findIndex(item=>item.id===record.id);if(index>=0)return history;history.push(record);getStorage().setItem(checkinStorageKey,JSON.stringify({version:1,checkins:history}));return history;},clear(){getStorage().removeItem(checkinStorageKey);}};
 }
-if(typeof module!=='undefined')module.exports={goalTime,goalProjection,groupedPlatforms,biggestOpportunity,dailyChange,validSavedCheckin,createCheckinStore,checkinStorageKey};
+// Goal records are separate from immutable saved check-in snapshots.
+const reductionStorageKey='social-media-sense.reduction-goals.v1';
+function createGoalStore(getStorage){
+ function read(){const raw=getStorage().getItem(reductionStorageKey);if(raw===null)return [];const data=JSON.parse(raw);if(data?.version!==1||!Array.isArray(data.goals)||!data.goals.every(g=>g&&typeof g.checkinId==='string'&&g.checkinId.length>0&&Number.isInteger(g.reduction)&&g.reduction>=0&&g.reduction<=1440&&Number.isFinite(Date.parse(g.updatedAt)))||new Set(data.goals.map(g=>g.checkinId)).size!==data.goals.length)throw Error('Saved goals could not be read.');return data.goals;}
+ return {read,save(record,history){if(!record||typeof record.checkinId!=='string'||!Number.isInteger(record.reduction)||record.reduction<0||!Number.isFinite(Date.parse(record.updatedAt)))throw Error('This goal could not be saved.');if(!history.some(c=>c.id===record.checkinId&&c.daily>120&&record.reduction<=c.daily))throw Error('Save the matching eligible check-in first.');const goals=read(),i=goals.findIndex(g=>g.checkinId===record.checkinId);if(i<0)goals.push(record);else goals[i]=record;getStorage().setItem(reductionStorageKey,JSON.stringify({version:1,goals}));return goals;}};
+}
+function clearCheckinsAndGoals(getStorage){
+ // Goals first: if either operation fails, history is never removed while linked
+ // goals remain. Report partial failure; do not touch the independent Shield key.
+ const storage=getStorage();storage.removeItem(reductionStorageKey);storage.removeItem(checkinStorageKey);
+}
+function freezeCheckin(value){if(value&&typeof value==='object'){Object.values(value).forEach(freezeCheckin);Object.freeze(value);}return value;}
+if(typeof module!=='undefined')module.exports={goalTime,goalProjection,groupedPlatforms,biggestOpportunity,dailyChange,validSavedCheckin,createCheckinStore,checkinStorageKey,reductionStorageKey,createGoalStore,clearCheckinsAndGoals,freezeCheckin};
 if(typeof document!=='undefined'){
- const get=id=>document.getElementById(id),store=createCheckinStore(()=>window.localStorage);let current=null,history=[],historyError=false,stale=false,saved=false,goalChosen=false,sequence=0;
- const goalSlider=get('goal-reduction');
- function message(text){get('goal-save-status').textContent=text;}
- function loadHistory(){try{history=store.read();historyError=false;return true;}catch{history=[];historyError=true;message('Saved check-ins could not be read. Browser storage may be blocked or the saved data may be invalid. No saved data has been replaced.');return false;}}
+ const get=id=>document.getElementById(id),store=createCheckinStore(()=>window.localStorage),goalStore=createGoalStore(()=>window.localStorage);
+ let current=null,history=[],goals=[],historyError=false,goalError=false,goalId='',progressId='',returnGoalId='',sequence=0;
+ const drafts=new Map(),goalSlider=get('goal-reduction');
+ const message=text=>{get('goal-save-status').textContent=text;};
+ const goalMessage=text=>{get('reduction-status').textContent=text;};
+ function load(){try{history=store.read();historyError=false;}catch{history=[];historyError=true;}try{goals=goalStore.read();goalError=false;}catch{goals=[];goalError=true;}}
+ function records(){return [...history,...(current&&!history.some(r=>r.id===current.id)?[current]:[])];}
+ function baseline(id){return records().find(r=>r.id===id);}
  function element(tag,text,className){const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(className)node.className=className;return node;}
+ function label(record){return (record.id===current?.id?'Current check-in':'Saved check-in')+' · '+new Date(record.date).toLocaleString()+' · '+goalTime(record.daily)+'/day';}
+ function options(id,selected){const select=get(id);select.replaceChildren();for(const record of records().slice().reverse()){const o=element('option',label(record));o.value=record.id;select.append(o);}select.value=selected;select.hidden=!records().length;get(id==='goal-baseline'?'goal-baseline-label':'progress-record-label').hidden=select.hidden;}
+ function defaultId(){return current?.id||history.at(-1)?.id||'';}
+ function draft(record){if(!drafts.has(record.id)){const saved=goals.find(g=>g.checkinId===record.id);drafts.set(record.id,saved&&saved.reduction<=record.daily?saved.reduction:record.reductionGoal??0);}return drafts.get(record.id);}
+ function updateProjection(){
+  const record=baseline(goalId);if(!record||record.daily<=120)return;
+  const p=goalProjection(record.daily,draft(record));goalSlider.max=String(record.daily);goalSlider.value=String(p.reduction);goalSlider.disabled=false;
+  goalSlider.setAttribute('aria-valuetext',`${p.reduction} minutes less per day`);get('goal-reduction-value').textContent=goalTime(p.reduction);
+  get('goal-limit').textContent=`Choose up to ${goalTime(record.daily)} per day. This is a plan, not a recorded change.`;
+  get('goal-before').textContent=goalTime(p.daily)+'/day';get('goal-after').textContent=goalTime(p.target)+'/day';get('goal-before-bar').style.width=p.daily/1440*100+'%';get('goal-after-bar').style.width=p.target/1440*100+'%';
+  get('goal-daily').textContent=String(p.reduction);for(const key of ['week','month','year'])get('goal-'+key).textContent=p[key].toLocaleString(undefined,{maximumFractionDigits:2});get('goal-days').textContent=p.days.toFixed(1);
+  get('report-weekly-saving').textContent=p.reduction?get('goal-week').textContent+' hours saved per week (projected)':'Choose a reduction amount if you want to explore how your time could change.';get('report-goal-breakdown').hidden=!p.reduction;
+ }
+ function renderGoal(){
+  if(!baseline(goalId))goalId=defaultId();options('goal-baseline',goalId);const record=baseline(goalId),eligible=!!record&&record.daily>120,saved=history.some(r=>r.id===goalId);
+  get('cutback').hidden=!eligible;get('goal-persistence').hidden=!eligible;get('goal-start').hidden=!!record;
+  get('goal-unavailable').textContent=!record?(historyError?'Saved history could not be read. No stored data has been replaced. A completed check-in is needed for a baseline.':'Complete a check-in to use a reported daily baseline. No usage has been assumed.'):!eligible?'This optional tool is available for reported daily use exceeding 2 hours. This is an app feature rule, not a medical cutoff.':'';
+  get('goal-baseline-note').textContent=record?label(record)+(saved?'. Goals do not change this saved assessment.':'. Not saved yet. Your draft target stays with this check-in during this visit.') :'';
+  get('save-goal').disabled=!saved||goalError||historyError;get('goal-save-assessment').hidden=saved||record?.id!==current?.id;
+  if(goalError)goalMessage('Saved goals could not be read. No saved data has been replaced. You can still explore a temporary target.');
+  updateProjection();
+ }
  function changeText(before,after,unit){const diff=after-before;return diff===0?`No change ${unit}.`:`${Math.abs(diff)} ${Math.abs(diff)===1?'minute':'minutes'} ${diff<0?'less':'more'} ${unit}.`;}
  function addCompare(parent,before,after,beforeLabel,afterLabel){const grid=element('div',undefined,'goal-comparison');for(const [label,value,date] of [[beforeLabel,goalTime(before.daily)+'/day',before.date],[afterLabel,goalTime(after.daily)+'/day',after.date]]){const card=element('div',undefined,'goal-compare-card');card.append(element('span',label,'goal-label'),element('strong',value));const time=element('time',new Date(date).toLocaleString());time.dateTime=date;card.append(time);grid.append(card);}parent.append(grid);}
- function renderProgress(){
-  if(!current)return;const area=get('goal-progress-content');area.replaceChildren();const summary=get('progress-summary'),details=get('progress-details');summary.textContent='';details.hidden=true;get('clear-checkins').disabled=!history.length&&!historyError;get('save-checkin').disabled=stale||saved||historyError;
-  if(historyError){summary.textContent='Saved history is unavailable. You can still use the current results and projections.';return;}
-  const previous=history.filter(item=>item.id!==current.id).at(-1);
-  if(!previous){summary.textContent=saved?'Check-in saved. Complete another assessment later to compare it with this one.':'This is your first saved check-in. Save it now and come back later to compare your progress.';return;}
-  details.hidden=false;summary.textContent=changeText(previous.daily,current.daily,'per day')+' Compared with your previous saved check-in.';
+ function renderComparison(previous,current,area){
   addCompare(area,previous,current,'PREVIOUS CHECK-IN','CURRENT CHECK-IN');
   const change=dailyChange(previous.daily,current.daily);let text=changeText(previous.daily,current.daily,'per day');
   if(change.percent===null)text+=' Percentage change is not defined because previous use was 0.';
@@ -58,39 +91,51 @@ if(typeof document!=='undefined'){
   area.append(element('h4','Top social media apps'),element('p','The most-used apps from either check-in, with their reported daily times.','goal-note'));
   if(!names.size)area.append(element('p','No social media time was reported in either check-in.'));
   else{const list=element('ul',undefined,'goal-app-list');for(const [key,name] of names){const a=prior.find(p=>p.name.toLowerCase()===key)?.minutes||0,b=now.find(p=>p.name.toLowerCase()===key)?.minutes||0,item=element('li');item.append(element('strong',name),element('p',`Previous: ${goalTime(a)} · Current: ${goalTime(b)}`),element('p',changeText(a,b,'per day')));list.append(item);}area.append(list);}
-  area.append(element('p','These are changes in your reported averages, not a measure of whether you are healthier or unhealthier.','goal-note'));
+  area.append(element('p','These are changes in your reported averages, not a measure of whether you are healthier or unhealthier.','goal-note')); }
+ function renderProgress(){
+  if(!baseline(progressId))progressId=defaultId();options('progress-record',progressId);
+  const selected=baseline(progressId),saved=history.some(r=>r.id===current?.id),area=get('goal-progress-content'),summary=get('progress-summary'),details=get('progress-details'),recordArea=get('saved-record-summary');
+  area.replaceChildren();recordArea.replaceChildren();summary.textContent='';details.hidden=true;get('goal-progress').hidden=false;
+  get('save-checkin').hidden=!current||selected?.id!==current.id;get('save-checkin').disabled=!current||saved||historyError;get('save-checkin').textContent=saved?'Current Check-In Saved':'Save This Check-In';
+  get('clear-checkins').disabled=!history.length&&!historyError&&!goals.length&&!goalError;
+  get('return-to-goal').hidden=!returnGoalId||!baseline(returnGoalId);
+  get('progress-record-note').textContent=selected?label(selected)+(selected.id===current?.id?'. Saving uses this completed assessment, not your draft answers.':'. Saved fields only; this is not a reconstructed assessment report.'):'';
+  if(historyError){summary.textContent='Saved history could not be read. Nothing has been overwritten. Clear history only if you want to remove it and linked goals.';return;}
+  if(!selected){summary.textContent='No saved check-ins yet. Complete an assessment, then save it here to compare later.';return;}
+  recordArea.append(element('p',`Reported daily use: ${goalTime(selected.daily)} · Sleep: ${goalTime(selected.sleepMinutes)} per night · Physical activity: ${goalTime(selected.activityMinutes)} per day.`));
+  const savedFields=element('details'),savedSummary=element('summary','View saved check-in fields');savedFields.append(savedSummary);
+  const platforms=element('ul');for(const p of groupedPlatforms(selected.platforms).filter(p=>p.minutes>0))platforms.append(element('li',p.name+' — '+goalTime(p.minutes)));savedFields.append(platforms);
+  const titles={bedtime:'Kept you up later',tasks:'Interrupted responsibilities',movement:'Replaced physical activity',people:'Replaced time with people',longer:'Scrolled longer than planned'};
+  for(const [key,title] of Object.entries(titles))savedFields.append(element('p',title+': '+(selected.behaviors[key]||'Not recorded in this older check-in')));
+  savedFields.append(element('p','Recorded starting point: '+selected.opportunity.area));recordArea.append(savedFields);
+  const index=history.findIndex(r=>r.id===selected.id),previous=index>=0?history[index-1]:history.at(-1);
+  if(!previous){summary.textContent=history.some(r=>r.id===selected.id)?'This is the first saved check-in. Complete and save another check-in to compare.':'This check-in is not saved yet. Save it here to compare on a later visit.';}
+  else{details.hidden=false;summary.textContent=changeText(previous.daily,selected.daily,'per day')+' Compared with the preceding saved check-in.';renderComparison(previous,selected,area);}
+  const linked=goals.find(g=>g.checkinId===selected.id);
+  if(selected.reductionGoal!==null)recordArea.append(element('p','Historical goal recorded with this check-in: '+goalTime(selected.reductionGoal)+' less per day.','goal-note'));
+  if(linked)recordArea.append(element('p',`Separately saved goal: ${goalTime(linked.reduction)} less per day · ${new Date(linked.updatedAt).toLocaleString()}. This is a target, not a change in reported use.`,'goal-note'));
+  const orphans=goals.filter(g=>!history.some(r=>r.id===g.checkinId));if(orphans.length)message('Some goals have no matching saved check-in, possibly from a change in another tab. Clear saved history and linked goals to remove them; they cannot be used as baselines.');
  }
- function updateProjection(chosen=false){
-  if(!current)return;const projection=goalProjection(current.daily,Number(goalSlider.value));if(chosen)goalChosen=true;
-  goalSlider.max=String(current.daily);goalSlider.value=String(projection.reduction);goalSlider.disabled=stale||current.daily===0;
-  goalSlider.setAttribute('aria-valuetext',`${projection.reduction} minutes less per day`);get('goal-reduction-value').textContent=goalTime(projection.reduction);
-  get('goal-limit').textContent=stale?'Your answers changed. Select “See My Results” to update the comparison.':current.daily===0?'You entered 0 minutes of daily use, so there is no time to reduce.':`Choose up to ${goalTime(current.daily)} per day. This is a plan, not a recorded change.`;
-  get('goal-before').textContent=goalTime(projection.daily)+'/day';get('goal-after').textContent=goalTime(projection.target)+'/day';get('goal-before-bar').style.width=projection.daily/1440*100+'%';get('goal-after-bar').style.width=projection.target/1440*100+'%';
-  get('goal-daily').textContent=String(projection.reduction);for(const key of ['week','month','year'])get('goal-'+key).textContent=projection[key].toLocaleString(undefined,{maximumFractionDigits:2});get('goal-days').textContent=projection.days.toFixed(1);
-  current.reductionGoal=goalChosen?projection.reduction:null;
-  if(chosen){saved=false;message('Goal updated. Use “Save This Check-In” to save this goal on this device.');renderProgress();}
- }
+ function changed(){document.dispatchEvent(new Event('tools:data-changed'));}
  document.addEventListener('checkin:complete',event=>{
-  if(!event.detail.assessment)return;const assessment=event.detail.assessment;
-  current={id:typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+(++sequence),date:new Date().toISOString(),daily:assessment.daily,platforms:assessment.platforms.map(p=>({...p})),sleepMinutes:assessment.sleepMinutes,activityMinutes:assessment.activityMinutes,behaviors:{...assessment.behaviors},opportunity:biggestOpportunity(assessment),reductionGoal:null};
-  const showCutback=assessment.daily>120;
-  stale=false;saved=false;
-  if(!showCutback)goalSlider.value='0';
-  goalChosen=showCutback&&Number(goalSlider.value)>0;message('');loadHistory();
-  get('opportunity-area').textContent=current.opportunity.area;get('opportunity-why').textContent=current.opportunity.explanation;get('opportunity-platform').textContent=current.opportunity.platformNote;get('opportunity-platform').hidden=!current.opportunity.platformNote;
-  get('biggest-opportunity').hidden=false;get('goal-progress').hidden=false;get('cutback').hidden=!showCutback;updateProjection();renderProgress();
+  if(!event.detail.assessment)return;const a=event.detail.assessment;
+  current=freezeCheckin({id:typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+(++sequence),date:new Date().toISOString(),daily:a.daily,platforms:a.platforms.map(p=>({...p})),sleepMinutes:a.sleepMinutes,activityMinutes:a.activityMinutes,behaviors:{...a.behaviors},opportunity:biggestOpportunity(a),reductionGoal:null});
+  goalId=current.id;progressId=current.id;returnGoalId='';drafts.set(current.id,0);message('');goalMessage('');load();
+  get('opportunity-area').textContent=current.opportunity.area;get('opportunity-why').textContent=current.opportunity.explanation;get('opportunity-platform').textContent=current.opportunity.platformNote;get('opportunity-platform').hidden=!current.opportunity.platformNote;get('biggest-opportunity').hidden=false;changed();
  });
- goalSlider.addEventListener('input',()=>{if(current&&!stale)updateProjection(true);});
- get('checkin').addEventListener('input',()=>{if(!current)return;stale=true;updateProjection();renderProgress();message('Your answers changed. Complete the check-in again before saving.');});
- get('save-checkin').addEventListener('click',()=>{
-  if(!current||stale||saved||historyError)return;
-  try{history=store.save(current);historyError=false;saved=true;message('Check-in saved on this device.');renderProgress();}
-  catch(error){message('Could not save this check-in. Browser storage may be blocked, full, or contain unreadable data. Your previous saved data has not been intentionally removed.');}
- });
+ document.addEventListener('view:before',event=>{if(['reduction','progress'].includes(event.detail.view)){load();if(event.detail.view==='reduction')renderGoal();else renderProgress();}});
+ goalSlider.addEventListener('input',()=>{const record=baseline(goalId);if(!record||record.daily<=120)return;drafts.set(record.id,goalProjection(record.daily,goalSlider.value).reduction);updateProjection();goalMessage('Draft target updated. Select Save My Goal to keep it on this device.');});
+ get('goal-baseline').addEventListener('change',()=>{goalId=get('goal-baseline').value;goalMessage('');renderGoal();});
+ get('progress-record').addEventListener('change',()=>{progressId=get('progress-record').value;renderProgress();});
+ get('goal-save-assessment').addEventListener('click',()=>{returnGoalId=goalId;progressId=goalId;appViews.show('progress');});
+ get('return-to-goal').addEventListener('click',()=>{goalId=returnGoalId;appViews.show('reduction');});
+ get('save-checkin').addEventListener('click',()=>{if(!current)return;try{history=store.save(current);historyError=false;message('Current check-in saved on this device. A reduction goal is saved separately in Reduction Goal.');renderProgress();changed();}catch{message('Could not save this check-in. Browser storage may be unavailable or contain unreadable data. No previous record has been intentionally replaced.');}});
+ get('save-goal').addEventListener('click',()=>{const record=baseline(goalId);if(!record||record.daily<=120)return;try{history=store.read();goals=goalStore.save({checkinId:record.id,reduction:goalProjection(record.daily,draft(record)).reduction,updatedAt:new Date().toISOString()},history);goalMessage('Goal saved for '+label(record)+'. The assessment is unchanged.');changed();}catch{goalMessage('Could not save this goal. Save the matching check-in first and check browser storage. No assessment has been changed.');}});
  get('clear-checkins').addEventListener('click',()=>{
-  if(!window.confirm('Clear your saved check-ins? This cannot be undone.'))return;
-  try{store.clear();history=[];historyError=false;saved=false;message('Saved check-in history cleared.');renderProgress();}catch{message('Could not clear saved check-ins because browser storage is unavailable.');}
+  if(!window.confirm('Clear your saved check-ins and all reduction goals linked to them? This cannot be undone. Sleep Shield plans and nights will not be deleted.'))return;
+  try{clearCheckinsAndGoals(()=>window.localStorage);drafts.clear();if(current)drafts.set(current.id,0);returnGoalId='';goalMessage('Saved history and linked goals were cleared.');message('Saved check-ins and linked reduction goals cleared. Sleep Shield is unchanged.');}
+  catch{message('Clearing could not finish. Linked goals may already have been removed, but check-ins were not intentionally removed before goals. Retry when browser storage is available. Sleep Shield was not touched.');}
+  load();renderProgress();changed();
  });
- window.addEventListener('storage',event=>{if((event.key===checkinStorageKey||event.key===null)&&current){loadHistory();saved=history.some(item=>item.id===current.id&&item.reductionGoal===current.reductionGoal);renderProgress();}});
+ window.addEventListener('storage',event=>{if([checkinStorageKey,reductionStorageKey,null].includes(event.key)){load();if(appViews.current==='progress')renderProgress();if(appViews.current==='reduction')renderGoal();changed();}});
 }
-

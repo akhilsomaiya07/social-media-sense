@@ -10,40 +10,35 @@ function shieldOpportunity(result){const late=result.reasons.find(r=>r.text==='Y
 let shieldResearchId=0,shieldResearchAbort;
 function validShieldBedtime(value){return typeof value==='string'&&/^([01]\d|2[0-3]):[0-5]\d$/.test(value);}
 function savedShieldBedtime(stored,result){
- const candidates=[stored.bedtime,result.sleepBedtime,...(Array.isArray(stored.nights)?stored.nights.slice().reverse().map(n=>n?.plan?.bedtime):[])];
+ const candidates=[stored.bedtime,result?.sleepBedtime,...(Array.isArray(stored.nights)?stored.nights.slice().reverse().map(n=>n?.plan?.bedtime):[])];
  return candidates.find(validShieldBedtime)||'';
 }
+let shieldCurrentContext=null,shieldBuilt=false,shieldRefreshContext=null;
 function renderSleepShield(result){
- const get=id=>document.getElementById(id),section=get('sleep-shield'),root=get('sleep-shield-content'),report=get('result'),open=get('shield-open');
- shieldResearchId++;shieldResearchAbort?.abort();section.hidden=true;root.replaceChildren();
- const late=result.reasons.find(r=>r.text==='You said social media kept you up later than intended.');
- const invite=get('shield-invitation');invite.hidden=!late;invite.textContent=late?`You reported that social media ${late.frequency.toLowerCase()} keeps you up later than intended.`:'';
- let built=false,reportScroll=0,shieldScroll=0;
- open.onclick=()=>{
-  reportScroll=window.scrollY;
-  if(!built){buildSleepShield(result,root);built=true;}
-  report.hidden=true;section.hidden=false;
-  get('sleep-shield-title').focus({preventScroll:true});window.scrollTo({top:shieldScroll,behavior:'instant'});
- };
- get('shield-back').onclick=()=>{
-  shieldScroll=window.scrollY;section.hidden=true;report.hidden=false;
-  open.focus({preventScroll:true});window.scrollTo({top:reportScroll,behavior:'instant'});
- };
+ shieldCurrentContext=result;
+ if(shieldBuilt&&shieldRefreshContext)shieldRefreshContext(result);
 }
+function openSleepShield(){
+ if(shieldBuilt)return;
+ buildSleepShield(shieldCurrentContext,document.getElementById('sleep-shield-content'));
+ shieldBuilt=true;
+}
+if(typeof document!=='undefined')document.addEventListener('view:before',event=>{if(event.detail.view==='shield')openSleepShield();});
 function buildSleepShield(result,root){
  const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
  const add=(tag,text,cls,parent=root)=>{const n=el(tag,text,cls);parent.append(n);return n;};
- let stored={};try{stored=JSON.parse(localStorage.getItem(sleepShieldKey)||'{}')||{};}catch{}
+ let stored={},storageUnreadable=false;try{stored=JSON.parse(localStorage.getItem(sleepShieldKey)||'{}')||{};if(typeof stored!=='object'||Array.isArray(stored))throw Error('Invalid plan');}catch{stored={};storageUnreadable=true;}
+ if(storageUnreadable)add('p','Saved Sleep Shield data could not be read. Nothing will be overwritten. You can try a plan temporarily.','shield-error');
  let nights=Array.from({length:7},(_,i)=>validateShieldNight(stored.nights?.[i])?stored.nights[i]:null);
  const state={window:shieldWindows.includes(stored.window)?stored.window:30,activity:['Read','Stretch','Shower','Prepare for tomorrow','Journal','Relax','Listen to calm audio','Talk with family','Breathing or relaxation','Other'].includes(stored.activity)?stored.activity:'Read',other:typeof stored.other==='string'?stored.other.slice(0,80):'',parking:['In my bed','Beside my bed','Across the room','Outside the bedroom'].includes(stored.parking)?stored.parking:''};
- const sleepMinutes=Math.round(result.sleep*60),opportunity=shieldOpportunity(result);
+ let contextResult=result;
  let active=false;
  const stageTitle=add('h3','Create Your Bedtime Plan');
  const editor=add('div',undefined,'shield-plan-editor');
  const bedtimeLabel=add('label','What time do you usually try to go to sleep?'),bedtime=el('input');bedtime.type='time';bedtime.setAttribute('aria-required','true');bedtime.id='shield-bedtime';bedtimeLabel.append(bedtime);
  const bedtimeError=add('p','','shield-error');bedtimeError.id='shield-bedtime-error';bedtimeError.setAttribute('role','alert');bedtime.setAttribute('aria-describedby',bedtimeError.id);
  const savedBedtime=savedShieldBedtime(stored,result);
- if(savedBedtime){const reuse=add('button',`Reuse saved bedtime (${shieldClock(Number(savedBedtime.slice(0,2))*60+Number(savedBedtime.slice(3)))})`,'goal-button goal-secondary');reuse.type='button';reuse.addEventListener('click',()=>{bedtime.value=savedBedtime;updatePlan();bedtime.focus();});}
+ if(savedBedtime){const reuse=add('button',`Resume My Plan (${shieldClock(Number(savedBedtime.slice(0,2))*60+Number(savedBedtime.slice(3)))})`,'goal-button goal-secondary');reuse.type='button';reuse.addEventListener('click',()=>{bedtime.value=savedBedtime;updatePlan();activate(false);});}
 
  const previewTitle=add('h4','Your Bedtime Plan');const startNote=add('p','');
  const timeline=add('div',undefined,'shield-timeline');timeline.setAttribute('aria-live','polite');
@@ -64,9 +59,9 @@ function buildSleepShield(result,root){
  const compactComparison=add('p','','goal-note');compactComparison.hidden=true;
  function disclosure(title){const d=add('details',undefined,'shield-disclosure');add('summary',title,undefined,d);return d;}
  const why=disclosure('Sleep Guidance & Sources');
- add('p',opportunity.text,undefined,why);add('p','The suggested window is a practical starting point, not a guarantee or a medical requirement.','goal-note',why);
+ const whyDescription=add('p','',undefined,why);add('p','The suggested window is a practical starting point, not a guarantee or a medical requirement.','goal-note',why);
  const wind=select('Adjust wind-down period',shieldWindows.map(n=>[String(n),n+' minutes']),String(state.window));wind.id='shield-window';root.insertBefore(wind.parentElement,bedtimeError.nextSibling);
- add('p',`You reported ${shieldDuration(sleepMinutes)} per night. Live research uses your age, total daily social media time, and frequency answers. Bedtime, activity, phone location, notes, and seven-night history are not sent.`,'goal-note',why);
+ const researchContextNote=add('p','','goal-note',why);
  const research=add('div',undefined,'shield-research',why);
  const history=disclosure('View My Progress');
  add('p','Record each night after you wake up. Saved nights stay here until you clear them.','goal-note',history);
@@ -74,7 +69,7 @@ function buildSleepShield(result,root){
  const opportunityDetails=disclosure('How Your Wind-Down Time Adds Up');const totals=add('div',undefined,'shield-summary',opportunityDetails);
  add('p','This is protected bedtime opportunity, not guaranteed additional sleep. These projections assume the same protected window every night; they are not measured reductions in app use.','goal-note',opportunityDetails);
  // Move existing controls, retaining their identity and handlers.
- for(const node of [...root.children])if(node===bedtimeLabel||node===bedtimeError||node===wind.parentElement||node===activity.parentElement||node===otherLabel||(node.tagName==='BUTTON'&&node.textContent.startsWith('Reuse saved bedtime')))editor.append(node);
+ for(const node of [...root.children])if(node===bedtimeLabel||node===bedtimeError||node===wind.parentElement||node===activity.parentElement||node===otherLabel||(node.tagName==='BUTTON'&&node.textContent.startsWith('Resume My Plan')))editor.append(node);
  function planDisplay(ready){
   editor.hidden=ready;use.hidden=ready;editPlan.hidden=!ready;recordHelp.hidden=!ready;
   stageTitle.textContent=ready?'Your Plan Is Ready':'Create Your Bedtime Plan';
@@ -82,27 +77,34 @@ function buildSleepShield(result,root){
  }
  editPlan.addEventListener('click',()=>{planDisplay(false);track.hidden=true;bedtime.focus();});
  const saveStatus=add('p','','goal-note');saveStatus.setAttribute('role','status');
- function persist(){try{localStorage.setItem(sleepShieldKey,JSON.stringify({...stored,version:1,...state,bedtime:bedtime.value,nights}));saveStatus.textContent='Saved on this device.';}catch{saveStatus.textContent='This browser could not save your Sleep Shield. You can still use it here, but it may be lost when you leave.';}}
+ function persist(){if(storageUnreadable){saveStatus.textContent='This plan is temporary because existing storage could not be read. No stored data has been overwritten.';return;}try{localStorage.setItem(sleepShieldKey,JSON.stringify({...stored,version:1,...state,bedtime:bedtime.value,nights}));saveStatus.textContent='Saved on this device.';document.dispatchEvent(new Event('tools:data-changed'));}catch{saveStatus.textContent='This browser could not save your Sleep Shield. You can still use it here, but it may be lost when you leave.';}}
  function updatePlan(){active=false;planDisplay(false);track.hidden=true;history.hidden=true;nightList.hidden=true;nightStatus.hidden=true;compactComparison.hidden=true;otherLabel.hidden=state.activity!=='Other';bedtimeError.textContent='';bedtime.removeAttribute('aria-invalid');if(!validShieldBedtime(bedtime.value)){timeline.hidden=true;timeline.replaceChildren();totals.replaceChildren();startNote.textContent='Choose a bedtime to preview your plan.';return;}const p=shieldPlan(bedtime.value,state.window);timeline.hidden=false;timeline.replaceChildren();add('p',`Social media off: ${p.cutoff}${p.previousDay?' (previous day)':''}`,undefined,timeline);add('p',`Planned bedtime: ${p.bedtime}`,undefined,timeline);add('p',`Wind-down period: ${state.window} minutes`,undefined,timeline);add('p',`Instead of scrolling: ${state.activity==='Other'?state.other||'Other':state.activity}`,undefined,timeline);startNote.textContent=`Try protecting the final ${state.window} minutes before your planned bedtime from social media.`;totals.replaceChildren();for(const [key,label] of [['night','per night'],['week','per week'],['month','per 30-day month'],['year','per 365-day year']]){const cell=add('div',undefined,undefined,totals);add('strong',shieldDuration(p[key]),undefined,cell);add('p',label,'goal-note',cell);}otherLabel.hidden=state.activity!=='Other';parkingNote.hidden=!['In my bed','Beside my bed'].includes(state.parking);parkingNote.textContent='If you usually keep your phone beside you in bed, consider charging it farther away during your Sleep Shield window.';}
  wind.addEventListener('change',()=>{const value=Number(wind.value);if(!shieldWindows.includes(value))return;state.window=value;updatePlan();});activity.addEventListener('change',()=>{state.activity=activity.value;updatePlan();});other.addEventListener('input',()=>{state.other=other.value.slice(0,80);updatePlan();});updatePlan();
  bedtime.addEventListener('input',updatePlan);
- use.addEventListener('click',()=>{if(!validShieldBedtime(bedtime.value)){bedtimeError.textContent='Choose a valid planned bedtime.';bedtime.setAttribute('aria-invalid','true');bedtime.focus();return;}active=true;persist();planDisplay(true);track.hidden=false;history.hidden=false;nightStatus.hidden=false;showComparison();track.focus();});
+ function activate(save=true){if(!validShieldBedtime(bedtime.value)){bedtimeError.textContent='Choose a valid planned bedtime.';bedtime.setAttribute('aria-invalid','true');bedtime.focus();return;}active=true;if(save)persist();planDisplay(true);track.hidden=false;history.hidden=false;nightStatus.hidden=false;showComparison();if(track.disabled)editPlan.focus();else track.focus();}
+ use.addEventListener('click',()=>activate());
  function showComparison(){const c=shieldComparison(nights);nightStatus.textContent=c.complete?`${c.complete} of 7 nights recorded`:'';track.disabled=c.complete===7;track.textContent=c.complete===7?'7 nights complete':'Record a Night';compactComparison.hidden=true;compactComparison.textContent=c.yes&&c.no?`Average reported sleep: ${shieldDuration(c.yes.average)} on nights following your plan; ${shieldDuration(c.no.average)} on nights not following it. This does not prove cause and effect.`:c.complete>=2?`${c.complete} nights recorded. Open your progress to see your personal pattern.`:'';completedList.replaceChildren();nights.forEach((n,i)=>{if(!n)return;const row=add('div',undefined,'shield-completed-row',completedList);add('p',`Night ${i+1} · ${n.followed} · ${shieldDuration(n.sleepMinutes)} · ${n.rested}`,undefined,row);if(n.note)add('p',n.note,'goal-note',row);const edit=add('button',`Edit night ${i+1}`,'goal-button goal-secondary',row);edit.type='button';edit.addEventListener('click',()=>buildNight(i));});progress.replaceChildren();progress.hidden=c.complete===0;nights.forEach((n,i)=>{const mark=add('span',`${i+1}${n?' ✓':''}`,n?'complete':'',progress);mark.title=`Night ${i+1}: ${n?'saved':'not recorded'}`;});comparison.replaceChildren();add('h4','Your personal pattern',undefined,comparison);add('p',`Sleep Shield followed: ${c.yes?.count||0} of 7 nights · ${c.complete} nights recorded`,undefined,comparison);for(const [key,label] of [['yes','following'],['partly','partly following'],['no','not following']])if(c[key])add('p',`Nights ${label} Sleep Shield: average reported sleep ${shieldDuration(c[key].average)} (${c[key].count} ${c[key].count===1?'night':'nights'}).`,undefined,comparison);if(c.rating)add('p',`Average rested rating: ${c.rating}`,undefined,comparison);if(!c.yes||!c.no)add('p','Complete more nights to see your personal pattern.',undefined,comparison);add('p','These patterns come from your own check-ins and do not prove that social media caused changes in your sleep.','goal-note',comparison);add('p','“Partly” nights are shown separately. Rested ratings use 1–3 for the three choices, then round the average to the nearest label. Only saved, complete nights are included.','goal-note',comparison);}
  function buildNight(i){nightList.replaceChildren();nightList.hidden=false;const saved=nights[i],details=add('div',undefined,'shield-night',nightList);const title=add('h4',`Night ${i+1}`,undefined,details);title.tabIndex=-1;title.focus();add('p','Complete this after you wake up.','goal-note',details);if(saved?.recordedAt)add('p',`Recorded ${new Date(saved.recordedAt).toLocaleDateString()}${saved.plan?` · ${saved.plan.window}-minute window · ${saved.plan.activity}`:''}`,'goal-note',details);const followed=select('Did you follow your Sleep Shield?',[['','Choose'],...['Yes','Partly','No'].map(t=>[t,t])],saved?.followed||'',details);add('p','How much did you sleep?',undefined,details);const fields=add('div',undefined,'two',details);function number(label,max,value){const wrap=add('label',label,undefined,fields),n=el('input');n.type='number';n.min=0;n.max=max;n.step=1;n.inputMode='numeric';n.value=value;wrap.append(n);return n;}const hours=number('Sleep hours',24,saved?Math.floor(saved.sleepMinutes/60):''),minutes=number('Sleep minutes',59,saved?saved.sleepMinutes%60:'');const rested=select('How rested did you feel?',[['','Choose'],...['Rested','Somewhat rested','Not very rested'].map(t=>[t,t])],saved?.rested||'',details);const noteDetails=add('details',undefined,undefined,details);add('summary','Add a note (optional)',undefined,noteDetails);const noteLabel=add('label','Short note',undefined,noteDetails),note=el('textarea');note.maxLength=240;note.rows=2;note.value=saved?.note||'';noteLabel.append(note);const error=add('p','', 'shield-error',details);error.setAttribute('role','alert');const button=add('button','Save night','goal-button',details);button.type='button';button.addEventListener('click',()=>{const h=Number(hours.value),m=Number(minutes.value);let message='';if(hours.value.trim()===''||!Number.isInteger(h)||h<0||h>24)message='Enter sleep hours from 0 to 24.';else if(minutes.value.trim()===''||!Number.isInteger(m)||m<0||m>59)message='Enter sleep minutes from 0 to 59.';else if(h*60+m>1440)message='Sleep time cannot exceed 24 hours per night.';else if(!followed.value)message='Choose whether you followed your Sleep Shield.';else if(!rested.value)message='Choose how rested you felt.';error.textContent=message;if(message)return;nights[i]={followed:followed.value,sleepMinutes:h*60+m,rested:rested.value,note:note.value.slice(0,240),recordedAt:new Date().toISOString(),plan:{bedtime:bedtime.value,window:state.window,activity:state.activity==='Other'?state.other:state.activity,parking:state.parking}};persist();nightList.hidden=true;nightList.replaceChildren();showComparison();track.focus();});const cancel=add('button','Close check-in','goal-button goal-secondary',details);cancel.type='button';cancel.addEventListener('click',()=>{nightList.hidden=true;nightList.replaceChildren();track.focus();});}
  track.addEventListener('click',()=>{if(!active)return;const index=nights.findIndex(n=>!n);if(index>=0)buildNight(index);});
  showComparison();const clear=add('button','Clear Sleep Shield nights','goal-button goal-secondary',history);clear.type='button';clear.addEventListener('click',()=>{if(!confirm('Clear your seven Sleep Shield nights? This cannot be undone.'))return;nights=Array(7).fill(null);persist();nightList.hidden=true;nightList.replaceChildren();showComparison();});
  add('p','Your Sleep Shield check-ins are stored on this device.','goal-note');add('p','People using this browser profile can see saved check-ins. No account is required.','goal-note',history);
  track.hidden=true;history.hidden=true;nightStatus.hidden=true;root.dispatchEvent(new Event('shield:ready'));
- loadShieldResearch(result,research,el);
+ function refreshContext(next){
+  contextResult=next;
+  whyDescription.textContent=next?shieldOpportunity(next).text:'Choose a wind-down period that fits your routine. No assessment is required to make or resume a plan.';
+  researchContextNote.textContent=next?`Research context: your completed check-in, with ${shieldDuration(Math.round(next.sleep*60))} reported sleep per night. Live research uses your age, daily social media time and frequency answers. Plan details and recorded nights are not sent.`:'No current assessment is available. The guidance below is general; no age, sleep duration or disruption answers have been assumed.';
+  loadShieldResearch(next,research,el);
+ }
+ shieldRefreshContext=refreshContext;refreshContext(result);
 }
 
 async function loadShieldResearch(result,root,el){
  const id=++shieldResearchId;shieldResearchAbort?.abort();const controller=new AbortController();shieldResearchAbort=controller;const timeout=setTimeout(()=>controller.abort(),50000);
  function fallback(notice){root.replaceChildren(el('p',notice,'goal-note'));const p=el('p','Previously verified general guidance: CDC includes switching off electronic devices before bedtime among its sleep-habit tips. This is general education, not a personalized sleep-duration recommendation.','goal-note'),a=el('a','CDC · About Sleep · Read Source');a.href='https://www.cdc.gov/sleep/about/index.html';a.target='_blank';a.rel='noopener noreferrer';root.append(p,a);}
+ if(!result){fallback('General guidance from previously verified sources. Complete a check-in for personalized research context.');clearTimeout(timeout);return;}
  fallback('Checking current sleep sources…');
  try{const context=healthSearchContext(result);const response=await fetch('/api/health-information',{method:'POST',headers:{'Content-Type':'application/json'},cache:'no-store',signal:controller.signal,body:JSON.stringify({...context,sleepShield:{age:result.age,prebed:result.prebed}})});const data=await response.json();if(id!==shieldResearchId)return;if(!response.ok||!Array.isArray(data.benefits)||!data.benefits.length||!Array.isArray(data.risks)||!Number.isFinite(Date.parse(data.checkedAt)))throw Error('Unavailable');const fragment=document.createDocumentFragment();fragment.append(el('p','Current sleep sources checked for this assessment · '+new Date(data.checkedAt).toLocaleString(),'goal-note'));const items=result.reasons.length?[...data.benefits,...data.risks].slice(0,4):data.benefits.slice(0,3);for(const item of items){if(typeof item.statement!=='string'||typeof item.population!=='string'||typeof item.applicability!=='string'||!Array.isArray(item.sources)||!item.sources.length)throw Error('Malformed');const card=el('div',undefined,'shield-research-card');card.append(el('p',item.statement),el('p',`Evidence population: ${item.population}. ${item.applicability}`,'goal-note'));for(const s of item.sources){const url=new URL(s.url);if(url.protocol!=='https:'||typeof s.organization!=='string'||typeof s.title!=='string')throw Error('Malformed source');card.append(el('p',`${s.organization} — ${s.title}${s.date?' · '+s.date:' · Date not available'}`,'goal-note'));const a=el('a','Read Source');a.href=url.href;a.target='_blank';a.rel='noopener noreferrer';card.append(a);}fragment.append(card);}root.replaceChildren(fragment);}catch{if(id===shieldResearchId)fallback('Live sleep research could not be refreshed right now.');}finally{clearTimeout(timeout);}
 }
-if(typeof document!=='undefined')document.getElementById('checkin').addEventListener('input',()=>{shieldResearchId++;shieldResearchAbort?.abort();});
 if(typeof module!=='undefined')module.exports={validShieldBedtime,savedShieldBedtime,shieldPlan,shieldClock,shieldDuration,validateShieldNight,shieldComparison,shieldOpportunity};
 
 
