@@ -57,8 +57,6 @@ Save check-ins locally and compare reported values over time.
 
 </details>
 
-[Capture instructions and screenshot CI workflow](docs/SCREENSHOTS.md)
-
 ## What it does
 
 Social Media Sense turns a short five-step check-in into a practical snapshot of daily social media habits. It combines self-reported app usage with sleep, physical activity, and routine-disruption questions, then shows time calculations, personalized opportunities, reduction projections, Sleep Shield guidance, and current health resources.
