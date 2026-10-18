@@ -21,7 +21,7 @@ Development-only overrides `PLAYWRIGHT_MODULE` and `CHROMIUM_PATH` support the e
 
 The fictional participant is named Demo, age 30. The first check-in is 240 minutes/day and the second 180, with dates fixed at January 15 and 22, 2026. Platforms: Facebook, Instagram and YouTube. Sleep is 7h 30m, activity 45m; bedtime and longer-scrolling disruptions are Sometimes, other disruptions Never. Sleep Shield uses an explicitly entered 11 PM bedtime, 30-minute window and Read activity. Reduction Goal displays a 30-minute projection. Progress compares the two synthetic records.
 
-Desktop views are 1280×900 at 1×; mobile is 390×844. Most images are viewport captures, so long pages continue below the image. Step 2 intentionally scrolls to the first platform rows with the sticky total visible, not the entire assessment. The desktop report captures the complete report element. PNG uses lossless browser compression with no image-editing or fabricated content. The mobile example is a viewport, not a claim that the entire report fits on a phone screen.
+Desktop views are 1280×900 at 1×; mobile is 390×844. All curated images are viewport captures, so long pages continue below the image. Step 2 intentionally scrolls to the first platform rows with the sticky total visible, not the entire assessment. The desktop report uses the same 1280×900 viewport as the other desktop previews; the report continues below the image. The README renders every desktop preview at the same width. PNG uses lossless browser compression with no image-editing or fabricated content. The mobile example is a viewport, not a claim that the entire report fits on a phone screen.
 
 ## Review and publish manually
 
