@@ -260,3 +260,5 @@ footer{color:#c1cee1}
 @media(forced-colors:active){.homepage .home-screen,.homepage .intro p:last-child,.homepage .home-reassurance,.homepage .home-tools-link,.homepage .home-return-actions .report-text-button{color:CanvasText}.homepage .home-actions .primary{background:ButtonFace;color:ButtonText;border:1px solid ButtonText}}
 
 .homepage .intro h1{text-wrap:balance}.homepage .intro h1 br{display:none}
+
+#report-next .next-step-actions{display:flex;flex-direction:column;align-items:flex-start;gap:6px}#report-next .next-step-actions button{max-width:100%;white-space:normal;text-align:left}#report-next .next-step-actions .goal-button{margin:6px 0;text-align:center}

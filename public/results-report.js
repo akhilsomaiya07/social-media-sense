@@ -1,8 +1,28 @@
 'use strict';
+// Select navigation only; this never changes assessment interpretation.
+function nextStepRecommendation(assessment){
+ const b=assessment.behaviors||{},reported=value=>value==='Sometimes'||value==='Often';
+ if(reported(b.bedtime))return {view:'shield',label:'Explore Sleep Shield',message:`You reported that social media ${b.bedtime.toLowerCase()} keeps you up later than intended.`,description:'Try creating a bedtime scrolling cutoff and tracking how your nights go.'};
+ const labels={tasks:'interrupts school, work, or everyday responsibilities',movement:'takes time away from physical activity',people:'takes time away from people you wanted to spend time with',longer:'keeps you scrolling longer than planned'};
+ const key=Object.keys(labels).find(k=>b[k]==='Often')||Object.keys(labels).find(k=>reported(b[k]));
+ if(key){const message=`You reported that social media ${b[key].toLowerCase()} ${labels[key]}.`;
+  return assessment.daily>120?{view:'reduction',label:'Explore a Reduction Goal',message,description:"If you'd like, explore a daily target and see how the projected time difference could add up."}:{view:'progress',message,description:'You can save this check-in in Progress and compare your reported routines over time.'};}
+ return {view:'progress',message:['bedtime','tasks','movement','people','longer'].every(k=>b[k]==='Never')?'Your check-in is complete. You did not report social media interfering with the routines covered by this assessment.':'Your check-in is complete. You can review your recorded answers in Progress.',description:''};
+}
+if(typeof module!=='undefined')module.exports={nextStepRecommendation};
 // Results presentation only. Existing renderers own all calculations, conditions,
 // research requests, event handlers and storage. Move/reuse their DOM output.
 if(typeof document!=='undefined'){
  const get=id=>document.getElementById(id),root=get('result');
+ let nextStep=null,savedState=false;
+ function renderNextNavigation(){
+  if(!nextStep)return;
+  const primary=get('next-step-action'),progress=get('next-step-progress');
+  primary.dataset.view=nextStep.view;primary.textContent=nextStep.view==='progress'?(savedState?'Review My Progress':'Save My Check-In in Progress'):nextStep.label;
+  progress.hidden=nextStep.view==='progress';progress.textContent=savedState?'Review My Progress':'Save My Check-In in Progress';
+  get('report-save-note').textContent=savedState?'This check-in is saved on this device. You can review it in Progress.':'This report is not automatically saved. Use Progress to save your check-in. Unsaved results may be lost when you refresh or close this tab.';
+ }
+ document.addEventListener('checkin:save-state',event=>{savedState=event.detail.saved;renderNextNavigation();});
  const ranking=get('platform-ranking'),more=get('platform-ranking-more');let expanded=false;
  function showPlatforms(){
   Array.from(ranking.children).forEach((item,index)=>{item.hidden=!expanded&&index>=3;});
@@ -23,6 +43,10 @@ if(typeof document!=='undefined'){
  document.addEventListener('checkin:complete',event=>{
   if(!event.detail.assessment)return;
   const assessment=event.detail.assessment;
+  nextStep=nextStepRecommendation(assessment);
+  get('next-step-message').textContent=nextStep.message;
+  get('next-step-description').textContent=nextStep.description;get('next-step-description').hidden=!nextStep.description;
+  renderNextNavigation();
   root.querySelectorAll('details').forEach(detail=>{detail.open=false;});
   expanded=false;showPlatforms();
   get('sleep-context-title').textContent='Your sleep context';
