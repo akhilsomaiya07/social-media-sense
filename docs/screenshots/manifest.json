@@ -1,7 +1,7 @@
 {
   "fixture": "Synthetic Demo, age 30; 240m prior / 180m current; fixed Jan 2026 UTC dates",
   "research": "503 fixture: existing fallback guidance, no successful live retrieval",
-  "browser": "153.0.8010.0",
+  "browser": "151.0.7922.34",
   "captures": [
     {
       "file": "homepage.png",
@@ -10,8 +10,18 @@
         "height": 900
       },
       "framing": "viewport (scrollable content may continue below)",
-      "bytes": 594892,
-      "sha256": "ff5b8ae6091f16c849f93e2da552958e377f88d5a5dc67cffb04c0acedf12cb3"
+      "bytes": 736102,
+      "sha256": "ba0b26e1964a1fc4c2e0ba68249d95e806aea28a02e6b7bb56ddb4140134710a"
+    },
+    {
+      "file": "assessment-step-1.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "framing": "viewport (scrollable content may continue below)",
+      "bytes": 601397,
+      "sha256": "e1391d1a188eae18ba35d925c009e794af72464af240b69a5dc13b02d4723196"
     },
     {
       "file": "assessment-step-2.png",
@@ -20,8 +30,38 @@
         "height": 900
       },
       "framing": "viewport (scrollable content may continue below)",
-      "bytes": 386284,
-      "sha256": "ae146fdbdfcb2944fb134ba2546791f270e4dbdcdec6939e24ec04d2b72252ca"
+      "bytes": 602592,
+      "sha256": "79913d1080a373a868038efeaf3c570ccb3e87767629587aa08d8b1d247adf44"
+    },
+    {
+      "file": "assessment-step-3.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "framing": "viewport (scrollable content may continue below)",
+      "bytes": 579631,
+      "sha256": "97a593c894271921f63169df022fc6f3b92bd1bdadd378495b4bb093b35639f3"
+    },
+    {
+      "file": "assessment-step-4.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "framing": "viewport (scrollable content may continue below)",
+      "bytes": 585783,
+      "sha256": "acf7571129b1df17321ac3bc50738271c7e62ef79e16652d7a1cba81ba9999d9"
+    },
+    {
+      "file": "assessment-step-5.png",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "framing": "viewport (scrollable content may continue below)",
+      "bytes": 583784,
+      "sha256": "8ce013cc29992fbf7281e5c693f87e35ca64d1059808b6a9b73171a2a69f03fb"
     },
     {
       "file": "results-report.png",
@@ -30,8 +70,8 @@
         "height": 900
       },
       "framing": "viewport (scrollable content may continue below)",
-      "bytes": 383345,
-      "sha256": "f9f90243685e21bc4601b4c423d2e3c5367b1c938d15e899912de8ec54a97413"
+      "bytes": 415561,
+      "sha256": "0a0424db5caaea9526eba61f6c5e9f6d95e7b2899320c21f523e5f58cb9a70ce"
     },
     {
       "file": "mobile-results.png",
@@ -40,8 +80,8 @@
         "height": 844
       },
       "framing": "viewport (scrollable content may continue below)",
-      "bytes": 105969,
-      "sha256": "bd716b6d7b8e3441ed93b7c49b78810050745bfe87a31e7fc906d680b54aadab"
+      "bytes": 110803,
+      "sha256": "bb31efc49ea121bd10c4091fd6eab156bc35989ccdda6ed392c650a9f7d9a4b1"
     },
     {
       "file": "my-tools.png",
@@ -50,8 +90,8 @@
         "height": 900
       },
       "framing": "viewport (scrollable content may continue below)",
-      "bytes": 407082,
-      "sha256": "ffe5638b72b6dfc83d2887054ea6a6a96d7f901b6c47a327685c3c348e67da7a"
+      "bytes": 501425,
+      "sha256": "eef07e2b24c99f169a9d90d082bbdac96da730d759f556e06af983f032323dbc"
     },
     {
       "file": "sleep-shield.png",
@@ -60,8 +100,8 @@
         "height": 900
       },
       "framing": "viewport (scrollable content may continue below)",
-      "bytes": 348898,
-      "sha256": "b06862679e292b58f726fcbe1912b450e100586889ce3118f522caf5264bc9ff"
+      "bytes": 395500,
+      "sha256": "39e3096ff964ad447de0e8b25a5649dac087b8e205e2310871c066d972a2b2f1"
     },
     {
       "file": "reduction-goal.png",
@@ -70,8 +110,8 @@
         "height": 900
       },
       "framing": "viewport (scrollable content may continue below)",
-      "bytes": 354219,
-      "sha256": "e74db88888ec7de592c0d8edff552d9cec1ee3735b21a46a969c7fe0752fbb88"
+      "bytes": 402867,
+      "sha256": "2e83191b1b534b717efba8cf6907a388597e0eace7fba294a610b93fbee58923"
     },
     {
       "file": "progress.png",
@@ -80,8 +120,8 @@
         "height": 900
       },
       "framing": "viewport (scrollable content may continue below)",
-      "bytes": 365952,
-      "sha256": "2bb86ad54d90c4d1e95b25efa2f44200f563df8da9e21ee8b38bcf34c42b1824"
+      "bytes": 415816,
+      "sha256": "d8ec3bc1a991a33b6136ff50742e75ff3394a911da511fb11981341d0db5c17d"
     }
   ]
 }
