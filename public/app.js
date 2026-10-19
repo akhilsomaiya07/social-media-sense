@@ -6,11 +6,22 @@ const questions = [
  {id:'people',text:'take time away from people you wanted to spend time with?',reason:'You said social media took time away from people you wanted to spend time with.'},
  {id:'longer',text:'keep you scrolling longer than you planned?',reason:'You said you spent longer scrolling than you planned.'}
 ];
+// Shared by submission, blur feedback, and non-DOM assessment callers.
+function ageValidation(value){
+ if(value===undefined||value===null||String(value).trim()==='')return {message:'Please enter your age to continue.'};
+ if(!['string','number'].includes(typeof value)||!Number.isFinite(Number(value)))return {message:'Please enter a valid whole-number age between 15 and 100.'};
+ const age=Number(value);
+ if(!Number.isInteger(age))return {message:'Please enter your age in whole years.'};
+ if(age<15)return {title:'Age requirement not met',message:'Social Media Sense is designed for people ages 15–100. Please enter an eligible age to continue.'};
+ if(age>100)return {title:'Age outside supported range',message:'Social Media Sense currently supports ages 15–100. Please check the age you entered.'};
+ return null;
+}
 function calculate(data){
  const errors={};
  const invalid=(key,message)=>{errors[key]=message};
  const integer=(key,min,max,label)=>{const value=data[key];if(value===undefined||value===null||String(value).trim()===''||!Number.isInteger(Number(value))||Number(value)<min||Number(value)>max)invalid(key,label);return Number(value)};
- const age=integer('age',13,120,'Enter a whole-number age from 13 to 120.');
+ const age=Number(data.age),ageError=ageValidation(data.age);
+ if(ageError)invalid('age',ageError.message);
  const hours=integer('hours',0,24,'Enter social media hours from 0 to 24. Use 0 if none.');
  const minutes=integer('minutes',0,59,'Enter social media minutes from 0 to 59. Use 0 if none.');
  const daily=hours*60+minutes;
@@ -65,26 +76,43 @@ function calculateWithRoutine(data){
  return {...result,sleepBedtime:data['sleep-bedtime'],prebed:data.prebed};
 }
 function duration(minutes){const h=Math.floor(minutes/60),m=minutes%60;return (h?h.toLocaleString('en-US')+'h':'')+(h&&m?' ':'')+(m?m+'m':'')||'0m'}
-if(typeof module!=='undefined')module.exports={calculate,calculateWithPlatforms,calculateWithRoutine,routineTime,duration};
+if(typeof module!=='undefined')module.exports={ageValidation,calculate,calculateWithPlatforms,calculateWithRoutine,routineTime,duration};
 if(typeof document!=='undefined'){
  const $=id=>document.getElementById(id), form=$('checkin');let latest=null;
  const platformUI=setupPlatformInputs();
  $('questions').innerHTML=questions.map(q=>`<fieldset class="question"><legend>${q.text}</legend><div class="choices">${['Never','Sometimes','Often'].map((v,i)=>`<label class="choice"><input type="radio" name="${q.id}" value="${v}" required><span>${v}</span></label>`).join('')}</div></fieldset>`).join('');
- function clearFieldErrors(){
-  for(const node of form.querySelectorAll('.field-error'))if(node.id!=='platform-limit-error')node.remove();
-  for(const input of form.querySelectorAll('[aria-invalid]')){input.removeAttribute('aria-invalid');input.removeAttribute('aria-describedby');}
+ function clearFieldErrors(preserveAge=false){
+  for(const node of form.querySelectorAll('.field-error'))if(node.id!=='platform-limit-error'&&!(preserveAge&&node.id==='age-error'))node.remove();
+  for(const input of form.querySelectorAll('[aria-invalid]')){if(preserveAge&&input.id==='age')continue;input.removeAttribute('aria-invalid');input.removeAttribute('aria-describedby');}
  }
  function showFieldErrors(fields){
   for(const [key,message] of Object.entries(fields||{})){
    const input=$(key)||form.querySelector(`input[name="${key}"]`);
    if(!input)continue;
+   if(key==='age'){showAgeError(message);continue;}
    const note=document.createElement('span');note.id=key+'-error';note.className='field-error';note.textContent=message;
    const question=input.closest('.question');
    if(question){question.append(note);for(const radio of question.querySelectorAll('input')){radio.setAttribute('aria-invalid','true');radio.setAttribute('aria-describedby',note.id);}}
    else{(input.closest('label')||input.parentElement).append(note);input.setAttribute('aria-invalid','true');input.setAttribute('aria-describedby',note.id);}
   }
  }
- function read(){const data={};for(const id of ['name','age','sleep-hours','sleep-minutes','activity-hours','activity-minutes'])data[id]=$(id).value;data.prebed=form.querySelector('input[name="prebed"]:checked')?.value;data.platforms=platformUI.readEntries();for(const q of questions)data[q.id]=form.querySelector(`input[name="${q.id}"]:checked`)?.value;return data}
+ function ageValue(){return $('age').validity.badInput?NaN:$('age').value;}
+ function clearAgeError(){
+  $('age-error')?.remove();$('age').removeAttribute('aria-invalid');$('age').removeAttribute('aria-describedby');
+ }
+ function showAgeError(message){
+  // Reuse an existing alert on blur followed by submit; do not announce it twice.
+  if($('age-error')?.dataset.message===message)return;
+  clearAgeError();
+  const note=document.createElement('span');note.id='age-error';note.className='field-error age-warning';note.dataset.message=message;note.setAttribute('role','alert');note.setAttribute('aria-atomic','true');
+  const icon=document.createElement('span');icon.className='age-warning-icon';icon.setAttribute('aria-hidden','true');icon.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" focusable="false"><path d="M12 3 2 21h20Z"/><path d="M12 9v5m0 3v1"/></svg>';
+  const title=document.createElement('strong');title.className='age-warning-title';title.textContent=ageValidation(ageValue())?.title||'Check your age';
+  const body=document.createElement('span');body.textContent=message;
+  note.append(icon,title,body);$('age').closest('.two').append(note);$('age').setAttribute('aria-invalid','true');$('age').setAttribute('aria-describedby',note.id);
+ }
+ $('age').addEventListener('blur',()=>{const error=ageValidation(ageValue());if(error)showAgeError(error.message);else clearAgeError();});
+ $('age').addEventListener('input',()=>{if(!ageValidation(ageValue()))clearAgeError();});
+ function read(){const data={};for(const id of ['name','age','sleep-hours','sleep-minutes','activity-hours','activity-minutes'])data[id]=$(id).value;data.age=ageValue();data.prebed=form.querySelector('input[name="prebed"]:checked')?.value;data.platforms=platformUI.readEntries();for(const q of questions)data[q.id]=form.querySelector(`input[name="${q.id}"]:checked`)?.value;return data}
  function refreshRoutineTimes(){
   const data=read();
   const reference=sleepReference(data.age),sleepTime=routineTime(data,'sleep');
@@ -115,7 +143,7 @@ if(typeof document!=='undefined'){
  }
  setupAssessmentFlow({form,read,calculate:calculateWithRoutine,render,clearFieldErrors,showFieldErrors,resetAssessment});
 
- if(document.modelContext?.registerTool){try{Promise.resolve(document.modelContext.registerTool({name:'calculate_social_media_checkin',title:'Calculate social media check-in',description:'Validate entries, put the supplied combined social media time in Other, fill the form, and show a social media time and routine check-in.',inputSchema:{type:'object',properties:{sleepBedtime:{type:'string',pattern:'^([01][0-9]|2[0-3]):[0-5][0-9]$'},prebed:{type:'string',enum:['Never','Sometimes','Often']},name:{type:'string',maxLength:60},age:{type:'integer',minimum:13,maximum:120},hours:{type:'integer',minimum:0,maximum:12},minutes:{type:'integer',minimum:0,maximum:55,multipleOf:5},sleep:{type:'number',minimum:0,maximum:24},activity:{type:'integer',minimum:0,maximum:1440},...Object.fromEntries(questions.map(q=>[q.id,{type:'string',enum:['Never','Sometimes','Often']}]))},required:['prebed','age','hours','minutes','sleep','activity',...questions.map(q=>q.id)],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute(data){const entries=[{name:'Other',hours:data.hours,minutes:data.minutes}];const result={...calculateWithPlatforms({...data,platforms:entries}),sleepBedtime:data.sleepBedtime,prebed:data.prebed};for(const input of form.querySelectorAll('input[name="prebed"]'))input.checked=input.value===data.prebed;platformUI.setEntries(entries);for(const id of ['name','age'])$(id).value=data[id]??'';for(const [prefix,total] of [['sleep',Math.round(data.sleep*60)],['activity',data.activity]]){$(prefix+'-hours').value=Math.floor(total/60);$(prefix+'-minutes').value=total%60;}refreshRoutineTimes();for(const q of questions)for(const input of form.querySelectorAll(`input[name="${q.id}"]`))input.checked=input.value===data[q.id];render(result);return result;}})).catch(()=>{});}catch{}}
+ if(document.modelContext?.registerTool){try{Promise.resolve(document.modelContext.registerTool({name:'calculate_social_media_checkin',title:'Calculate social media check-in',description:'Validate entries, put the supplied combined social media time in Other, fill the form, and show a social media time and routine check-in.',inputSchema:{type:'object',properties:{sleepBedtime:{type:'string',pattern:'^([01][0-9]|2[0-3]):[0-5][0-9]$'},prebed:{type:'string',enum:['Never','Sometimes','Often']},name:{type:'string',maxLength:60},age:{type:'integer',minimum:15,maximum:100},hours:{type:'integer',minimum:0,maximum:12},minutes:{type:'integer',minimum:0,maximum:55,multipleOf:5},sleep:{type:'number',minimum:0,maximum:24},activity:{type:'integer',minimum:0,maximum:1440},...Object.fromEntries(questions.map(q=>[q.id,{type:'string',enum:['Never','Sometimes','Often']}]))},required:['prebed','age','hours','minutes','sleep','activity',...questions.map(q=>q.id)],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute(data){const entries=[{name:'Other',hours:data.hours,minutes:data.minutes}];const result={...calculateWithPlatforms({...data,platforms:entries}),sleepBedtime:data.sleepBedtime,prebed:data.prebed};for(const input of form.querySelectorAll('input[name="prebed"]'))input.checked=input.value===data.prebed;platformUI.setEntries(entries);for(const id of ['name','age'])$(id).value=data[id]??'';for(const [prefix,total] of [['sleep',Math.round(data.sleep*60)],['activity',data.activity]]){$(prefix+'-hours').value=Math.floor(total/60);$(prefix+'-minutes').value=total%60;}refreshRoutineTimes();for(const q of questions)for(const input of form.querySelectorAll(`input[name="${q.id}"]`))input.checked=input.value===data[q.id];render(result);return result;}})).catch(()=>{});}catch{}}
 }
 
 

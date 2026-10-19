@@ -1,7 +1,7 @@
 'use strict';
 // CDC About Sleep (May 15, 2024). Context only; never part of the concern score.
 function sleepReference(age){
- if(!Number.isInteger(Number(age))||Number(age)<13||Number(age)>120)return null;
+ if(!Number.isInteger(Number(age))||Number(age)<15||Number(age)>100)return null;
  age=Number(age);
  if(age<18)return {group:'Teen',min:480,max:600,range:'8–10 hour',reference:'8–10 hours per 24 hours',guidance:'For ages 13–17, CDC guidance recommends 8–10 hours of sleep per 24 hours.',population:'ages 13–17'};
  if(age<=60)return {group:'Adult',min:420,max:null,range:'7 or more hours',reference:'7 or more hours per night',guidance:'For adults ages 18–60, CDC guidance recommends 7 or more hours of sleep per night.',population:'adults ages 18–60'};

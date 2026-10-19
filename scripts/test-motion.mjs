@@ -88,7 +88,7 @@ try{
     await page.mouse.move(0,0);await page.mouse.up();
    }
    await page.locator('#home-start').press('Enter');await step(page,1);
-   await page.click('#flow-next');assert.equal(await page.evaluate(()=>document.activeElement.id),'age');assert(await page.locator('#error').isVisible());assert.equal(await page.locator('#step-progress').evaluate(e=>e.value),1);
+   await page.click('#flow-next');assert.equal(await page.evaluate(()=>document.activeElement.id),'age');assert(await page.locator('#age-error').isVisible());assert(!await page.locator('#error').isVisible());assert.equal(await page.locator('#step-progress').evaluate(e=>e.value),1);
    await page.fill('#name','Motion Demo');await page.fill('#age','30');
    await page.evaluate(()=>document.getElementById('checkin').requestSubmit());await page.waitForTimeout(90);
    const scale=await page.locator('.step-progress-fill').evaluate(e=>new DOMMatrix(getComputedStyle(e).transform).a);

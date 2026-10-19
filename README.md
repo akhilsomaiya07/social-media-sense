@@ -2,7 +2,7 @@
 
 **Understand your social media time in the context of your everyday life.**
 
-Social Media Sense is a browser-based, five-step check-in for people aged 13 and older. It combines the time you estimate spending on each platform with questions about sleep, responsibilities, physical activity, time with other people, and scrolling longer than planned.
+Social Media Sense is designed for people aged 15–100. Its browser-based, five-step check-in combines the time you estimate spending on each platform with questions about sleep, responsibilities, physical activity, time with other people, and scrolling longer than planned.
 
 Social media time alone does not explain how it fits into someone's life. This project helps you connect the hours you report with the routines you want to protect, then decide whether there is anything you would like to explore or change. It does not measure your phone, grade your habits, or diagnose a condition.
 
@@ -26,7 +26,9 @@ There are no right or wrong answers. The app checks whether entries are complete
 
 ### Step 1 — About You
 
-Enter an optional name or nickname and a required age. The current age range is 13–120. Age helps the app select relevant sleep context and educational material, because guidance or research about adolescents may not apply to adults or older people. A name is used to address the person in the report, not to create an account.
+Enter an optional name or nickname and a required age. The supported age range is 15–100. Age helps the app select relevant sleep context and educational material, because guidance or research about adolescents may not apply to adults or older people. A name is used to address the person in the report, not to create an account.
+
+Educational searches consider broad age groups and self-reported routines: teenagers (15–17), young adults (18–29), adults (30–64), and older adults (65–100). Teenagers and young adults are priority groups for age-relevant evidence, with equally thoughtful coverage for older groups. Age alone does not identify disruption or a medical condition. Ordinary research requests send the broad group, not exact age; existing Sleep Shield research uses the exact assessment age when available. Published sleep-reference populations (such as CDC ages 13–17) remain unchanged. Optional tools still work without an assessment.
 
 ### Step 2 — Social Media Time
 

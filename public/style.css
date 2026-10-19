@@ -298,3 +298,12 @@ footer{color:#c1cee1}
  .flow-progress .step-progress-track progress{opacity:1}
  :where(.primary,.flow-back,.goal-button,.home-tools-link,.report-text-button):not(:disabled):active{outline:2px solid Highlight;outline-offset:2px}
 }
+
+/* Age eligibility feedback stays within the existing Step 1 field. */
+#age[aria-invalid="true"]{border:2px solid #a42b35}
+.age-warning{grid-column:1/-1;display:grid;grid-template-columns:18px minmax(0,1fr);gap:6px 8px;padding:12px;border:1px solid #d6a3a8;border-radius:8px;background:#fff3f3;color:#63252c;overflow-wrap:anywhere}
+.age-warning-icon,.age-warning-title{color:#a02531}
+.age-warning-icon{font-size:18px;line-height:1.2}
+.age-warning-title{font-size:13px;line-height:1.4}
+.age-warning>span:last-child{grid-column:1/-1}
+@media(forced-colors:active){#age[aria-invalid="true"],.age-warning{border-color:CanvasText}.age-warning{background:Canvas;color:CanvasText}.age-warning-icon,.age-warning-title{color:CanvasText}}

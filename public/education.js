@@ -1,6 +1,6 @@
 'use strict';
 function healthSearchContext(result){
- const ageGroup=result.age<13?'Children':result.age<18?'Adolescents':result.age<65?'Adults':'Older adults';
+ const ageGroup=result.age<18?'Adolescents':result.age<30?'Young adults':result.age<65?'Adults':'Older adults';
  const topics=['social media benefits and online social connection','social media risks and digital well-being'];
  const texts=result.reasons.map(r=>r.text);
  if(texts.includes('You said social media kept you up later than intended.'))topics.push('screen use and sleep');

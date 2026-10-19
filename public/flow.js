@@ -17,7 +17,10 @@ function setupAssessmentFlow({form,read,calculate,render,clearFieldErrors,showFi
   if(focus){get(`step-title-${step}`).focus({preventScroll:true});form.scrollIntoView({block:'start',behavior:'auto'});}
  }
  function report(fields){
-  clearFieldErrors();showFieldErrors(fields);get('error').textContent=[...new Set(Object.values(fields))].join(' ');get('error').hidden=false;
+  clearFieldErrors(Boolean(fields.age));showFieldErrors(fields);
+  // The age field has its own live alert; retain the summary for other fields only.
+  const messages=Object.entries(fields).filter(([key])=>key!=='age').map(([,message])=>message);
+  get('error').textContent=[...new Set(messages)].join(' ');get('error').hidden=!messages.length;
   const key=Object.keys(fields)[0],input=get(key)||form.querySelector(`input[name="${key}"]`);
   if(input)input.focus();
  }
