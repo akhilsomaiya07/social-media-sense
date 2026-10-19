@@ -10,7 +10,7 @@ on:
       - '.github/workflows/screenshots.yml'
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 concurrency:
   group: screenshots-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          persist-credentials: false
+          persist-credentials: true
       - uses: actions/setup-node@v6
         with:
           node-version: '22'
@@ -40,3 +40,22 @@ jobs:
           path: artifacts/screenshots/
           if-no-files-found: warn
           retention-days: 14
+
+      - name: Publish approved showcase captures to review branch
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'codex/readme-human-showcase-steps-1-5' && success() }}
+        env:
+          REVIEW_BRANCH: ${{ github.head_ref }}
+        run: |
+          set -eu
+          mkdir -p docs/screenshots
+          cp artifacts/screenshots/*.png docs/screenshots/
+          cp artifacts/screenshots/manifest.json docs/screenshots/manifest.json
+          git add docs/screenshots/
+          if git diff --cached --quiet; then
+            echo "Screenshots already current"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "docs: refresh complete five-step screenshot gallery"
+          git push origin "HEAD:${REVIEW_BRANCH}"
