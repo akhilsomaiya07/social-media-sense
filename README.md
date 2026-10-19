@@ -1,132 +1,88 @@
 # SOCIAL MEDIA SENSE
 
-A responsive digital-wellness check-in that helps people understand how social media fits into their day — without diagnosing, labeling, or treating screen time alone as a health score.
+**A clearer picture of how social media fits into your day.**
 
-**Live demo:** https://social-media-sense.akhilsomaiya7.workers.dev/
+I built Social Media Sense to make it easier to reflect on social media habits without turning screen time into a score or labeling anyone. It starts with a short check-in, then puts your answers into perspective: how much time you reported, what parts of your routine may be affected, and what you might want to explore next.
+
+[Try the live website](https://social-media-sense.akhilsomaiya7.workers.dev/)
 
 ## See SOCIAL MEDIA SENSE in Action
 
-Actual browser captures using fictional check-ins and local storage. Research is shown in fallback mode; these screenshots do not claim a successful live search.
+These are real screenshots from the application, using fictional example answers rather than anyone's personal data.
 
-All previews use the same 1280 × 900 capture size and display width. Click an image to open it at full size.
+### Start here
 
-**Homepage**
+<a href="docs/screenshots/homepage.png"><img src="docs/screenshots/homepage.png" alt="Social Media Sense homepage inviting visitors to start a check-in" width="420"></a>
 
-<a href="docs/screenshots/homepage.png"><img src="docs/screenshots/homepage.png" alt="Homepage" width="640"></a>
+A short check-in to put your social media time in perspective.
 
-Start a five-step check-in or explore optional tools without an account.
+### Follow the five steps
 
-<details>
-<summary>Assessment, report and tools gallery</summary>
+| Step 1 — About you | Step 2 — Social media time |
+| :--- | :--- |
+| <a href="docs/screenshots/assessment-step-1.png"><img src="docs/screenshots/assessment-step-1.png" alt="Step 1 with example nickname and age entered" width="420"></a> | <a href="docs/screenshots/assessment-step-2.png"><img src="docs/screenshots/assessment-step-2.png" alt="Step 2 showing total social media time and app sliders" width="420"></a> |
+| Tell the app a little about yourself. | Estimate time spent on each social media platform. |
 
-**Daily app use**
+| Step 3 — Sleep | Step 4 — Physical activity |
+| :--- | :--- |
+| <a href="docs/screenshots/assessment-step-3.png"><img src="docs/screenshots/assessment-step-3.png" alt="Step 3 showing a sample sleep duration and bedtime usage answer" width="420"></a> | <a href="docs/screenshots/assessment-step-4.png"><img src="docs/screenshots/assessment-step-4.png" alt="Step 4 showing a sample daily physical activity duration" width="420"></a> |
+| Reflect on your sleep and scrolling before bed. | Add your usual daily activity time. |
 
-<a href="docs/screenshots/assessment-step-2.png"><img src="docs/screenshots/assessment-step-2.png" alt="Daily app use" width="640"></a>
+| Step 5 — Your routine | Your results |
+| :--- | :--- |
+| <a href="docs/screenshots/assessment-step-5.png"><img src="docs/screenshots/assessment-step-5.png" alt="Step 5 with answers to routine disruption questions" width="420"></a> | <a href="docs/screenshots/results-report.png"><img src="docs/screenshots/results-report.png" alt="Read-only report showing an example social media snapshot and personalized insight" width="420"></a> |
+| Think about the past week. | See your time snapshot and personal insights. |
 
-Set per-app time with a live combined total. This view is scrolled to the app controls.
+### Explore the optional tools
 
-**Your report**
+| My Tools | Sleep Shield |
+| :--- | :--- |
+| <a href="docs/screenshots/my-tools.png"><img src="docs/screenshots/my-tools.png" alt="My Tools hub for Sleep Shield, Reduction Goal and Progress" width="420"></a> | <a href="docs/screenshots/sleep-shield.png"><img src="docs/screenshots/sleep-shield.png" alt="Optional Sleep Shield bedtime plan and night tracking" width="420"></a> |
+| Choose the tool that fits your needs. | Make a bedtime plan and track your nights. |
 
-<a href="docs/screenshots/results-report.png"><img src="docs/screenshots/results-report.png" alt="Your report" width="640"></a>
+| Reduction Goal | Your Progress |
+| :--- | :--- |
+| <a href="docs/screenshots/reduction-goal.png"><img src="docs/screenshots/reduction-goal.png" alt="Reduction Goal showing a hypothetical daily reduction and time projections" width="420"></a> | <a href="docs/screenshots/progress.png"><img src="docs/screenshots/progress.png" alt="Progress screen comparing two saved example check-ins" width="420"></a> |
+| Explore possible time savings, without changing your results. | Save and compare check-ins on your device. |
 
-Review your time snapshot, personal insights and an optional next step. More content continues below this viewport.
+Every screenshot comes from a browser-rendered example of the actual app. Research is shown in its offline fallback state rather than a fabricated live search.
 
-**My Tools**
+## Take a five-step check-in
 
-<a href="docs/screenshots/my-tools.png"><img src="docs/screenshots/my-tools.png" alt="My Tools" width="640"></a>
+The assessment moves through five short sections:
 
-Open Sleep Shield, Reduction Goal or Progress.
+1. **About you:** enter your age and, if you like, a name or nickname.
+2. **Your social media time:** estimate daily time on each platform and see the combined total update.
+3. **Sleep:** report your usual nighttime sleep and whether you use social media before bed.
+4. **Physical activity:** add your average daily activity time.
+5. **Your routine:** reflect on whether scrolling affected bedtime, responsibilities, activity, time with people, or how long you intended to stay online.
 
-**Sleep Shield**
+After the fifth step, the app shows a **read-only report**. It includes your reported daily, weekly and yearly time, your most-used platforms, and a personal observation drawn from your routine answers. You can read the reasoning and source links without changing the original check-in.
 
-<a href="docs/screenshots/sleep-shield.png"><img src="docs/screenshots/sleep-shield.png" alt="Sleep Shield" width="640"></a>
+## What you can do afterward
 
-Create a bedtime cutoff and record nights separately from the assessment.
+The report is only one part of Social Media Sense. The optional **My Tools** area is separate, so making a plan doesn't rewrite your answers.
 
-**Reduction Goal**
+**Sleep Shield** helps you choose a scrolling cutoff before bedtime and record how seven nights went. **Reduction Goal** lets you explore a daily time target and projected savings when your reported use exceeds two hours; it doesn't claim you've already changed your habits. **Progress** lets you save check-ins in your browser and compare what you reported over time.
 
-<a href="docs/screenshots/reduction-goal.png"><img src="docs/screenshots/reduction-goal.png" alt="Reduction Goal" width="640"></a>
+None of these tools is a diagnosis or a requirement.
 
-Explore a target and projected time savings without changing reported usage.
+## Why the app works this way
 
-**Your Progress**
+An hour count doesn't tell the whole story. Someone can spend a lot of time on social media without reporting disruption, while someone with less time might say scrolling keeps them up later than planned. The app therefore asks about routines instead of declaring a universal healthy or unhealthy screen-time limit.
 
-<a href="docs/screenshots/progress.png"><img src="docs/screenshots/progress.png" alt="Your Progress" width="640"></a>
+The educational information is age-aware where the evidence supports it, with links to sources. When live research can't be retrieved, the app uses its existing verified fallback guidance rather than inventing new claims.
 
-Save check-ins locally and compare reported values over time.
+## Built with
 
-</details>
+- HTML, CSS, and JavaScript for the interface
+- Node.js and Cloudflare Workers for the application and live-research endpoint
+- Playwright for browser testing and reproducible example screenshots
+- Browser local storage for saved check-ins, optional goals, and Sleep Shield history
 
-## What it does
+I use GitHub to track changes and keep the project improving. The repository includes automated tests for calculations, validation, tool behavior, and several responsive layouts.
 
-Social Media Sense turns a short five-step check-in into a practical snapshot of daily social media habits. It combines self-reported app usage with sleep, physical activity, and routine-disruption questions, then shows time calculations, personalized opportunities, reduction projections, Sleep Shield guidance, and current health resources.
-
-## Key features
-
-- Five-step guided assessment with field-specific validation
-- Per-app social media sliders with a 24-hour combined daily limit
-- Daily, weekly, and yearly usage calculations
-- Read-only report with Your Social Media Snapshot, Your Personal Insights and personalized Your Next Steps
-- Top-platform breakdown
-- **My Tools** hub, accessible independently of the assessment
-- Behavior-based interpretation instead of judging users by time alone
-- **One Place to Start** within **Your Personal Insights**, using the existing routine-context rules
-- Separate **Reduction Goal** tool for optional time-saving projections (available above 120 reported minutes/day)
-- **Sleep Shield** with a personalized pre-bed plan and seven-night local tracker
-- **Your Progress** for explicitly saved check-ins and comparisons using browser local storage
-- Balanced-use celebration for users reporting little routine disruption
-- Live, age-aware health research with source links and verified fallback guidance
-- Responsive layout for desktop and mobile
-- Accessibility details including keyboard focus, semantic controls, `aria-live`, and reduced-motion support
-
-## Health and safety approach
-
-This project is educational, not diagnostic. It does not label users as addicted, healthy, unhealthy, depressed, anxious, or otherwise make medical conclusions.
-
-Social media time alone does not determine a result. The app uses self-reported routine context and clearly separates estimates for social media use, sleep, and physical activity.
-
-Live health information is selected from credible sources such as government/public-health organizations, professional associations, universities, academic medical centers, and peer-reviewed research. If live retrieval is unavailable, the app falls back to previously verified educational guidance rather than inventing sources.
-
-## How the assessment works
-
-1. **About you** — optional name/nickname and age
-2. **Social media time** — per-platform daily usage sliders
-3. **Sleep** — usual sleep duration and pre-bed social media use
-4. **Physical activity** — average daily activity
-5. **Past-week routine check-in** — Never / Sometimes / Often routine-disruption questions
-
-After a short loading transition, the assessment is hidden and a dedicated results screen is shown.
-
-## Tech stack
-
-- HTML
-- CSS
-- Vanilla JavaScript
-- Node.js
-- Cloudflare Workers + Static Assets
-- Wrangler
-- OpenAI SDK for server-side live research
-- Browser `localStorage` for saved check-ins and Sleep Shield history
-- GitHub for version control and deployment source
-
-The repository also retains Netlify configuration and function files from the earlier deployment path.
-
-## Project structure
-
-```text
-.
-├── public/                 # Frontend HTML, CSS, and JavaScript
-├── cloudflare/             # Cloudflare Worker
-├── lib/                    # Shared server-side health research logic
-├── netlify/                # Existing Netlify function
-├── scripts/                # Validation and regression tests
-├── package.json
-├── package-lock.json
-├── wrangler.jsonc
-└── netlify.toml
-```
-
-## Run locally
+### Run it locally
 
 Requires Node.js 22 or newer.
 
@@ -137,36 +93,16 @@ npm test
 npm run dev
 ```
 
-Opening `public/index.html` directly can display the frontend, but server-side live health research requires the Worker/runtime environment.
+Live research requires the Worker environment and its server-side configuration. Keep credentials in environment secrets, never in frontend code or GitHub.
 
-## Cloudflare deployment
+### Privacy
 
-The production deployment uses Cloudflare Workers with Static Assets.
+No account is required. Saved check-ins, goals, and Sleep Shield entries stay in the browser's local storage; other people using that browser profile may be able to see them, and clearing browser data may remove them. The app does not send names or saved histories in requests for health information.
 
-```text
-Build command:  npm run build
-Deploy command: npx wrangler deploy
-Root directory: repository root
-```
+## Project notes
 
-Runtime credentials for live research belong in Cloudflare secrets/environment variables and are never placed in frontend code or committed to GitHub.
+I originally focused on a straightforward daily-time check-in and gradually expanded it after testing the assessment and its results. I separated the report from optional tools so users can explore goals or track nights without changing their original answers.
 
-## Privacy
-
-- No login is required.
-- Saved check-ins and Sleep Shield entries stay in the browser's local storage.
-- The user's name, saved history, bedtime notes, and Sleep Shield tracking are not sent to live health research.
-- Clearing browser data can remove locally saved history.
-
-## Project evolution
-
-This project was built iteratively: the first working assessment was tested, validation and calculation bugs were fixed, the experience was expanded with per-app tracking, personalized result features, Sleep Shield, live health research, and local progress comparisons, then migrated from Netlify to Cloudflare and cleaned into a production-ready GitHub structure.
-
-## Creator
+The app is still evolving. I'm continuing to improve the clarity of the results, navigation, and presentation as I test more situations and screen sizes.
 
 **Made with ❤️ by Akhil Somaiya**
-
-
-## Report and optional tools
-
-The homepage opens the five-step assessment or My Tools. Completed reports are read-only snapshots. Sleep Shield, Reduction Goal, and Progress are separate in-app views; returning to a report does not recalculate it. Saved records are shown as recorded fields, never reconstructed full reports. See [TOOLS-ARCHITECTURE.md](TOOLS-ARCHITECTURE.md) for navigation, storage compatibility, and testing.
