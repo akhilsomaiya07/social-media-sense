@@ -40,6 +40,8 @@ Added:
 
 Removed the unused `mobile-results.png`; no Mobile example section is reintroduced.
 
+GitHub-rendered review captures: `docs/review/gallery/github-desktop.jpg` and `docs/review/gallery/github-mobile.jpg`. These are review evidence, not additional README gallery entries.
+
 Other changed files: `README.md`, `scripts/capture-showcase.mjs`, `docs/SCREENSHOTS.md`, this review file and `docs/screenshots/manifest.json`.
 
 ## Verification
@@ -52,6 +54,8 @@ Executed successfully:
 - Local Markdown-rendered README preview at 320, 390, 768 and 1280px: all 17 image sources load, original-image links match, aspect ratios are preserved and there is no horizontal overflow.
 - Image manifest hashes/dimensions and README paths checked; all application, dependency, deployment and workflow files compared with main and unchanged.
 - All generated images visually inspected. Five assessment steps, all five routine questions, navigation, report sections and expanded tool details are present.
+
+The actual branch README was also opened in GitHub and visually inspected at desktop and 390px mobile widths. All 17 images loaded and fit without horizontal overflow. [Desktop render](review/gallery/github-desktop.jpg) · [Mobile render](review/gallery/github-mobile.jpg).
 
 The deployed homepage HTML and all 12 linked CSS/JavaScript assets were downloaded and compared byte-for-byte with main. They matched. Screenshots nevertheless use only the local main checkout, not a mix of deployment versions.
 
