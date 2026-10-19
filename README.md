@@ -8,52 +8,44 @@ I built Social Media Sense to make it easier to reflect on social media habits w
 
 ## See SOCIAL MEDIA SENSE in Action
 
-These are real captures of the application using example answers, not anyone's personal records. The research panels use the app's offline fallback state.
+These are real screenshots from the application, using fictional example answers rather than anyone's personal data.
 
-**Homepage**
+### Start here
 
-<a href="docs/screenshots/homepage.png"><img src="docs/screenshots/homepage.png" alt="Homepage" width="640"></a>
+<a href="docs/screenshots/homepage.png"><img src="docs/screenshots/homepage.png" alt="Social Media Sense homepage inviting visitors to start a check-in" width="420"></a>
 
-Start a five-step check-in or explore optional tools without an account.
+A short check-in to put your social media time in perspective.
 
-**Daily app use**
+### Follow the five steps
 
-<a href="docs/screenshots/assessment-step-2.png"><img src="docs/screenshots/assessment-step-2.png" alt="Daily app use" width="640"></a>
+| Step 1 — About you | Step 2 — Social media time |
+| :--- | :--- |
+| <a href="docs/screenshots/assessment-step-1.png"><img src="docs/screenshots/assessment-step-1.png" alt="Step 1 with example nickname and age entered" width="420"></a> | <a href="docs/screenshots/assessment-step-2.png"><img src="docs/screenshots/assessment-step-2.png" alt="Step 2 showing total social media time and app sliders" width="420"></a> |
+| Tell the app a little about yourself. | Estimate time spent on each social media platform. |
 
-Set per-app time with a live combined total. This view is scrolled to the app controls.
+| Step 3 — Sleep | Step 4 — Physical activity |
+| :--- | :--- |
+| <a href="docs/screenshots/assessment-step-3.png"><img src="docs/screenshots/assessment-step-3.png" alt="Step 3 showing a sample sleep duration and bedtime usage answer" width="420"></a> | <a href="docs/screenshots/assessment-step-4.png"><img src="docs/screenshots/assessment-step-4.png" alt="Step 4 showing a sample daily physical activity duration" width="420"></a> |
+| Reflect on your sleep and scrolling before bed. | Add your usual daily activity time. |
 
-**Your report**
+| Step 5 — Your routine | Your results |
+| :--- | :--- |
+| <a href="docs/screenshots/assessment-step-5.png"><img src="docs/screenshots/assessment-step-5.png" alt="Step 5 with answers to routine disruption questions" width="420"></a> | <a href="docs/screenshots/results-report.png"><img src="docs/screenshots/results-report.png" alt="Read-only report showing an example social media snapshot and personalized insight" width="420"></a> |
+| Think about the past week. | See your time snapshot and personal insights. |
 
-<a href="docs/screenshots/results-report.png"><img src="docs/screenshots/results-report.png" alt="Your report" width="640"></a>
+### Explore the optional tools
 
-Review your time snapshot, personal insights and an optional next step. More content continues below this viewport.
+| My Tools | Sleep Shield |
+| :--- | :--- |
+| <a href="docs/screenshots/my-tools.png"><img src="docs/screenshots/my-tools.png" alt="My Tools hub for Sleep Shield, Reduction Goal and Progress" width="420"></a> | <a href="docs/screenshots/sleep-shield.png"><img src="docs/screenshots/sleep-shield.png" alt="Optional Sleep Shield bedtime plan and night tracking" width="420"></a> |
+| Choose the tool that fits your needs. | Make a bedtime plan and track your nights. |
 
-**My Tools**
+| Reduction Goal | Your Progress |
+| :--- | :--- |
+| <a href="docs/screenshots/reduction-goal.png"><img src="docs/screenshots/reduction-goal.png" alt="Reduction Goal showing a hypothetical daily reduction and time projections" width="420"></a> | <a href="docs/screenshots/progress.png"><img src="docs/screenshots/progress.png" alt="Progress screen comparing two saved example check-ins" width="420"></a> |
+| Explore possible time savings, without changing your results. | Save and compare check-ins on your device. |
 
-<a href="docs/screenshots/my-tools.png"><img src="docs/screenshots/my-tools.png" alt="My Tools" width="640"></a>
-
-Open Sleep Shield, Reduction Goal or Progress.
-
-**Sleep Shield**
-
-<a href="docs/screenshots/sleep-shield.png"><img src="docs/screenshots/sleep-shield.png" alt="Sleep Shield" width="640"></a>
-
-Create a bedtime cutoff and record nights separately from the assessment.
-
-**Reduction Goal**
-
-<a href="docs/screenshots/reduction-goal.png"><img src="docs/screenshots/reduction-goal.png" alt="Reduction Goal" width="640"></a>
-
-Explore a target and projected time savings without changing reported usage.
-
-**Your Progress**
-
-<a href="docs/screenshots/progress.png"><img src="docs/screenshots/progress.png" alt="Your Progress" width="640"></a>
-
-Save check-ins locally and compare reported values over time.
-
-
-
+Every screenshot comes from a browser-rendered example of the actual app. Research is shown in its offline fallback state rather than a fabricated live search.
 
 ## Take a five-step check-in
 
