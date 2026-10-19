@@ -1,7 +1,7 @@
 {
   "fixture": "Synthetic Demo, age 30; 240m prior / 180m current; fixed Jan 2026 UTC dates",
   "research": "503 fixture: existing fallback guidance, no successful live retrieval",
-  "browser": "151.0.7922.34",
+  "browser": "153.0.8010.0",
   "captures": [
     {
       "file": "homepage.png",
@@ -9,9 +9,18 @@
         "width": 1280,
         "height": 900
       },
-      "framing": "viewport (scrollable content may continue below)",
-      "bytes": 736102,
-      "sha256": "ba0b26e1964a1fc4c2e0ba68249d95e806aea28a02e6b7bb56ddb4140134710a"
+      "framing": [
+        "header",
+        "#home-screen",
+        ".creator-credit",
+        "footer"
+      ],
+      "dimensions": {
+        "width": 1280,
+        "height": 756
+      },
+      "bytes": 542280,
+      "sha256": "848d74333639eefa7322edf0c8e394737e44da023669ff4d257dfa3f5462a991"
     },
     {
       "file": "assessment-step-1.png",
@@ -19,49 +28,101 @@
         "width": 1280,
         "height": 900
       },
-      "framing": "viewport (scrollable content may continue below)",
-      "bytes": 601397,
-      "sha256": "e1391d1a188eae18ba35d925c009e794af72464af240b69a5dc13b02d4723196"
+      "framing": [
+        "#checkin"
+      ],
+      "dimensions": {
+        "width": 662,
+        "height": 513
+      },
+      "bytes": 62464,
+      "sha256": "30c147fd240def0f8e5747b9b29fa6151923a299faed528bfe446a589b57fcc7"
     },
     {
       "file": "assessment-step-2.png",
       "viewport": {
         "width": 1280,
-        "height": 900
+        "height": 1061
       },
-      "framing": "viewport (scrollable content may continue below)",
-      "bytes": 602592,
-      "sha256": "79913d1080a373a868038efeaf3c570ccb3e87767629587aa08d8b1d247adf44"
+      "framing": [
+        ".assessment-nav",
+        ".flow-progress",
+        "[data-step=\"2\"] > .section-title",
+        "[data-step=\"2\"] > .help",
+        "#platform-total-wrap",
+        ".platform-reference-legend",
+        ".platform-reference-info"
+      ],
+      "dimensions": {
+        "width": 600,
+        "height": 672
+      },
+      "bytes": 63044,
+      "sha256": "2c6234df3a2e855de328a835c6647d82fce3da4a3d41c14c72f780ba1450a4da"
+    },
+    {
+      "file": "assessment-step-2-sliders.png",
+      "viewport": {
+        "width": 1280,
+        "height": 1749
+      },
+      "framing": [
+        ".platform-row:nth-child(-n+4)"
+      ],
+      "dimensions": {
+        "width": 580,
+        "height": 693
+      },
+      "bytes": 26417,
+      "sha256": "9f63b86e1e47d65e8e54e0e880cdb1b4a5f161a4cbd7bca8afebaf3147697474"
     },
     {
       "file": "assessment-step-3.png",
       "viewport": {
         "width": 1280,
-        "height": 900
+        "height": 1288
       },
-      "framing": "viewport (scrollable content may continue below)",
-      "bytes": 579631,
-      "sha256": "97a593c894271921f63169df022fc6f3b92bd1bdadd378495b4bb093b35639f3"
+      "framing": [
+        "#checkin"
+      ],
+      "dimensions": {
+        "width": 662,
+        "height": 930
+      },
+      "bytes": 120826,
+      "sha256": "46181113938d0458fd0766f2bcb33dacbfcb21c14d894c9a5185234c4d98f2f8"
     },
     {
       "file": "assessment-step-4.png",
       "viewport": {
         "width": 1280,
-        "height": 900
+        "height": 1026
       },
-      "framing": "viewport (scrollable content may continue below)",
-      "bytes": 585783,
-      "sha256": "acf7571129b1df17321ac3bc50738271c7e62ef79e16652d7a1cba81ba9999d9"
+      "framing": [
+        "#checkin"
+      ],
+      "dimensions": {
+        "width": 662,
+        "height": 668
+      },
+      "bytes": 88054,
+      "sha256": "add367e73205d5d4a851654d7c5c81d0aab0eead2c913a58904ff45382c8fe80"
     },
     {
       "file": "assessment-step-5.png",
       "viewport": {
         "width": 1280,
-        "height": 900
+        "height": 1241
       },
-      "framing": "viewport (scrollable content may continue below)",
-      "bytes": 583784,
-      "sha256": "8ce013cc29992fbf7281e5c693f87e35ca64d1059808b6a9b73171a2a69f03fb"
+      "framing": [
+        "#checkin"
+      ],
+      "dimensions": {
+        "width": 662,
+        "height": 883
+      },
+      "bytes": 115175,
+      "sha256": "8596f4d9a7d4aa1237af0bb1c0bddd551d31f668c4e6b90cccb47ed5678b28dd"
     },
     {
       "file": "results-report.png",
@@ -69,19 +130,49 @@
         "width": 1280,
         "height": 900
       },
-      "framing": "viewport (scrollable content may continue below)",
-      "bytes": 415561,
-      "sha256": "0a0424db5caaea9526eba61f6c5e9f6d95e7b2899320c21f523e5f58cb9a70ce"
+      "framing": [
+        ".result-top",
+        "#result-title",
+        "#report-snapshot"
+      ],
+      "dimensions": {
+        "width": 732,
+        "height": 555
+      },
+      "bytes": 37838,
+      "sha256": "ce6e6c5a3e8516ec8c63aacfb48ab434f1d7f89f6af1a8c2aa40eff17498e75b"
     },
     {
-      "file": "mobile-results.png",
+      "file": "results-insights.png",
       "viewport": {
-        "width": 390,
-        "height": 844
+        "width": 1280,
+        "height": 1334
       },
-      "framing": "viewport (scrollable content may continue below)",
-      "bytes": 110803,
-      "sha256": "bb31efc49ea121bd10c4091fd6eab156bc35989ccdda6ed392c650a9f7d9a4b1"
+      "framing": [
+        "#report-insights"
+      ],
+      "dimensions": {
+        "width": 732,
+        "height": 609
+      },
+      "bytes": 59033,
+      "sha256": "5687be27a9fb6ff4480a1a13f70bec80ae4895987d2b7875d77d7b8af6c6e936"
+    },
+    {
+      "file": "results-next-steps.png",
+      "viewport": {
+        "width": 1280,
+        "height": 1851
+      },
+      "framing": [
+        "#report-next"
+      ],
+      "dimensions": {
+        "width": 732,
+        "height": 524
+      },
+      "bytes": 36684,
+      "sha256": "aeeb75303d257e05cee50e474875cd7bc9cc70630806333a46fa1858842453f2"
     },
     {
       "file": "my-tools.png",
@@ -89,39 +180,111 @@
         "width": 1280,
         "height": 900
       },
-      "framing": "viewport (scrollable content may continue below)",
-      "bytes": 501425,
-      "sha256": "eef07e2b24c99f169a9d90d082bbdac96da730d759f556e06af983f032323dbc"
+      "framing": [
+        "#tools-screen"
+      ],
+      "dimensions": {
+        "width": 792,
+        "height": 485
+      },
+      "bytes": 70544,
+      "sha256": "988933af4485c9377bd6f4297ac95540a0affc3507d4a07ee9e3c48b05accf36"
     },
     {
       "file": "sleep-shield.png",
       "viewport": {
         "width": 1280,
-        "height": 900
+        "height": 951
       },
-      "framing": "viewport (scrollable content may continue below)",
-      "bytes": 395500,
-      "sha256": "39e3096ff964ad447de0e8b25a5649dac087b8e205e2310871c066d972a2b2f1"
+      "framing": [
+        "#sleep-shield"
+      ],
+      "dimensions": {
+        "width": 792,
+        "height": 804
+      },
+      "bytes": 88158,
+      "sha256": "9e4eae54e7fd7be2ef7a0ed8bf178ae92e893d59ef2236dbee6d2ec4b9e881f1"
+    },
+    {
+      "file": "sleep-shield-tracking.png",
+      "viewport": {
+        "width": 1280,
+        "height": 1173
+      },
+      "framing": [
+        ".shield-night"
+      ],
+      "dimensions": {
+        "width": 700,
+        "height": 522
+      },
+      "bytes": 29018,
+      "sha256": "16c4abc7f57624e5038374bfd1d19d727e5b5ae3e5a6b468d2554c4f048b68ec"
     },
     {
       "file": "reduction-goal.png",
       "viewport": {
         "width": 1280,
-        "height": 900
+        "height": 1302
       },
-      "framing": "viewport (scrollable content may continue below)",
-      "bytes": 402867,
-      "sha256": "2e83191b1b534b717efba8cf6907a388597e0eace7fba294a610b93fbee58923"
+      "framing": [
+        "#reduction-screen"
+      ],
+      "dimensions": {
+        "width": 792,
+        "height": 1155
+      },
+      "bytes": 136577,
+      "sha256": "4a944d34c022916ba23c6b0c186680be2ddf5de58d660a300ff445c854870d94"
+    },
+    {
+      "file": "reduction-savings.png",
+      "viewport": {
+        "width": 1280,
+        "height": 1432
+      },
+      "framing": [
+        "#report-goal-breakdown"
+      ],
+      "dimensions": {
+        "width": 732,
+        "height": 411
+      },
+      "bytes": 32314,
+      "sha256": "7ea1f901d0a526596df5e80776cfc63c81b3e0ece59fdcce0dc4a1fca3cb50e9"
     },
     {
       "file": "progress.png",
       "viewport": {
         "width": 1280,
-        "height": 900
+        "height": 1062
       },
-      "framing": "viewport (scrollable content may continue below)",
-      "bytes": 415816,
-      "sha256": "d8ec3bc1a991a33b6136ff50742e75ff3394a911da511fb11981341d0db5c17d"
+      "framing": [
+        "#progress-screen"
+      ],
+      "dimensions": {
+        "width": 792,
+        "height": 915
+      },
+      "bytes": 121891,
+      "sha256": "d1e5f71037c2285cab78c4d7a21dc522fd116c62c9349241c1347e01c322d92b"
+    },
+    {
+      "file": "progress-comparison.png",
+      "viewport": {
+        "width": 1280,
+        "height": 1467
+      },
+      "framing": [
+        "#progress-details"
+      ],
+      "dimensions": {
+        "width": 732,
+        "height": 776
+      },
+      "bytes": 58692,
+      "sha256": "15f7a305a51565096e338fedcc38080a1f13f17bc15d2b3c39255610fc5a1973"
     }
   ]
 }

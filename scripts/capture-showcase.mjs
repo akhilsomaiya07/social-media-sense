@@ -9,8 +9,8 @@ const output=path.resolve(root,process.env.SCREENSHOT_DIR||'artifacts/screenshot
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 await fs.mkdir(output,{recursive:true});
 // Remove only outputs this script owns; a failed run cannot retain a stale gallery.
-const names=['homepage','assessment-step-1','assessment-step-2','assessment-step-3','assessment-step-4','assessment-step-5','results-report','my-tools','sleep-shield','reduction-goal','progress','mobile-results'];
-for(const name of [...names.map(n=>n+'.png'),'manifest.json','failure.png','failure.txt'])await fs.rm(path.join(output,name),{force:true});
+const names=['homepage','assessment-step-1','assessment-step-2','assessment-step-2-sliders','assessment-step-3','assessment-step-4','assessment-step-5','results-report','results-insights','results-next-steps','my-tools','sleep-shield','sleep-shield-tracking','reduction-goal','reduction-savings','progress','progress-comparison'];
+for(const name of [...names.map(n=>n+'.png'),'mobile-results.png','manifest.json','failure.png','failure.txt'])await fs.rm(path.join(output,name),{force:true});
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:process.env.CHROMIUM_PATH?['--no-sandbox','--disable-dev-shm-usage','--use-gl=angle','--use-angle=swiftshader','--disable-gpu-sandbox']:[]});
 const context=await browser.newContext({viewport:{width:1280,height:900},deviceScaleFactor:1,locale:'en-US',timezoneId:'UTC',colorScheme:'light',reducedMotion:'reduce',serviceWorkers:'block'});
 const page=await context.newPage(),errors=[],captures=[];page.setDefaultTimeout(15000);page.on('pageerror',e=>errors.push(e.message));
@@ -23,24 +23,44 @@ await context.route('**/*',async route=>{
  if(!file.startsWith(path.join(root,'public')+path.sep))return route.abort();
  try{await route.fulfill({body:await fs.readFile(file),contentType:file.endsWith('.css')?'text/css':file.endsWith('.js')?'text/javascript':'text/html'});}catch{await route.fulfill({status:404,body:'Not found'});}
 });
-async function capture(name,selector){
+// Capture complete semantic sections, not a fixed-height screen. A range of
+// selectors frames adjacent content without moving, hiding or rebuilding UI.
+async function capture(name,selectors){
+ await page.setViewportSize({width:1280,height:900});
  await page.evaluate(async()=>{await document.fonts.ready;window.scrollTo(0,0);if(document.activeElement instanceof HTMLElement)document.activeElement.blur();});
- // Keep the Step 2 heading and daily total visible in the screenshot.
  await page.mouse.move(0,0);
  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+ const frame=async()=>page.evaluate(selectors=>{
+  const pad=selectors.includes('.shield-night')?0:selectors.some(s=>s.startsWith('.platform-row'))?6:16;
+  const boxes=selectors.flatMap(s=>[...document.querySelectorAll(s)]).filter(e=>e.getClientRects().length).map(e=>e.getBoundingClientRect());
+  if(!boxes.length)throw Error('No visible capture targets');
+  const x=Math.max(0,Math.floor(Math.min(...boxes.map(b=>b.left))-pad));
+  const y=Math.max(0,Math.floor(Math.min(...boxes.map(b=>b.top))+scrollY-pad));
+  const right=Math.min(innerWidth,Math.ceil(Math.max(...boxes.map(b=>b.right))+pad));
+  const bottom=Math.ceil(Math.max(...boxes.map(b=>b.bottom))+scrollY+pad);
+  return {x,y,width:right-x,height:bottom-y};
+ },selectors);
+ let clip=await frame();
+ // Keep the entire capture in the viewport so sticky totals do not obscure
+ // labels when Chromium scrolls a long locator into view.
+ await page.setViewportSize({width:1280,height:Math.max(900,clip.y+clip.height+24)});
+ await page.evaluate(()=>window.scrollTo(0,0));clip=await frame();
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`${name}: horizontal overflow`);
- const target=selector?page.locator(selector):page;
- const buffer=await target.screenshot({type:'png',animations:'disabled',caret:'hide',scale:'css',...(selector?{}:{fullPage:false})});
+ const buffer=await page.screenshot({type:'png',animations:'disabled',caret:'hide',scale:'css',clip});
  await fs.writeFile(path.join(output,name+'.png'),buffer);
- captures.push({file:name+'.png',viewport:page.viewportSize(),framing:selector||'viewport (scrollable content may continue below)',bytes:buffer.length,sha256:createHash('sha256').update(buffer).digest('hex')});
- console.log('Captured '+name);
+ captures.push({file:name+'.png',viewport:page.viewportSize(),framing:selectors,dimensions:{width:clip.width,height:clip.height},bytes:buffer.length,sha256:createHash('sha256').update(buffer).digest('hex')});
+ console.log('Captured '+name+' '+clip.width+'×'+clip.height);
 }
 async function usePlatform(name,minutes){await page.getByRole('slider',{name:name+' daily usage',exact:true}).evaluate((el,n)=>{el.value=platformPosition(n);el.dispatchEvent(new Event('input',{bubbles:true}));},minutes);}
 async function finishAssessment(facebook,showAllSteps=false){
  await usePlatform('Facebook',facebook);await usePlatform('Instagram',90);await usePlatform('YouTube',30);
- await page.click('#flow-next');if(showAllSteps)await capture('assessment-step-3');await page.fill('#sleep-hours','7');await page.fill('#sleep-minutes','30');await page.check('input[name="prebed"][value="Sometimes"]');
- await page.click('#flow-next');if(showAllSteps)await capture('assessment-step-4');await page.fill('#activity-hours','0');await page.fill('#activity-minutes','45');await page.click('#flow-next');if(showAllSteps)await capture('assessment-step-5');
+ await page.click('#flow-next');await page.fill('#sleep-hours','7');await page.fill('#sleep-minutes','30');await page.check('input[name="prebed"][value="Sometimes"]');
+ if(showAllSteps)await capture('assessment-step-3',['#checkin']);
+ await page.click('#flow-next');await page.fill('#activity-hours','0');await page.fill('#activity-minutes','45');
+ if(showAllSteps)await capture('assessment-step-4',['#checkin']);
+ await page.click('#flow-next');
  for(const [key,value] of Object.entries({bedtime:'Sometimes',tasks:'Never',movement:'Never',people:'Never',longer:'Sometimes'}))await page.check(`input[name="${key}"][value="${value}"]`);
+ if(showAllSteps){assert.equal(await page.locator('#questions fieldset').count(),5);await capture('assessment-step-5',['#checkin']);}
  await page.click('#flow-next');await page.locator('#result').waitFor({state:'visible'});
  await page.waitForFunction(()=>document.getElementById('education-live-status').textContent.includes('could not'));
 }
@@ -48,19 +68,28 @@ async function begin(){await page.fill('#name','Demo');await page.fill('#age','3
 async function hub(){await page.locator('[data-view="tools"]:visible').first().click();}
 async function tool(view){await page.locator(`#tools-screen [data-view="${view}"]`).click();}
 try{
- await page.goto('https://showcase.local/');assert.equal(await page.evaluate(()=>localStorage.length),0);await capture('homepage');
+ await page.goto('https://showcase.local/');assert.equal(await page.evaluate(()=>localStorage.length),0);await capture('homepage',['header','#home-screen','.creator-credit','footer']);
  await page.click('#home-start');await begin();await finishAssessment(120);
  await page.click('#next-step-progress');await page.click('#save-checkin');await hub();await page.click('#tools-report');await page.click('#start-new-checkin');
- await page.clock.setFixedTime(new Date('2026-01-22T12:00:00Z'));await capture('assessment-step-1');await begin();
+ await page.clock.setFixedTime(new Date('2026-01-22T12:00:00Z'));await page.fill('#name','Demo');await page.fill('#age','30');await capture('assessment-step-1',['#checkin']);await page.click('#flow-next');
  await usePlatform('Facebook',60);await usePlatform('Instagram',90);await usePlatform('YouTube',30);
- await capture('assessment-step-2');await finishAssessment(60,true);assert.equal(await page.locator('#daily').textContent(),'3h');
- await capture('results-report');await page.setViewportSize({width:390,height:844});await capture('mobile-results');await page.setViewportSize({width:1280,height:900});
- await page.click('#explore-tools');await capture('my-tools');await tool('shield');
- await page.fill('#shield-bedtime','23:00');await page.selectOption('#shield-window','30');await page.selectOption('#shield-activity','Read');await page.click('#shield-use');await capture('sleep-shield');
- await hub();await tool('reduction');await page.locator('#goal-reduction').fill('30');await capture('reduction-goal');
- await hub();await tool('progress');assert.match(await page.locator('#progress-summary').textContent(),/60 minutes less/);await page.click('#save-checkin');await capture('progress');
- assert.deepEqual(errors,[]);assert.equal(captures.length,12);
+ await capture('assessment-step-2',['.assessment-nav','.flow-progress','[data-step="2"] > .section-title','[data-step="2"] > .help','#platform-total-wrap','.platform-reference-legend','.platform-reference-info']);
+ await capture('assessment-step-2-sliders',['.platform-row:nth-child(-n+4)']);
+ await finishAssessment(60,true);assert.equal(await page.locator('#daily').textContent(),'3h');
+ await capture('results-report',['.result-top','#result-title','#report-snapshot']);
+ await capture('results-insights',['#report-insights']);
+ await capture('results-next-steps',['#report-next']);
+ await page.click('#explore-tools');await capture('my-tools',['#tools-screen']);await tool('shield');
+ await page.fill('#shield-bedtime','23:00');await page.selectOption('#shield-window','30');await page.selectOption('#shield-activity','Read');await page.click('#shield-use');await capture('sleep-shield',['#sleep-shield']);
+ await page.click('#shield-track');await page.locator('.shield-night select').nth(0).selectOption('Yes');await page.getByLabel('Sleep hours',{exact:true}).fill('7');await page.getByLabel('Sleep minutes',{exact:true}).fill('45');await page.locator('.shield-night select').nth(1).selectOption('Rested');
+ await capture('sleep-shield-tracking',['.shield-night']);await page.getByRole('button',{name:'Save night',exact:true}).click();
+ await hub();await tool('reduction');await page.locator('#goal-reduction').fill('30');await capture('reduction-goal',['#reduction-screen']);
+ await page.locator('#report-goal-breakdown > summary').click();await capture('reduction-savings',['#report-goal-breakdown']);
+ assert.equal(await page.locator('#goal-year').textContent(),'182.5');
+ await hub();await tool('progress');assert.match(await page.locator('#progress-summary').textContent(),/60 minutes less/);await page.click('#save-checkin');await capture('progress',['#progress-screen']);
+ await page.locator('#progress-details > summary').click();await capture('progress-comparison',['#progress-details']);
+ assert.deepEqual(errors,[]);assert.equal(captures.length,names.length);
  await fs.writeFile(path.join(output,'manifest.json'),JSON.stringify({fixture:'Synthetic Demo, age 30; 240m prior / 180m current; fixed Jan 2026 UTC dates',research:'503 fixture: existing fallback guidance, no successful live retrieval',browser:browser.version(),captures},null,2)+'\n');
- console.log('PASS: twelve local UI captures, isolated synthetic storage, fallback research and no overflow.');
+ console.log(`PASS: ${captures.length} complete section captures, isolated synthetic storage, fallback research and no overflow.`);
 }catch(error){await fs.writeFile(path.join(output,'failure.txt'),String(error.stack||error));await page.screenshot({path:path.join(output,'failure.png')}).catch(()=>{});throw error;}
 finally{await context.close();await browser.close();}
