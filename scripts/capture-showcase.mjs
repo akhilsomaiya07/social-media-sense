@@ -25,7 +25,7 @@ await context.route('**/*',async route=>{
 });
 async function capture(name,selector){
  await page.evaluate(async()=>{await document.fonts.ready;window.scrollTo(0,0);if(document.activeElement instanceof HTMLElement)document.activeElement.blur();});
- if(name==='assessment-step-2')await page.locator('.platform-row').first().evaluate(el=>window.scrollTo(0,el.getBoundingClientRect().top+scrollY-130));
+ // Keep the Step 2 heading and daily total visible in the screenshot.
  await page.mouse.move(0,0);
  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`${name}: horizontal overflow`);
