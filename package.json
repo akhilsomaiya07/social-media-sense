@@ -12,7 +12,8 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "check:cloudflare": "wrangler deploy --dry-run --outdir .cloudflare-build",
-    "screenshots": "node scripts/capture-showcase.mjs"
+    "screenshots": "node scripts/capture-showcase.mjs",
+    "test:motion": "node scripts/test-motion.mjs"
   },
   "dependencies": {
     "openai": "7.28.0"

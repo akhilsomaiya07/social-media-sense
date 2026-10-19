@@ -5,6 +5,7 @@ on:
     paths:
       - 'public/**'
       - 'scripts/capture-showcase.mjs'
+      - 'scripts/test-motion.mjs'
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/screenshots.yml'
@@ -30,6 +31,8 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run build
       - run: npm test
+      - name: Check motion and accessibility
+        run: npm run test:motion
       - name: Capture local application
         run: npm run screenshots
       - name: Upload screenshots and failure diagnostics
@@ -37,6 +40,8 @@ jobs:
         uses: actions/upload-artifact@v5
         with:
           name: screenshots-${{ github.run_id }}-${{ github.run_attempt }}
-          path: artifacts/screenshots/
+          path: |
+            artifacts/screenshots/
+            artifacts/motion/
           if-no-files-found: warn
           retention-days: 14
