@@ -6,6 +6,9 @@ on:
       - 'public/**'
       - 'scripts/capture-showcase.mjs'
       - 'scripts/test-motion.mjs'
+      - 'scripts/*routing*.mjs'
+      - 'cloudflare/worker.mjs'
+      - 'wrangler.jsonc'
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/screenshots.yml'
@@ -33,6 +36,8 @@ jobs:
       - run: npm test
       - name: Check motion and accessibility
         run: npm run test:motion
+      - name: Check routes and Worker fallback
+        run: npm run test:routing
       - name: Capture local application
         run: npm run screenshots
       - name: Upload screenshots and failure diagnostics
@@ -43,5 +48,6 @@ jobs:
           path: |
             artifacts/screenshots/
             artifacts/motion/
+            artifacts/routing/
           if-no-files-found: warn
           retention-days: 14

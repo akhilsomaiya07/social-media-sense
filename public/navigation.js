@@ -17,6 +17,7 @@ const appViews=(()=>{
   get('tools-state').textContent=storageProblem?'Some saved data could not be read. Open the relevant tool for details; nothing has been replaced.':note;
  }
  function show(view,focus=true){
+  if(window.assessmentFlow?.busy&&view!=='loading')return;
   if(view==='report'&&!hasReport)view='tools';
   scrolls.set(current,window.scrollY);
   if(document.activeElement?.matches('button,a'))triggers.set(current,document.activeElement);
@@ -25,20 +26,21 @@ const appViews=(()=>{
   current=view;
   const intro=document.querySelector('.intro'),home=get('home-screen');
   if(view==='home')home.prepend(intro);else home.before(intro);
-  intro.hidden=view!=='home'&&view!=='assessment';
+  intro.hidden=view!=='home'&&view!=='assessment'&&view!=='loading';
   intro.querySelector('h1+p').textContent=view==='home'?'Take a five-step check-in to understand your social media time and how it fits into your daily routine.':'A few details. A clearer picture. No scores or labels.';
   document.body.classList.toggle('homepage',view==='home');
   const workspace=get('checkin').closest('.workspace');workspace.hidden=view==='home';
   workspace.classList.toggle('flow-active',view==='assessment'||view==='loading');workspace.classList.toggle('results-only',view!=='assessment'&&view!=='loading');
-  document.body.classList.toggle('results-screen',view!=='home'&&view!=='assessment');
+  document.body.classList.toggle('results-screen',view!=='home'&&view!=='assessment'&&view!=='loading');
   refresh();
-  if(focus){const previous=triggers.get(view);const title=get(titles[view]);const target=previous&&!previous.hidden&&previous.isConnected?previous:title;if(target){target.focus({preventScroll:true});}window.scrollTo({top:scrolls.get(view)||0,behavior:'instant'});}
+  if(focus){const previous=triggers.get(view);const title=get(titles[view]);const target=previous&&previous.isConnected&&previous.getClientRects().length?previous:title;if(target){target.focus({preventScroll:true});}window.scrollTo({top:scrolls.get(view)||0,behavior:'instant'});}
   document.dispatchEvent(new CustomEvent('view:shown',{detail:{view}}));
  }
  document.addEventListener('click',event=>{const b=event.target.closest('[data-view]');if(b){event.preventDefault();show(b.dataset.view);}const start=event.target.closest('[data-start]');if(start){event.preventDefault();document.dispatchEvent(new Event(assessmentStarted&&!completed?'assessment:resume':'assessment:start'));assessmentStarted=true;completed=false;refresh();}});
  document.addEventListener('checkin:complete',()=>{hasReport=true;completed=true;refresh();});
  document.addEventListener('assessment:started',()=>{assessmentStarted=true;completed=false;});
+ document.addEventListener('assessment:resumed-route',()=>{assessmentStarted=true;completed=false;refresh();});
  window.addEventListener('storage',refresh);document.addEventListener('tools:data-changed',refresh);
- document.addEventListener('DOMContentLoaded',()=>show('home',false));
+ document.addEventListener('DOMContentLoaded',()=>window.appRouting?window.appRouting.start():show('home',false));
  return {show,refresh,get hasReport(){return hasReport;},get current(){return current;}};
 })();

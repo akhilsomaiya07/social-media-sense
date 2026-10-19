@@ -1,0 +1,50 @@
+[
+  {
+    "file": "social-media-time-390.jpg",
+    "url": "http://127.0.0.1:41853/check-in/social-media-time",
+    "viewport": {
+      "width": 390,
+      "height": 900
+    }
+  },
+  {
+    "file": "results-390.jpg",
+    "url": "http://127.0.0.1:41853/results",
+    "viewport": {
+      "width": 390,
+      "height": 900
+    }
+  },
+  {
+    "file": "sleep-shield-390.jpg",
+    "url": "http://127.0.0.1:41853/tools/sleep-shield",
+    "viewport": {
+      "width": 390,
+      "height": 900
+    }
+  },
+  {
+    "file": "social-media-time-1280.jpg",
+    "url": "http://127.0.0.1:41853/check-in/social-media-time",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    }
+  },
+  {
+    "file": "results-1280.jpg",
+    "url": "http://127.0.0.1:41853/results",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    }
+  },
+  {
+    "file": "sleep-shield-1280.jpg",
+    "url": "http://127.0.0.1:41853/tools/sleep-shield",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    }
+  }
+]
