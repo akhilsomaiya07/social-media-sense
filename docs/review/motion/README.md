@@ -1,4 +1,6 @@
-# Calm interface motion — review
+# Reviewing the motion changes
+
+I wanted the interface to feel a little more responsive without turning it into something distracting. This is the record of the animation changes and the tests I used to review them.
 
 [Recorded Chromium walkthrough](motion-demo.mp4) (17 seconds, synthetic data, local frontend). This is a real regression-test recording, including validation, back navigation and a second check-in; it is not an edited product mockup. Research uses a controlled unavailable response, not a successful live search.
 
