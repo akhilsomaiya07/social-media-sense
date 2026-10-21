@@ -1,4 +1,6 @@
 'use strict';
+// Keep the longer-scrolling reason consistent with the assessment question in app.js.
+const longerScrollingReason='You said you spent longer scrolling than you planned.';
 function healthSearchContext(result){
  const ageGroup=result.age<18?'Adolescents':result.age<30?'Young adults':result.age<65?'Adults':'Older adults';
  const topics=['social media benefits and online social connection','social media risks and digital well-being'];
@@ -6,10 +8,10 @@ function healthSearchContext(result){
  if(texts.includes('You said social media kept you up later than intended.'))topics.push('screen use and sleep');
  if(texts.includes('You said social media took time away from physical activity.'))topics.push('sedentary behavior and physical activity');
  if(texts.includes('You said social media took time away from people you wanted to spend time with.'))topics.push('offline social connection and relationships');
- if(texts.includes('You said you spent longer scrolling than planned.'))topics.push('problematic or compulsive social media use');
+ if(texts.includes(longerScrollingReason))topics.push('problematic or compulsive social media use');
  if(texts.includes('You said social media interrupted your everyday responsibilities.'))topics.push('school work and everyday responsibilities');
  if(!result.reasons.length)topics.push('social comparison and cyberbullying');
- const reportTexts={bedtime:'You said social media kept you up later than intended.',movement:'You said social media took time away from physical activity.',people:'You said social media took time away from people you wanted to spend time with.',longer:'You said you spent longer scrolling than planned.',tasks:'You said social media interrupted your everyday responsibilities.'};
+ const reportTexts={bedtime:'You said social media kept you up later than intended.',movement:'You said social media took time away from physical activity.',people:'You said social media took time away from people you wanted to spend time with.',longer:longerScrollingReason,tasks:'You said social media interrupted your everyday responsibilities.'};
  const disruption=Object.fromEntries(Object.entries(reportTexts).map(([key,text])=>[key,result.reasons.find(r=>r.text===text)?.frequency||'Never']));
  return {ageGroup,topics,dailyMinutes:result.daily,disruption};
 }
@@ -62,7 +64,7 @@ function showHealthFallback(result){
  const notes={
   'education-bedtime':['You said social media kept you up later than intended.'],
   'education-movement':['You said social media took time away from physical activity.','You said social media took time away from people you wanted to spend time with.'],
-  'education-longer':['You said you spent longer scrolling than planned.'],
+  'education-longer':[longerScrollingReason],
   'education-tasks':['You said social media interrupted your everyday responsibilities.']
  };
  for(const [kind,items] of Object.entries(verifiedHealthFallback)){

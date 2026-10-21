@@ -117,7 +117,6 @@ No account is required. Estimates may be imprecise, and the app does not automat
 
 These application requests do not include the name/nickname, individual platform names or times, reported sleep/activity duration, planned bedtime, journal notes, saved goals or saved history. Opening Sleep Shield without a current assessment uses general fallback guidance rather than inventing an age or assessment. This describes the app's request payloads, not a promise that hosting or service providers keep no operational logs.
 
-A current text-matching limitation can cause the research request to mark longer-than-planned scrolling as Never even when the report records disruption. The report still uses the submitted answer, but live reading may not reflect it.
 
 Live research can be unavailable or incomplete. Age-specific findings may not apply to another age group, and associations do not establish causes. The app links educational sources and retains fallback guidance; users should consider the scope of the evidence rather than treating a result as a medical conclusion.
 

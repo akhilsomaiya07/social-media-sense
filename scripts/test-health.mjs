@@ -33,10 +33,27 @@ const ids=Object.fromEntries(['checkin','education-live-status','education-benef
 const sandbox={document:{getElementById:id=>ids[id],createElement:()=>new Node(),createDocumentFragment:()=>new Node()},AbortController,URL,Date,setTimeout,clearTimeout,module:{exports:{}},fetch:async(url,options)=>{requested=JSON.parse(options.body);return {ok:true,json:async()=>({benefits:[item],risks:[item],resources:api.verifiedResult(response).resources,checkedAt:new Date().toISOString()})}}};
 vm.createContext(sandbox);vm.runInContext(await readFile('public/health-fallback.js','utf8'),sandbox);vm.runInContext(await readFile('public/education.js','utf8'),sandbox);const client=sandbox.module.exports;
 for(const [age,group] of [[15,'Adolescents'],[17,'Adolescents'],[18,'Young adults'],[29,'Young adults'],[30,'Adults'],[64,'Adults'],[65,'Older adults'],[100,'Older adults']])assert.equal(client.healthSearchContext({age,reasons:[]}).ageGroup,group);
+// Compare education's source matching against the actual assessment question definitions.
+const assessmentSandbox={module:{exports:{}}};vm.createContext(assessmentSandbox);
+vm.runInContext(await readFile('public/app.js','utf8'),assessmentSandbox);
+const questionReasons=Array.from(vm.runInContext('questions.map(({id,reason})=>({id,reason}))',assessmentSandbox));
+const topicByQuestion={bedtime:'screen use and sleep',tasks:'school work and everyday responsibilities',movement:'sedentary behavior and physical activity',people:'offline social connection and relationships',longer:'problematic or compulsive social media use'};
+assert.equal(questionReasons.length,5);
+for(const {id,reason} of questionReasons){
+ for(const frequency of ['Sometimes','Often']){
+  const actual=client.healthSearchContext({age:25,daily:180,reasons:[{text:reason,frequency}]});
+  assert.equal(actual.disruption[id],frequency,`${id} ${frequency} must reach research context`);
+  assert(actual.topics.includes(topicByQuestion[id]),`${id} must select its research topic`);
+  for(const other of questionReasons)if(other.id!==id)assert.equal(actual.disruption[other.id],'Never');
+ }
+}
+const noDisruption=client.healthSearchContext({age:25,daily:180,reasons:[]});
+for(const {id} of questionReasons)assert.equal(noDisruption.disruption[id],'Never');
+assert(!noDisruption.topics.includes(topicByQuestion.longer));
 await client.renderHealthEducation({age:30,name:'Never send this',daily:600,reasons:[{text:'You said social media kept you up later than intended.'}]});assert(requested.topics.includes('screen use and sleep'));assert.deepEqual(Object.keys(requested).sort(),['ageGroup','dailyMinutes','disruption','topics']);assert(!ids['education-checked'].hidden);assert.equal(ids['education-benefits'].children.length,1);assert(!ids['health-resources'].hidden);assert.equal(ids['health-resource-list'].children.length,1);assert.equal(requested.dailyMinutes,600);
 sandbox.fetch=async()=>({ok:false,json:async()=>({code:'not_configured'})});await client.renderHealthEducation({age:30,reasons:[]});assert.equal(ids['education-benefits'].children.length,5);assert(ids['education-checked'].hidden);assert.equal(ids['education-live-status'].textContent,'Live sources could not be refreshed right now.');
 assert.equal(ids['education-risks'].children.length,7);assert.equal(ids['education-risks'].children.filter(n=>!n.hidden).length,4);ids['education-risks-more'].onclick();assert.equal(ids['education-risks'].children.filter(n=>!n.hidden).length,7);ids['education-risks-more'].onclick();assert.equal(ids['education-risks'].children.filter(n=>!n.hidden).length,4);assert(!ids['education-fallback-note'].hidden);assert(ids['health-resources'].hidden);assert.equal(ids['health-resource-list'].children.length,0);
-sandbox.fetch=async()=>({ok:true,json:async()=>({broken:true})});await client.renderHealthEducation({age:40,reasons:[{text:'You said you spent longer scrolling than planned.',frequency:'Often'}]});assert.equal(ids['education-risks'].children[0].children[0].textContent,'Losing track of time or scrolling longer than intended');assert(ids['education-risks'].children[0].children.some(n=>n.className==='education-personal'));
+sandbox.fetch=async()=>({ok:true,json:async()=>({broken:true})});await client.renderHealthEducation({age:40,reasons:[{text:questionReasons.find(q=>q.id==='longer').reason,frequency:'Often'}]});assert.equal(ids['education-risks'].children[0].children[0].textContent,'Losing track of time or scrolling longer than intended');assert(ids['education-risks'].children[0].children.some(n=>n.className==='education-personal'));
 await client.renderHealthEducation({age:70,reasons:[]});assert(ids['education-age'].textContent.includes('no routine disruption'));assert(ids['education-age'].textContent.includes('older adults'));
 sandbox.fetch=async()=>{throw new DOMException('Timed out','TimeoutError')};await client.renderHealthEducation({age:15,reasons:[]});assert.equal(ids['education-risks'].children.length,7);
 let finish;sandbox.fetch=()=>new Promise(resolve=>finish=resolve);const pending=client.renderHealthEducation({age:30,reasons:[]});const finishOld=finish;sandbox.fetch=async()=>({ok:false,json:async()=>({code:'test'})});await client.renderHealthEducation({age:30,reasons:[]});finishOld({ok:true,json:async()=>({benefits:[item],risks:[item],resources:api.verifiedResult(response).resources,checkedAt:new Date().toISOString()})});await pending;assert.equal(ids['education-benefits'].children.length,5);
