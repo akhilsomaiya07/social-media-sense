@@ -1,4 +1,6 @@
-# Browser URL routing — review
+# Reviewing the page URLs
+
+I added readable browser addresses for the existing check-in steps and tools. I kept the calculations and saved data separate from navigation. These notes explain how the routes work and what I checked.
 
 This is a navigation-only change based on main `1898643b744553aac58f07d0da59a263904d6679`, including the merged motion improvements. No CSS, calculations, research providers, storage formats, tool behavior or README gallery changes.
 

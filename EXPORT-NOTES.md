@@ -1,4 +1,6 @@
-# Complete current export
+# Notes from the October 2026 export
+
+I kept these notes to explain what was included in the original export and what I was able to check at the time. They describe that earlier snapshot, not every change made since.
 
 Prepared October 10, 2026 (UTC).
 

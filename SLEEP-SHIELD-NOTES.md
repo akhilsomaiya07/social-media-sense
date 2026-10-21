@@ -1,4 +1,6 @@
-# Sleep Shield
+# How I separated Sleep Shield from the check-in
+
+I wanted the finished report to stay a record of someone's answers. That's why I kept Sleep Shield as an optional tool in My Tools, instead of adding another assessment step.
 
 Sleep Shield is an optional dedicated tool opened from My Tools, not an assessment step. It does not alter a completed report. Step 3 retains duration, age-related context and pre-bed social-media questions; clock time is required only to activate a plan.
 

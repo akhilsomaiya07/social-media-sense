@@ -1,4 +1,6 @@
-# Screenshot showcase
+# How I capture the project screenshots
+
+I use Playwright to take real screenshots of the app with made-up answers. That keeps the README gallery consistent without collecting or displaying anyone's personal data.
 
 ## Capture locally
 

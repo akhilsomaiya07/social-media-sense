@@ -1,15 +1,17 @@
-# Age eligibility review
+# Reviewing the age requirement
+
+I changed the supported assessment ages to 15 through 100 and checked the warning shown when someone enters an age outside that range. This is a record of that change, including its screenshots and tests.
 
 Based on main `b7f882802d36f32cf1388732b0e9445e63f6379a`. Branch: `codex/age-eligibility-15-100`.
 
 ## Implementation
 
-- Assessment ages are 15–100 inclusive, enforced by the shared calculation validator, native input attributes, and the browser tool schema. Nickname remains optional.
+- Assessment ages are 15 to 100 inclusive, enforced by the shared calculation validator, native input attributes, and the browser tool schema. Nickname remains optional.
 - Empty, decimal, invalid, under-15 and over-100 entries have distinct messages. Blur and Next show a single field-level alert with a decorative red triangle, textual heading, red input border, and associated accessible description. Valid edits clear it immediately; typing an initial `1` does not create a warning. The warning spans the existing field row so it stays readable at 320px.
 - The flow retains its validation/focus architecture. Only age is omitted from the duplicate form-level summary; all other errors retain their existing summary behavior.
-- Education groups are Adolescents (15–17), Young adults (18–29), Adults (30–64), Older adults (65–100). Source-search instructions prioritize reported routines, balanced coverage and applicable evidence, without assuming student/employment/family status or technological ability. General adult evidence must not be presented as a young-adult-specific finding.
-- Ordinary research still sends only the broad group, daily minutes, topics and reported disruption. The existing Sleep Shield research context retains exact age, now validated within 15–100. Frontend and backend must be released together for the new Young adults category. The legacy Children broad category remains accepted by the API for compatibility, but new assessments never emit it.
-- CDC reference bands remain 13–17, 18–60, 61–64, and 65+, describing source populations rather than product eligibility. Teen nighttime sleep remains incomparable with a total-24-hour reference including naps. Out-of-range assessment ages receive no sleep reference.
+- Education groups are Adolescents (15 to 17), Young adults (18 to 29), Adults (30 to 64), Older adults (65 to 100). Source-search instructions prioritize reported routines, balanced coverage and applicable evidence, without assuming student/employment/family status or technological ability. General adult evidence must not be presented as a young-adult-specific finding.
+- Ordinary research still sends only the broad group, daily minutes, topics and reported disruption. The existing Sleep Shield research context retains exact age, now validated within 15 to 100. Frontend and backend must be released together for the new Young adults category. The legacy Children broad category remains accepted by the API for compatibility, but new assessments never emit it.
+- CDC reference bands remain 13 to 17, 18 to 60, 61 to 64, and 65+, describing source populations rather than product eligibility. Teen nighttime sleep remains incomparable with a total-24-hour reference including naps. Out-of-range assessment ages receive no sleep reference.
 - No storage schema, migration, history clearing, optional-tool age gate, report calculations, source verification, source URLs or routing changes. Existing saved tools remain available without a current assessment.
 
 ## Browser screenshots

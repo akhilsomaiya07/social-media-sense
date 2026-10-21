@@ -1,4 +1,6 @@
-# Deploy Social Media Sense to Cloudflare Workers
+# How I deploy Social Media Sense to Cloudflare Workers
+
+I host the current version on Cloudflare Workers. These are my setup notes for anyone who wants to run the same project. The Worker serves both the website and the optional health-information endpoint.
 
 This is a full-stack app. Use **Cloudflare Workers with Static Assets**, not a static-only Pages upload. The Worker serves the app and its `/api/health-information` endpoint. Both health education and Sleep Shield use that endpoint.
 

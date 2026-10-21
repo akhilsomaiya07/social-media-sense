@@ -1,4 +1,6 @@
-# Redeploy with Netlify AI Gateway
+# My older Netlify deployment notes
+
+I currently use Cloudflare Workers, but I've kept these Netlify steps because the repository still includes a compatible function adapter. These are reference notes, not instructions for the current live host.
 
 1. Unzip the project and replace the files in your existing project/repository with this version. Keep `netlify.toml`, `package.json`, and `package-lock.json` at the project root.
 2. Deploy through your connected Git repository, or use Netlify CLI from the extracted folder:
