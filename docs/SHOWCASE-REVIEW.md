@@ -1,4 +1,6 @@
-# Screenshot framing review
+# How I improved the screenshot gallery
+
+I reviewed the original captures and noticed that some images cut off the parts I wanted people to see. These notes record what I changed and how I checked the revised gallery.
 
 Base: `fda21b1dd38066d3e9ffa48e4d049fa94608a611` (main, merged PR #27).
 
