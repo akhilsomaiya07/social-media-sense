@@ -1,276 +1,233 @@
 # SOCIAL MEDIA SENSE
 
-**Understand your social media time in the context of your everyday life.**
+**A five-step check-in to understand how social media time fits into everyday life.**
 
-Social Media Sense is designed for people aged 15–100. Its browser-based, five-step check-in combines the time you estimate spending on each platform with questions about sleep, responsibilities, physical activity, time with other people, and scrolling longer than planned.
+[**Try Social Media Sense**](https://social-media-sense.akhilsomaiya7.workers.dev/) · [**See the walkthrough**](#see-the-project-in-action) · [**Run the project locally**](#run-it-locally)
 
-Social media time alone does not explain how it fits into someone's life. This project helps you connect the hours you report with the routines you want to protect, then decide whether there is anything you would like to explore or change. It does not measure your phone, grade your habits, or diagnose a condition.
+Social Media Sense is a small, browser-based educational prototype created for a Handshake project. It is designed for people **ages 15–100**. Rather than deciding whether a person's screen time is "good" or "bad," it combines their **estimated social media use** with questions about **sleep, movement, responsibilities, time with others and scrolling longer than intended**.
 
-You receive a read-only report with time estimates, explanations drawn from your answers, and optional next steps. Teenagers, adults and older users can complete it for themselves; parents can use it as a starting point for a conversation with a teenager. No account is required.
+The result is a personal, **read-only snapshot** of what the person reported, together with an explanation of their routine answers and optional tools for exploring a change. **No account or automatic phone tracking is required.** This is a reflection tool, not a clinical assessment or addiction test.
 
-[Try the live website](https://social-media-sense.akhilsomaiya7.workers.dev/)
+## Why I built it
 
-## Why I Built Social Media Sense
+An hour of social media can mean something different for different people. Someone may spend time chatting with friends, learning something or working. Another person may notice that scrolling sometimes delays their bedtime or interrupts something they intended to do. **A time total by itself cannot tell those stories apart.**
 
-I wanted to build something that asks what an hour count means in a person's day. Time online can include conversations, learning, work and entertainment. The same amount can fit comfortably into one person's routine while another person reports staying up later or putting off something they meant to do.
+I built Social Media Sense to make that distinction visible. Instead of diagnosing someone from a number, the project asks about their routine, shows how their answers relate to their estimated use, and leaves decisions about possible changes with the person completing it.
 
-That is why I built the check-in around both time and context. Sleep, responsibilities, movement and relationships deserve separate questions. So does the difference between choosing to spend time online and noticing that a short visit became much longer than intended.
+The central question is not **"How many hours are too many?"** It is **"How does my reported social media time fit into the life I want to live?"**
 
-My aim is to make those patterns easier to describe without assigning a health score or making the decision for the user. The report records what someone submitted. Optional tools give them room to try a plan or compare later check-ins without rewriting that original account.
+This is an intentionally limited **Handshake portfolio prototype**, not a commercial wellness service. The purpose is to demonstrate a useful idea, build it as a working interactive experience, explain its limitations, and test it carefully—not to keep expanding it with accounts, gamification or complicated tracking.
 
-I am developing and refining the project with AI-assisted coding support. The implementation and its tests are available here for review; the project is not a clinically validated assessment.
+## What someone can learn
 
-## How the Five-Step Check-In Works
+A completed check-in can help someone:
 
-There are no right or wrong answers. The app checks whether entries are complete and within its allowed ranges; it does not reward a particular routine. You can move backward to correct answers during the current visit.
+- See their **estimated daily and weekly social media time**, and which platforms make up the largest shares.
+- Notice whether they reported any interruptions to **bedtime, responsibilities, movement, relationships or planned stopping points**.
+- Understand why a particular routine observation appears as **One Place to Start**, without mistaking it for a diagnosis.
+- Explore an **optional next step**, or simply keep the report as a reflection on their current answers.
+- Save summary values in their browser and compare a later check-in, without treating a difference as proof of improved health.
 
-### Step 1 — About You
+For example, a person reporting **90 minutes a day** who sometimes stays up longer than intended can receive a bedtime-oriented next step. Another person reporting **three hours a day**, with **Never** selected for all five routine-interruption questions, is not automatically labelled unhealthy. These are examples of the app's rules, **not research findings, testimonials or statements that any duration is universally safe**.
 
-Enter an optional name or nickname and a required age. The supported age range is 15–100. Age helps the app select relevant sleep context and educational material, because guidance or research about adolescents may not apply to adults or older people. A name is used to address the person in the report, not to create an account.
+## The five-step check-in
 
-Educational searches consider broad age groups and self-reported routines: teenagers (15–17), young adults (18–29), adults (30–64), and older adults (65–100). Teenagers and young adults are priority groups for age-relevant evidence, with equally thoughtful coverage for older groups. Age alone does not identify disruption or a medical condition. Ordinary research requests send the broad group, not exact age; existing Sleep Shield research uses the exact assessment age when available. Published sleep-reference populations (such as CDC ages 13–17) remain unchanged. Optional tools still work without an assessment.
+The assessment is designed for **ages 15–100, inclusive**. A nickname is optional. People can go back to correct their answers, and the completed report does not become an editable goal-setting screen.
 
-### Step 2 — Social Media Time
+| Step | What you enter | Why it matters |
+| --- | --- | --- |
+| **1. About you** | Optional nickname and age | Selects relevant educational context. Ages outside 15–100 cannot continue. |
+| **2. Social media time** | Estimated time for each platform on an average day | Shows a combined total and the platforms contributing to it. |
+| **3. Sleep** | Typical nighttime sleep and pre-bed social media frequency | Provides age-relevant sleep context without assuming social media caused a sleep pattern. |
+| **4. Physical activity** | Typical daily activity in hours and minutes | Adds routine context, rather than a fitness grade. |
+| **5. Everyday routine** | Five **Never / Sometimes / Often** answers about the past week | Determines which reported habits, if any, may be worth reviewing. |
 
-Estimate an average day's time for each platform using sliders, with custom platforms available under Other. Each slider selects 0–12 hours in five-minute increments; unused apps can stay at zero. The combined total updates immediately and cannot exceed 24 hours.
+### About the age requirement
 
-These are your estimates, not readings automatically retrieved from a device. If two apps are used at the same time, count the overlapping time only once so the total represents time spent rather than the sum of simultaneous app sessions.
+Step 1 has an accessible, field-level warning when someone enters an age under 15 or over 100. Under-15 entries receive **"Age requirement not met"** and an explanation of the supported range; invalid entries cannot advance to Step 2.
 
-The fixed-platform sliders show two reference points: **30 minutes** refers to a study target for reduced combined daily use among college students, and **two hours** is a reference for the optional cutback feature. Neither is an individual-app limit or a universal medically established safe amount. The nearby APA and AAP links provide context. The marked sliders use a nonlinear scale to keep the reference points readable while preserving five-minute selections.
+Age-relevant educational material distinguishes **teens (15–17), young adults (18–29), adults (30–64) and older adults (65–100)**. Teen and young-adult experiences receive specific attention, while adults 30+ remain important. Published medical-source age ranges are preserved as written; they are not rewritten to match the app's eligibility rule.
 
-### Step 3 — Sleep
+### About the time sliders
 
-Enter your usual nightly sleep in hours and minutes, then answer how often you use social media in the hour before trying to sleep. The app presents age-related sleep context and sources. It does not diagnose a sleep disorder or infer that social media caused your sleep duration.
+Each built-in platform slider supports **0–12 hours** in **five-minute increments**. Unused platforms can remain at zero. People can add and remove custom platforms. The combined reported total updates live and cannot exceed **24 hours per day**.
 
-Using social media before bed and being kept up later than intended are different answers. The latter is asked separately in Step 5. You do not need to choose a clock-time bedtime to finish the assessment; that belongs to the optional Sleep Shield tool.
+When apps are used simultaneously, the person is asked to count the overlapping time only once so the combined total represents their best estimate of time spent. This means the platform-by-platform breakdown is an allocation estimate, **not an exact device measurement**.
 
-### Step 4 — Physical Activity
+The **30-minute marker** describes a research study's combined-use reduction target, and the **two-hour marker** provides context for an optional reduction tool. The markers are **not per-platform limits or universal medical thresholds**. The interface links to explanatory APA and AAP resources.
 
-Estimate your average daily physical activity in hours and minutes. This can include walking, cycling, sports, workouts, dancing and other intentional movement. The app converts the entry into minutes for display and later comparisons; it does not assign a fitness score or diagnose inactivity.
+## Understanding the results
 
-Social media time, sleep and physical activity are separate self-reported estimates. The app does not add them together to decide whether the day is valid.
+After Step 5, the app displays a short loading transition, followed by **only the completed, read-only report**. The report has three primary sections:
 
-### Step 5 — Everyday Routine
+**1. Your Social Media Snapshot.** Estimated daily and weekly totals, plus top platforms. The yearly projection and assumptions are available in expandable details. Calculations use the entered daily average: **weekly = daily × 7** and **yearly = daily × 365**. They do not represent measured historical usage.
 
-Think about the past week and choose **Never**, **Sometimes** or **Often** for five questions: whether social media kept you up later, interrupted responsibilities, took time away from physical activity, took time away from people you wanted to see, or kept you scrolling longer than planned.
+**2. Your Personal Insights.** A summary of the person's reported routine, **One Place to Start** when relevant, and general sleep context. A **Sometimes** or **Often** answer flags an observation for reflection. If every routine answer is **Never**, the report acknowledges that no disruption was reported within these questions; it does not certify that the behavior is risk-free. A conditional balance celebration is available for eligible results.
 
-These answers shape the routine interpretation separately from total time. After selecting See My Results, a short loading transition leads to the completed report. The animation does not make random calculations or change the answers.
+**3. Your Next Steps.** One optional suggestion based on the actual answers, along with ways to save the check-in, explore tools and inspect educational sources. Reported bedtime interference takes priority for **Sleep Shield**. Other disruption may lead to **Reduction Goal** when the usage-based eligibility rule is met; otherwise **Progress** remains an option. The two-hour reference alone is not used to diagnose or label someone.
 
-## Understanding Your Results
+The completed report cannot be changed by moving a goal slider or tracking a night of sleep. A new assessment creates a new report.
 
-The report has three main sections:
+## Three optional tools
 
-- **Your Social Media Snapshot:** reported daily time, a weekly estimate and the platforms accounting for the most time. Expand the time details to see the yearly estimate and calculation assumptions. Weekly time is daily time × 7; yearly time is daily time × 365. Neither is a measurement of what you actually did over those periods.
-- **Your Personal Insights:** an explanation based on the submitted routine answers, **One Place to Start**, and relevant sleep context. “Sometimes” or “Often” flags a habit worth reviewing; a stronger reported disruption takes priority when choosing a starting point. If every routine answer is Never, the report acknowledges that no disruption was reported and includes the conditional balance celebration. It does not certify the amount of use as safe.
-- **Your Next Steps:** one optional direction suited to the answers, plus access to Progress, My Tools, and expandable health information and sources. Reported bedtime disruption takes priority for Sleep Shield. Other disruption can suggest Reduction Goal when reported use exceeds 120 minutes. Without that eligibility, or when no disruption is reported, Progress is the practical next action. Time above two hours alone does not trigger a recommendation to cut back.
+These tools can be opened from **My Tools** without first completing the assessment. They are separate from the report.
 
-The report stays **read-only** so a plan cannot be mistaken for a change in the original assessment. Setting a reduction target or recording a Sleep Shield night does not alter the daily total, interpretation or submitted answers. A new completed check-in produces a new current report.
+### Sleep Shield — explore a bedtime routine
 
-Educational material includes linked sources and publication/update dates when available. Live retrieval uses the check-in context to seek relevant evidence from credible health and research sources. When it fails, existing general educational fallback material remains available with a notice. Source links are there to examine, not to imply that an organization endorses this app.
+Set a planned bedtime, choose a **15-, 30-, 45- or 60-minute** social media wind-down window, and select a replacement activity. The tool displays the planned cutoff and can track **seven nights** of self-reported adherence, sleep and how rested the person felt. Saved plans and night entries remain in the browser. **It does not promise better sleep or prove causation.**
 
-## What Can Users Learn?
+### Reduction Goal — test a hypothetical target
 
-These are hypothetical examples of how the app responds, not research findings, medical advice or testimonials.
+For a current or saved baseline reporting **more than 120 minutes per day**, explore a target reduction and view **before-versus-after time projections** for a day, week, 30-day month and 365-day year. The 120-minute rule is **tool eligibility**, not a health limit. Changing the slider does not mean time has actually been recovered, and saving a goal is a separate action.
 
-**A — A bedtime concern at 90 minutes a day.** Someone reports 90 minutes of use and says it sometimes keeps them up later than intended. The report can suggest exploring Sleep Shield because of that answer, even though daily use is below two hours. The useful question is which bedtime habit they might want to try changing.
+### Progress — save and compare check-ins
 
-**B — Three hours, with no reported disruption.** Someone reports three hours a day and Never to all five routine questions. The app acknowledges that check-in without automatically describing the person as unhealthy or insisting on a reduction. It offers Progress, while optional tools remain accessible. The result describes these answers; it cannot rule out every possible effect of social media.
+Explicitly save summary values and compare later entries for estimated usage, platforms, sleep, activity and routine responses. Saved check-ins are **summaries, not historical copies of the entire report or its research**. Clearing saved check-ins also removes their linked reduction goals; Sleep Shield records remain separate.
 
-**C — Exploring a target before committing to it.** Someone with an eligible baseline wants to see what reducing use by 60 minutes per day would mean. Reduction Goal projects 7 hours per week, 30 hours per 30-day month and 365 hours per year—about 15.2 full days. Those figures assume the reduction is maintained. Moving the slider does not mean any time has actually been recovered, and does not automatically save a goal.
+## See the project in action
 
-**D — Comparing two check-ins.** Someone explicitly saves a check-in, returns later and saves another. Progress can show changes in reported daily time, platform use, sleep and activity, with recorded routine answers available to review. A difference may prompt a conversation about what changed. It is not proof of improved health or that one behavior caused another.
+These are **real browser screenshots** captured with fictional answers. They are not generated interface mockups or personal user records. They demonstrate the actual assessment, report and optional tools.
 
-## Explore Your Options With My Tools
+The latest validated **15–100 age warning** is shown first. The older homepage capture has been omitted here because it predates the recent homepage-copy update; a new homepage image should only be published after a fresh browser capture is reviewed. Other unchanged screens retain their previously reviewed captures.
 
-My Tools can be opened from the homepage or after a report. The tools are optional: none is required to complete the assessment or guarantees a health outcome.
+### Step 1 — Age eligibility and validation
 
-### Sleep Shield
+[![Social Media Sense Step 1 with age 15–100 guidance](docs/review/age/after-1280.jpg)](docs/review/age/after-1280.jpg)
 
-Choose a planned bedtime, a 15-, 30-, 45- or 60-minute wind-down window, and a replacement activity such as reading or preparing for tomorrow. The tool calculates a scrolling cutoff, including when it falls on the previous day. Save a plan when you want to use it, or resume an existing locally saved plan without another assessment.
+[![Mobile underage warning for a submitted age of 14](docs/review/age/underage-390.jpg)](docs/review/age/underage-390.jpg)
 
-After waking, record whether you followed the plan, how long you slept, how rested you felt and any optional notes. The seven-night tracker supports editing entries and reviewing comparisons. Detailed guidance and progress are expandable to keep the main screen short. This can help someone examine a bedtime routine; a protected window is an opportunity, not guaranteed extra sleep, and comparisons do not establish causation.
+The red warning explains the requirement and keeps the user on Step 1. It is a validation message, not a medical or emergency alert.
 
-### Reduction Goal
+### Step 2 — Estimate social media time
 
-Choose a current or saved check-in as a baseline. The calculator is available when that baseline reports **more than 120 minutes per day**. This is a tool-eligibility rule, not a medical threshold. A slider explores a reduction up to the reported daily total and displays before/after targets and projected savings over a week, 30-day month and 365-day year.
+[![Step 2 daily total, slider guidance and evidence links](docs/screenshots/assessment-step-2.png)](docs/screenshots/assessment-step-2.png)
 
-A draft target stays with its assessment while you visit Progress to save the baseline. Saving a goal is a separate, explicit action; changing the slider does not save it or change reported usage. Starting another assessment does not transfer the old draft to it. The tool is useful for considering an experiment, not for claiming an improvement has already happened.
+[![Platform sliders showing reported durations and reference markers](docs/screenshots/assessment-step-2-sliders.png)](docs/screenshots/assessment-step-2-sliders.png)
 
-### Progress
+### Steps 3–5 — Your routine
 
-Save a completed check-in explicitly, then compare it with earlier saved records. Progress shows reported time, platform use, sleep, activity and the recorded routine answers. You can revisit saved progress without taking another assessment.
+**Step 3: Sleep and pre-bed use**
 
-Saved records are **summary data, not full historical reports**. They do not preserve a complete report or its live research. Clearing check-in history requires confirmation and also deletes linked reduction goals; Sleep Shield history remains separate unless you explicitly clear it there.
+[![Sleep step, age context and pre-bed question](docs/screenshots/assessment-step-3.png)](docs/screenshots/assessment-step-3.png)
 
-## Privacy, Evidence and Limitations
+**Step 4: Physical activity**
 
-No account is required. Estimates may be imprecise, and the app does not automatically measure phone activity, access social accounts or verify behavior. This is an educational reflection tool, not a clinically validated psychological or addiction assessment. It does not diagnose addiction, depression, anxiety, sleep disorders or other medical conditions. Neither the two-hour reference nor any other amount establishes universally safe or unhealthy social media use.
+[![Activity duration entry](docs/screenshots/assessment-step-4.png)](docs/screenshots/assessment-step-4.png)
 
-**Saved data stays in this browser.** Check-ins, saved goals and Sleep Shield plans/nights use local storage. Other people using the same browser profile may be able to see them. Clearing browser data may remove them, and private browsing may not retain them. There is no account-based sync or backup.
+**Step 5: Five routine questions**
 
-**Live research is not entirely on-device.** The browser sends a limited context to `/api/health-information`; the server validates it and passes the accepted context to the configured OpenAI research service:
+[![All five daily-routine questions and completion action](docs/screenshots/assessment-step-5.png)](docs/screenshots/assessment-step-5.png)
 
-| Request | Context sent |
+### The completed report
+
+**Social media snapshot**
+
+[![Daily and weekly estimates and top platforms](docs/screenshots/results-report.png)](docs/screenshots/results-report.png)
+
+**Personal insights and one place to start**
+
+[![Personal insights and sleep context](docs/screenshots/results-insights.png)](docs/screenshots/results-insights.png)
+
+**Optional next steps**
+
+[![Suggested next step, save link and educational sources](docs/screenshots/results-next-steps.png)](docs/screenshots/results-next-steps.png)
+
+### Separate tools
+
+**My Tools**
+
+[![My Tools overview](docs/screenshots/my-tools.png)](docs/screenshots/my-tools.png)
+
+**Sleep Shield**
+
+[![Sleep Shield bedtime plan](docs/screenshots/sleep-shield.png)](docs/screenshots/sleep-shield.png)
+
+[![Sleep Shield night-tracking form](docs/screenshots/sleep-shield-tracking.png)](docs/screenshots/sleep-shield-tracking.png)
+
+**Reduction Goal**
+
+[![Before and after hypothetical reduction](docs/screenshots/reduction-goal.png)](docs/screenshots/reduction-goal.png)
+
+[![Expanded projected time savings](docs/screenshots/reduction-savings.png)](docs/screenshots/reduction-savings.png)
+
+**Progress**
+
+[![Saved check-in overview](docs/screenshots/progress.png)](docs/screenshots/progress.png)
+
+[![Comparison of two self-reported check-ins](docs/screenshots/progress-comparison.png)](docs/screenshots/progress-comparison.png)
+
+The screenshots use a controlled offline research fallback rather than pretending that a live research request succeeded. For reproduction and capture standards, see [screenshot documentation](docs/SCREENSHOTS.md).
+
+## Privacy, evidence and important limits
+
+**Social Media Sense is not a medically validated questionnaire and does not diagnose addiction, anxiety, depression, sleep disorders or other conditions.** It cannot automatically read phone usage, validate that estimates are accurate, or determine that social media caused a reported routine difficulty.
+
+**No account is necessary.** Check-ins, goals and Sleep Shield data that a visitor chooses to save are stored in the **current browser's local storage**. They can be visible to someone else using the same browser profile and may disappear if browser data is cleared. There is no cross-device sync or account backup.
+
+**Live health information is not entirely on-device.** The browser sends limited educational context to \`/api/health-information\`, which the Worker validates and may pass to the configured external research service:
+
+| Research request | Context passed |
 | --- | --- |
-| Report education | Age group, total daily social media minutes, five disruption fields derived from the report, and related topic labels |
-| Sleep Shield research with current assessment context | The same context, plus numeric age and the pre-bed social media response |
+| Report education | Broad age group, total daily social media minutes, five routine-disruption frequencies, and relevant topic labels |
+| Sleep Shield with a current assessment | The above, plus numeric assessment age and the pre-bed social media response |
 
-These application requests do not include the name/nickname, individual platform names or times, reported sleep/activity duration, planned bedtime, journal notes, saved goals or saved history. Opening Sleep Shield without a current assessment uses general fallback guidance rather than inventing an age or assessment. This describes the app's request payloads, not a promise that hosting or service providers keep no operational logs.
+These requests do **not** include the person's nickname, platform names or individual app times, reported sleep/activity durations, planned bedtime, journal entries, saved goals or historical records. This is a statement about the application's request fields, not a guarantee regarding infrastructure logs.
 
+Health sources are selected for **educational relevance**, with attention to age applicability, possible benefits as well as risks, and the difference between association and causation. The app shows linked resources where available; live retrieval may fail or have insufficient evidence, in which case it displays previously checked fallback guidance with a notice. Sources do not imply endorsement of the project.
 
-Live research can be unavailable or incomplete. Age-specific findings may not apply to another age group, and associations do not establish causes. The app links educational sources and retains fallback guidance; users should consider the scope of the evidence rather than treating a result as a medical conclusion.
+**Unsaved full reports are temporary.** Browser navigation can preserve an in-progress assessment during the current visit, but refreshing can return a person to Step 1, and opening \`/results\` without an active completed report will not recreate one. Only deliberately saved summary check-ins remain available through Progress.
 
-**Unsaved answers and full reports are temporary.** Within the current visit, Back/Forward navigation preserves the active draft and the completed report. Refreshing an assessment route starts at Step 1 with an explanation. Opening or refreshing `/results` without a complete report in memory returns home. Saving a check-in in Progress preserves its summary values, not the entire report.
+## How it is built
 
-## See SOCIAL MEDIA SENSE in Action
+The frontend uses **HTML, CSS and vanilla JavaScript**. A **Cloudflare Worker** serves the static files, supports readable URLs via the History API and handles the optional research endpoint. The server-side research integration uses the official OpenAI JavaScript SDK. **Node.js, Wrangler and Playwright** support local development, validation, browser tests and screenshot reviews.
 
-These are real screenshots from the application, using fictional example answers rather than anyone's personal data.
+The project uses explicit client-side validation, accessible error messages, reduced-motion support, browser route guards, immutable report presentation and local-storage boundaries. These decisions support the scope of a working prototype without adding an account system or a frontend framework.
 
-### Start here
+### Run it locally
 
-<a href="docs/screenshots/homepage.png"><img src="docs/screenshots/homepage.png" alt="Social Media Sense homepage" width="840"></a>
+Node.js **22+** is required.
 
-A short check-in to put your social media time in perspective.
-
-### Step 1 — About you
-
-<a href="docs/screenshots/assessment-step-1.png"><img src="docs/screenshots/assessment-step-1.png" alt="Complete Step 1 with example nickname, age and Next button" width="660"></a>
-
-Tell the app a little about yourself.
-
-### Step 2 — Social media time
-
-<a href="docs/screenshots/assessment-step-2.png"><img src="docs/screenshots/assessment-step-2.png" alt="Step 2 instructions, combined daily total and slider reference notes" width="600"></a>
-
-Estimate your combined daily time, then set each app’s usage.
-
-<a href="docs/screenshots/assessment-step-2-sliders.png"><img src="docs/screenshots/assessment-step-2-sliders.png" alt="Example platform sliders with selected times and reference markers" width="600"></a>
-
-A closer look at the app controls. Unused platforms stay at zero.
-
-### Step 3 — Sleep
-
-<a href="docs/screenshots/assessment-step-3.png"><img src="docs/screenshots/assessment-step-3.png" alt="Complete sleep step with duration, age context, pre-bed question and navigation" width="660"></a>
-
-Reflect on your sleep and scrolling before bed.
-
-### Step 4 — Physical activity
-
-<a href="docs/screenshots/assessment-step-4.png"><img src="docs/screenshots/assessment-step-4.png" alt="Complete physical activity step with example duration and navigation" width="660"></a>
-
-Add your usual daily activity time.
-
-### Step 5 — Your routine
-
-<a href="docs/screenshots/assessment-step-5.png"><img src="docs/screenshots/assessment-step-5.png" alt="All five routine questions, selected answers and See My Results button" width="660"></a>
-
-Think about the past week, then see your results.
-
-### Your results
-
-<a href="docs/screenshots/results-report.png"><img src="docs/screenshots/results-report.png" alt="Daily and weekly social media totals with top platforms" width="760"></a>
-
-Start with your reported time and most-used platforms.
-
-<a href="docs/screenshots/results-insights.png"><img src="docs/screenshots/results-insights.png" alt="Personal insights, One Place to Start and sleep context" width="760"></a>
-
-See which routine answers shaped your personal insights.
-
-<a href="docs/screenshots/results-next-steps.png"><img src="docs/screenshots/results-next-steps.png" alt="Optional personalized next step and access to tools and sources" width="760"></a>
-
-Choose what to explore next. Your report stays unchanged.
-
-### My Tools
-
-<a href="docs/screenshots/my-tools.png"><img src="docs/screenshots/my-tools.png" alt="Sleep Shield, Reduction Goal and Progress tools" width="760"></a>
-
-Choose the tool that fits your needs.
-
-### Sleep Shield
-
-<a href="docs/screenshots/sleep-shield.png"><img src="docs/screenshots/sleep-shield.png" alt="Active bedtime plan with cutoff, bedtime, replacement activity and tracking action" width="760"></a>
-
-Make a bedtime plan without changing your assessment.
-
-<a href="docs/screenshots/sleep-shield-tracking.png"><img src="docs/screenshots/sleep-shield-tracking.png" alt="Nightly tracking form with plan adherence, sleep duration and rested rating" width="760"></a>
-
-Record a night after you wake up.
-
-### Reduction Goal
-
-<a href="docs/screenshots/reduction-goal.png"><img src="docs/screenshots/reduction-goal.png" alt="Daily baseline, selected reduction and before-and-after comparison" width="760"></a>
-
-Explore a daily target as an optional experiment.
-
-<a href="docs/screenshots/reduction-savings.png"><img src="docs/screenshots/reduction-savings.png" alt="Expanded daily, weekly, monthly and yearly projected savings" width="760"></a>
-
-See the projected time difference, including the assumptions behind it.
-
-### Your Progress
-
-<a href="docs/screenshots/progress.png"><img src="docs/screenshots/progress.png" alt="Saved check-in and comparison summary" width="760"></a>
-
-Save check-ins in your browser and revisit what you reported.
-
-<a href="docs/screenshots/progress-comparison.png"><img src="docs/screenshots/progress-comparison.png" alt="Detailed comparison of social media use, platforms, sleep and activity" width="760"></a>
-
-Compare two check-ins without treating changes as a health score.
-
-Every screenshot comes from a browser-rendered example of the actual app. Research is shown in its offline fallback state rather than a fabricated live search.
-
-## For Developers
-
-The frontend uses plain HTML, CSS and JavaScript, with no routing framework. Cloudflare Workers serves static assets and the server-side health-information endpoint. The History API connects the existing screens to readable paths such as `/check-in/sleep`, `/results` and `/tools/sleep-shield`. The Worker supplies the entry document for supported page routes while keeping API and missing-asset responses separate.
-
-Node.js is used for development and test tooling; Wrangler provides local Worker development and deployment. The official OpenAI JavaScript SDK makes research calls on the server. Playwright runs browser regressions and deterministic screenshot captures. Browser local storage holds intentionally saved data; routing adds no persistent draft store.
-
-### Run locally
-
-Requires Node.js 22 or newer.
-
-```bash
+\`\`\`bash
 npm ci
 npm run build
 npm test
 npm run dev
-```
+\`\`\`
 
-Open the local URL printed by Wrangler. `build` validates project files and JavaScript; it is not a frontend bundling step. The assessment and tools can be examined without live research credentials, using their educational fallback state.
+Open the URL displayed by Wrangler. The basic assessment and fallback education do not require live research credentials. For the optional live research service, configure \`OPENAI_BASE_URL\` and \`OPENAI_API_KEY\` **only in the server runtime**; never commit credentials or expose them in frontend code.
 
-For live research, the Worker runtime must have server-side `OPENAI_BASE_URL` and `OPENAI_API_KEY` configuration. Keep credentials in secure runtime configuration, never in frontend files or committed source. The Cloudflare handler returns an unavailable response when the required configuration is absent. The repository also retains a Netlify function adapter; the current deployment configuration uses Cloudflare Workers.
+### Additional checks and real screenshots
 
-### Tests and review captures
-
-```bash
+\`\`\`bash
 npx playwright install chromium
 npm run test:motion
 npm run test:routing
+npm run test:age
 npm run screenshots
 npm run check:cloudflare
-```
+\`\`\`
 
-- `npm test` covers health-source handling, sleep context, Sleep Shield, slider mapping, custom-platform removal, storage rules and next-step selection.
-- `test:motion` checks normal/reduced motion, navigation, focus, loading and report figures at mobile and desktop widths.
-- `test:routing` checks browser history, direct links, refresh guards, saved-tool access and the Worker handler using a local asset stand-in.
-- `screenshots` captures synthetic browser states into `artifacts/screenshots/`. It does not replace the curated README images. Research is deliberately shown in fallback mode.
-- `check:cloudflare` creates a deployment dry-run bundle without publishing it.
+\`npm run screenshots\` creates real captures from isolated, synthetic browser sessions under \`artifacts/screenshots/\`. It deliberately does **not** overwrite the reviewed images shown in this README. Images should be compared with the current UI before publication; do not stretch, fabricate or silently replace them.
 
-The screenshot-review GitHub workflow runs checks and uploads artifacts for review. Updating documentation images is a separate reviewed change. Passing local tests is not a guarantee that every browser or deployed service behaves identically.
+The screenshot-review GitHub workflow runs build, unit, motion and routing tests before capturing the gallery. **Recent workflow runs have timed out during a motion-test screenshot**, before the new gallery could be captured. That is an outstanding screenshot-pipeline reliability issue, not proof that new screenshots were successfully produced. Check the next CI run before claiming refreshed screenshot coverage.
 
-### Where to look in the code
+For developers, the main files are:
 
-| Location | Responsibility |
+| Area | Files |
 | --- | --- |
-| `public/index.html`, `public/style.css` | Interface markup and visual styling |
-| `public/app.js`, `public/platforms.js`, `public/flow.js` | Assessment calculations, sliders, validation and five-step flow |
-| `public/navigation.js`, `public/routing.js`, `public/motion.js` | View changes, browser URLs and motion enhancements |
-| `public/results-report.js`, `public/education.js`, `public/sleep-context.js` | Report presentation and educational context |
-| `public/goals.js`, `public/sleep-shield.js` | Goals, saved progress, bedtime plans and nightly records |
-| `cloudflare/worker.mjs`, `lib/health.mjs`, `wrangler.jsonc` | Worker entry point, research handling and hosting configuration |
-| `scripts/`, `.github/workflows/` | Validation, automated tests and review captures |
+| Assessment and platform controls | \`public/app.js\`, \`public/flow.js\`, \`public/platforms.js\` |
+| Interface and navigation | \`public/index.html\`, \`public/style.css\`, \`public/navigation.js\`, \`public/routing.js\` |
+| Report and educational context | \`public/results-report.js\`, \`public/education.js\`, \`public/sleep-context.js\` |
+| Optional tools | \`public/goals.js\`, \`public/sleep-shield.js\` |
+| Hosting and research | \`cloudflare/worker.mjs\`, \`lib/health.mjs\`, \`wrangler.jsonc\` |
+| Tests and reviewed screenshots | \`scripts/\`, \`docs/screenshots/\`, \`docs/review/\` |
 
-## Project Status
+The repository retains a Netlify adapter, but **Cloudflare Workers is the current deployment target**.
 
-Social Media Sense is an evolving, non-medical prototype. I am refining how clearly it explains estimates, separates submitted answers from optional plans, and helps users choose their own next step. The code, limitations and review history are part of that work, rather than claims of measured health impact.
+## Project status
+
+**Social Media Sense is a working, non-commercial Handshake prototype.** Its emphasis is on a clear problem, a useful check-in, honest interpretation of estimates, and well-tested existing functionality—not feature expansion.
+
+I developed and refined the project with AI-assisted coding support and iterative review. The README, tests and screenshot records document what the prototype does and where its limitations remain.
 
 **Made with ❤️ by Akhil Somaiya**
