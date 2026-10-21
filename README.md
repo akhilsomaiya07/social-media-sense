@@ -164,7 +164,7 @@ The screenshots use a controlled offline research fallback rather than pretendin
 
 **No account is necessary.** Check-ins, goals and Sleep Shield data that a visitor chooses to save are stored in the **current browser's local storage**. They can be visible to someone else using the same browser profile and may disappear if browser data is cleared. There is no cross-device sync or account backup.
 
-**Live health information is not entirely on-device.** The browser sends limited educational context to \`/api/health-information\`, which the Worker validates and may pass to the configured external research service:
+**Live health information is not entirely on-device.** The browser sends limited educational context to `/api/health-information`, which the Worker validates and may pass to the configured external research service:
 
 | Research request | Context passed |
 | --- | --- |
@@ -175,7 +175,7 @@ These requests do **not** include the person's nickname, platform names or indiv
 
 Health sources are selected for **educational relevance**, with attention to age applicability, possible benefits as well as risks, and the difference between association and causation. The app shows linked resources where available; live retrieval may fail or have insufficient evidence, in which case it displays previously checked fallback guidance with a notice. Sources do not imply endorsement of the project.
 
-**Unsaved full reports are temporary.** Browser navigation can preserve an in-progress assessment during the current visit, but refreshing can return a person to Step 1, and opening \`/results\` without an active completed report will not recreate one. Only deliberately saved summary check-ins remain available through Progress.
+**Unsaved full reports are temporary.** Browser navigation can preserve an in-progress assessment during the current visit, but refreshing can return a person to Step 1, and opening `/results` without an active completed report will not recreate one. Only deliberately saved summary check-ins remain available through Progress.
 
 ## How it is built
 
@@ -187,27 +187,27 @@ The project uses explicit client-side validation, accessible error messages, red
 
 Node.js **22+** is required.
 
-\`\`\`bash
+```bash
 npm ci
 npm run build
 npm test
 npm run dev
-\`\`\`
+```
 
-Open the URL displayed by Wrangler. The basic assessment and fallback education do not require live research credentials. For the optional live research service, configure \`OPENAI_BASE_URL\` and \`OPENAI_API_KEY\` **only in the server runtime**; never commit credentials or expose them in frontend code.
+Open the URL displayed by Wrangler. The basic assessment and fallback education do not require live research credentials. For the optional live research service, configure `OPENAI_BASE_URL` and `OPENAI_API_KEY` **only in the server runtime**; never commit credentials or expose them in frontend code.
 
 ### Additional checks and real screenshots
 
-\`\`\`bash
+```bash
 npx playwright install chromium
 npm run test:motion
 npm run test:routing
 npm run test:age
 npm run screenshots
 npm run check:cloudflare
-\`\`\`
+```
 
-\`npm run screenshots\` creates real captures from isolated, synthetic browser sessions under \`artifacts/screenshots/\`. It deliberately does **not** overwrite the reviewed images shown in this README. Images should be compared with the current UI before publication; do not stretch, fabricate or silently replace them.
+`npm run screenshots` creates real captures from isolated, synthetic browser sessions under `artifacts/screenshots/`. It deliberately does **not** overwrite the reviewed images shown in this README. Images should be compared with the current UI before publication; do not stretch, fabricate or silently replace them.
 
 The screenshot-review GitHub workflow runs build, unit, motion and routing tests before capturing the gallery. **Recent workflow runs have timed out during a motion-test screenshot**, before the new gallery could be captured. That is an outstanding screenshot-pipeline reliability issue, not proof that new screenshots were successfully produced. Check the next CI run before claiming refreshed screenshot coverage.
 
@@ -215,12 +215,12 @@ For developers, the main files are:
 
 | Area | Files |
 | --- | --- |
-| Assessment and platform controls | \`public/app.js\`, \`public/flow.js\`, \`public/platforms.js\` |
-| Interface and navigation | \`public/index.html\`, \`public/style.css\`, \`public/navigation.js\`, \`public/routing.js\` |
-| Report and educational context | \`public/results-report.js\`, \`public/education.js\`, \`public/sleep-context.js\` |
-| Optional tools | \`public/goals.js\`, \`public/sleep-shield.js\` |
-| Hosting and research | \`cloudflare/worker.mjs\`, \`lib/health.mjs\`, \`wrangler.jsonc\` |
-| Tests and reviewed screenshots | \`scripts/\`, \`docs/screenshots/\`, \`docs/review/\` |
+| Assessment and platform controls | `public/app.js`, `public/flow.js`, `public/platforms.js` |
+| Interface and navigation | `public/index.html`, `public/style.css`, `public/navigation.js`, `public/routing.js` |
+| Report and educational context | `public/results-report.js`, `public/education.js`, `public/sleep-context.js` |
+| Optional tools | `public/goals.js`, `public/sleep-shield.js` |
+| Hosting and research | `cloudflare/worker.mjs`, `lib/health.mjs`, `wrangler.jsonc` |
+| Tests and reviewed screenshots | `scripts/`, `docs/screenshots/`, `docs/review/` |
 
 The repository retains a Netlify adapter, but **Cloudflare Workers is the current deployment target**.
 
