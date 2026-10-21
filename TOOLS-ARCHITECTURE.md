@@ -1,4 +1,6 @@
-# Read-only report and optional tools
+# How the report and optional tools fit together
+
+I kept the completed check-in separate from bedtime plans, reduction goals, and progress history. This document explains the storage and navigation decisions behind that choice.
 
 Home distinguishes first visits, in-memory assessment drafts, completed current reports, saved check-ins and saved Sleep Shield plans. My Tools opens Sleep Shield, Reduction Goal and Progress. Back to My Results appears only when a completed report exists in this session. Reloading never reconstructs a complete report from incomplete historical fields.
 
