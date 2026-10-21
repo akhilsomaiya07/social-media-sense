@@ -1,62 +1,64 @@
 # SOCIAL MEDIA SENSE
 
-**A five-step check-in to understand how social media time fits into everyday life.**
+**A simple way to look at how social media fits into everyday life.**
 
-[**Try Social Media Sense**](https://social-media-sense.akhilsomaiya7.workers.dev/) · [**See the walkthrough**](#see-the-project-in-action) · [**Run the project locally**](#run-it-locally)
+[Try the project](https://social-media-sense.akhilsomaiya7.workers.dev/) · [See what it looks like](#see-the-project-in-action) · [Run it locally](#run-it-locally)
 
-Social Media Sense is a small, browser-based educational prototype created for a Handshake project. It is designed for people **ages 15–100**. Rather than deciding whether a person's screen time is "good" or "bad," it combines their **estimated social media use** with questions about **sleep, movement, responsibilities, time with others and scrolling longer than intended**.
+## What I built
 
-The result is a personal, **read-only snapshot** of what the person reported, together with an explanation of their routine answers and optional tools for exploring a change. **No account or automatic phone tracking is required.** This is a reflection tool, not a clinical assessment or addiction test.
+I made Social Media Sense as a small project for Handshake. I wanted to create something people could actually try, not just a presentation of an idea.
 
-## Why I built it
+The question behind it is pretty straightforward: **how does the time I spend on social media fit into the rest of my day?** Just knowing that someone spends two or three hours online doesn't say much about their experience. They might be catching up with friends, learning something new, or finding themselves scrolling when they meant to go to bed.
 
-An hour of social media can mean something different for different people. Someone may spend time chatting with friends, learning something or working. Another person may notice that scrolling sometimes delays their bedtime or interrupts something they intended to do. **A time total by itself cannot tell those stories apart.**
+My project asks people to estimate their social media time and think about a few parts of their routine. After five steps, it gives them a summary of what they entered, points out any interruptions they reported, and offers optional tools if they want to explore a change.
 
-I built Social Media Sense to make that distinction visible. Instead of diagnosing someone from a number, the project asks about their routine, shows how their answers relate to their estimated use, and leaves decisions about possible changes with the person completing it.
+I designed the check-in for **ages 15 to 100**. It doesn't read someone's phone data, give them a health score, or diagnose social media addiction. People can use it without creating an account.
 
-The central question is not **"How many hours are too many?"** It is **"How does my reported social media time fit into the life I want to live?"**
+## Why I wanted to make it
 
-This is an intentionally limited **Handshake portfolio prototype**, not a commercial wellness service. The purpose is to demonstrate a useful idea, build it as a working interactive experience, explain its limitations, and test it carefully—not to keep expanding it with accounts, gamification or complicated tracking.
+I kept coming back to the idea that two people can spend the same amount of time online and have very different experiences. That's why I didn't want to build another calculator that simply multiplies daily screen time by seven.
 
-## What someone can learn
+I wanted people to think about **what that time means to them**. Does it affect bedtime? Are they putting off something they planned to do? Does it get in the way of time with other people? Or does it fit into their routine without any of those issues?
 
-A completed check-in can help someone:
+I also wanted the results to feel fair. Someone who reports more time online shouldn't automatically be told they have a problem. Likewise, someone with a smaller total can still have a habit they'd like to work on.
 
-- See their **estimated daily and weekly social media time**, and which platforms make up the largest shares.
-- Notice whether they reported any interruptions to **bedtime, responsibilities, movement, relationships or planned stopping points**.
-- Understand why a particular routine observation appears as **One Place to Start**, without mistaking it for a diagnosis.
-- Explore an **optional next step**, or simply keep the report as a reflection on their current answers.
-- Save summary values in their browser and compare a later check-in, without treating a difference as proof of improved health.
+This is a **Handshake portfolio prototype**, not a commercial app or a medical assessment. I'm keeping the scope small and focusing on whether the existing experience is useful, understandable, and reliable.
 
-For example, a person reporting **90 minutes a day** who sometimes stays up longer than intended can receive a bedtime-oriented next step. Another person reporting **three hours a day**, with **Never** selected for all five routine-interruption questions, is not automatically labelled unhealthy. These are examples of the app's rules, **not research findings, testimonials or statements that any duration is universally safe**.
+## What you can do with it
 
-## The five-step check-in
+The check-in lets someone see their estimated daily and weekly social media use, find their most-used platforms, and reflect on habits they noticed during the past week. The results explain which answers shaped the summary.
 
-The assessment is designed for **ages 15–100, inclusive**. A nickname is optional. People can go back to correct their answers, and the completed report does not become an editable goal-setting screen.
+For example, someone who reports **90 minutes a day** but says scrolling sometimes delays their bedtime might see a suggestion to explore a bedtime plan. Someone reporting **three hours a day** with no disruptions across the five questions won't automatically be labelled unhealthy.
+
+These are examples of how I wrote the app's rules, not medical conclusions or research findings.
+
+## How the five steps work
+
+I designed the assessment for **ages 15 to 100**, including both endpoints. A nickname is optional. People can go back to correct their answers, and the completed report does not become an editable goal-setting screen.
 
 | Step | What you enter | Why it matters |
 | --- | --- | --- |
-| **1. About you** | Optional nickname and age | Selects relevant educational context. Ages outside 15–100 cannot continue. |
+| **1. About you** | Optional nickname and age | Selects relevant educational context. Ages outside 15 to 100 cannot continue. |
 | **2. Social media time** | Estimated time for each platform on an average day | Shows a combined total and the platforms contributing to it. |
 | **3. Sleep** | Typical nighttime sleep and pre-bed social media frequency | Provides age-relevant sleep context without assuming social media caused a sleep pattern. |
 | **4. Physical activity** | Typical daily activity in hours and minutes | Adds routine context, rather than a fitness grade. |
 | **5. Everyday routine** | Five **Never / Sometimes / Often** answers about the past week | Determines which reported habits, if any, may be worth reviewing. |
 
-### About the age requirement
+### Why I ask for age
 
 Step 1 has an accessible, field-level warning when someone enters an age under 15 or over 100. Under-15 entries receive **"Age requirement not met"** and an explanation of the supported range; invalid entries cannot advance to Step 2.
 
-Age-relevant educational material distinguishes **teens (15–17), young adults (18–29), adults (30–64) and older adults (65–100)**. Teen and young-adult experiences receive specific attention, while adults 30+ remain important. Published medical-source age ranges are preserved as written; they are not rewritten to match the app's eligibility rule.
+Age-relevant educational material distinguishes **teens (15 to 17), young adults (18 to 29), adults (30 to 64) and older adults (65 to 100)**. Teen and young-adult experiences receive specific attention, while adults 30+ remain important. Published medical-source age ranges are preserved as written; they are not rewritten to match the app's eligibility rule.
 
-### About the time sliders
+### How the sliders work
 
-Each built-in platform slider supports **0–12 hours** in **five-minute increments**. Unused platforms can remain at zero. People can add and remove custom platforms. The combined reported total updates live and cannot exceed **24 hours per day**.
+Each built-in platform slider supports **0 to 12 hours** in **five-minute increments**. Unused platforms can remain at zero. People can add and remove custom platforms. The combined reported total updates live and cannot exceed **24 hours per day**.
 
 When apps are used simultaneously, the person is asked to count the overlapping time only once so the combined total represents their best estimate of time spent. This means the platform-by-platform breakdown is an allocation estimate, **not an exact device measurement**.
 
 The **30-minute marker** describes a research study's combined-use reduction target, and the **two-hour marker** provides context for an optional reduction tool. The markers are **not per-platform limits or universal medical thresholds**. The interface links to explanatory APA and AAP resources.
 
-## Understanding the results
+## What happens after the check-in
 
 After Step 5, the app displays a short loading transition, followed by **only the completed, read-only report**. The report has three primary sections:
 
@@ -66,21 +68,21 @@ After Step 5, the app displays a short loading transition, followed by **only th
 
 **3. Your Next Steps.** One optional suggestion based on the actual answers, along with ways to save the check-in, explore tools and inspect educational sources. Reported bedtime interference takes priority for **Sleep Shield**. Other disruption may lead to **Reduction Goal** when the usage-based eligibility rule is met; otherwise **Progress** remains an option. The two-hour reference alone is not used to diagnose or label someone.
 
-The completed report cannot be changed by moving a goal slider or tracking a night of sleep. A new assessment creates a new report.
+I kept the report read-only. Moving a goal slider or tracking a night of sleep doesn't change the original answers. A new assessment creates a new report.
 
-## Three optional tools
+## The optional tools
 
 These tools can be opened from **My Tools** without first completing the assessment. They are separate from the report.
 
-### Sleep Shield — explore a bedtime routine
+### Sleep Shield ,  explore a bedtime routine
 
 Set a planned bedtime, choose a **15-, 30-, 45- or 60-minute** social media wind-down window, and select a replacement activity. The tool displays the planned cutoff and can track **seven nights** of self-reported adherence, sleep and how rested the person felt. Saved plans and night entries remain in the browser. **It does not promise better sleep or prove causation.**
 
-### Reduction Goal — test a hypothetical target
+### Reduction Goal ,  test a hypothetical target
 
-For a current or saved baseline reporting **more than 120 minutes per day**, explore a target reduction and view **before-versus-after time projections** for a day, week, 30-day month and 365-day year. The 120-minute rule is **tool eligibility**, not a health limit. Changing the slider does not mean time has actually been recovered, and saving a goal is a separate action.
+For a current or saved baseline reporting **more than 120 minutes per day**, explore a target reduction and view **before-versus-after time projections** for a day, week, 30-day month and 365-day year. I use the 120-minute rule only to decide when the optional calculator is available. It's not a health limit. Changing the slider does not mean time has actually been recovered, and saving a goal is a separate action.
 
-### Progress — save and compare check-ins
+### Progress ,  save and compare check-ins
 
 Explicitly save summary values and compare later entries for estimated usage, platforms, sleep, activity and routine responses. Saved check-ins are **summaries, not historical copies of the entire report or its research**. Clearing saved check-ins also removes their linked reduction goals; Sleep Shield records remain separate.
 
@@ -88,23 +90,23 @@ Explicitly save summary values and compare later entries for estimated usage, pl
 
 These are **real browser screenshots** captured with fictional answers. They are not generated interface mockups or personal user records. They demonstrate the actual assessment, report and optional tools.
 
-The latest validated **15–100 age warning** is shown first. The older homepage capture has been omitted here because it predates the recent homepage-copy update; a new homepage image should only be published after a fresh browser capture is reviewed. Other unchanged screens retain their previously reviewed captures.
+The latest validated **15 to 100 age warning** is shown first. The older homepage capture has been omitted here because it predates the recent homepage-copy update; a new homepage image should only be published after a fresh browser capture is reviewed. Other unchanged screens retain their previously reviewed captures.
 
-### Step 1 — Age eligibility and validation
+### Step 1: Age and the warning message
 
-[![Social Media Sense Step 1 with age 15–100 guidance](docs/review/age/after-1280.jpg)](docs/review/age/after-1280.jpg)
+[![Social Media Sense Step 1 with age 15 to 100 guidance](docs/review/age/after-1280.jpg)](docs/review/age/after-1280.jpg)
 
 [![Mobile underage warning for a submitted age of 14](docs/review/age/underage-390.jpg)](docs/review/age/underage-390.jpg)
 
 The red warning explains the requirement and keeps the user on Step 1. It is a validation message, not a medical or emergency alert.
 
-### Step 2 — Estimate social media time
+### Step 2: Estimating social media time
 
 [![Step 2 daily total, slider guidance and evidence links](docs/screenshots/assessment-step-2.png)](docs/screenshots/assessment-step-2.png)
 
 [![Platform sliders showing reported durations and reference markers](docs/screenshots/assessment-step-2-sliders.png)](docs/screenshots/assessment-step-2-sliders.png)
 
-### Steps 3–5 — Your routine
+### Steps 3 to 5: Thinking about your routine
 
 **Step 3: Sleep and pre-bed use**
 
@@ -118,7 +120,7 @@ The red warning explains the requirement and keeps the user on Step 1. It is a v
 
 [![All five daily-routine questions and completion action](docs/screenshots/assessment-step-5.png)](docs/screenshots/assessment-step-5.png)
 
-### The completed report
+### What the results look like
 
 **Social media snapshot**
 
@@ -132,7 +134,7 @@ The red warning explains the requirement and keeps the user on Step 1. It is a v
 
 [![Suggested next step, save link and educational sources](docs/screenshots/results-next-steps.png)](docs/screenshots/results-next-steps.png)
 
-### Separate tools
+### My Tools
 
 **My Tools**
 
@@ -156,9 +158,9 @@ The red warning explains the requirement and keeps the user on Step 1. It is a v
 
 [![Comparison of two self-reported check-ins](docs/screenshots/progress-comparison.png)](docs/screenshots/progress-comparison.png)
 
-The screenshots use a controlled offline research fallback rather than pretending that a live research request succeeded. For reproduction and capture standards, see [screenshot documentation](docs/SCREENSHOTS.md).
+I took these screenshots with fictional data and the regular offline research fallback. They don't represent a successful live search. For reproduction and capture standards, see [screenshot documentation](docs/SCREENSHOTS.md).
 
-## Privacy, evidence and important limits
+## Privacy and a few important limits
 
 **Social Media Sense is not a medically validated questionnaire and does not diagnose addiction, anxiety, depression, sleep disorders or other conditions.** It cannot automatically read phone usage, validate that estimates are accurate, or determine that social media caused a reported routine difficulty.
 
@@ -177,7 +179,7 @@ Health sources are selected for **educational relevance**, with attention to age
 
 **Unsaved full reports are temporary.** Browser navigation can preserve an in-progress assessment during the current visit, but refreshing can return a person to Step 1, and opening `/results` without an active completed report will not recreate one. Only deliberately saved summary check-ins remain available through Progress.
 
-## How it is built
+## How I built it
 
 The frontend uses **HTML, CSS and vanilla JavaScript**. A **Cloudflare Worker** serves the static files, supports readable URLs via the History API and handles the optional research endpoint. The server-side research integration uses the official OpenAI JavaScript SDK. **Node.js, Wrangler and Playwright** support local development, validation, browser tests and screenshot reviews.
 
@@ -224,10 +226,10 @@ For developers, the main files are:
 
 The repository retains a Netlify adapter, but **Cloudflare Workers is the current deployment target**.
 
-## Project status
+## Where the project stands
 
-**Social Media Sense is a working, non-commercial Handshake prototype.** Its emphasis is on a clear problem, a useful check-in, honest interpretation of estimates, and well-tested existing functionality—not feature expansion.
+**I built Social Media Sense as a small, non-commercial Handshake prototype.** My focus is on explaining the idea clearly, checking that it works, and being upfront about what it cannot tell someone.
 
-I developed and refined the project with AI-assisted coding support and iterative review. The README, tests and screenshot records document what the prototype does and where its limitations remain.
+I used AI-assisted coding tools while building and reviewing parts of this project. I also made decisions about its purpose, questions, layout, and boundaries. I've kept the test notes and screenshots so anyone looking at the repo can see how it works and what I checked.
 
 **Made with ❤️ by Akhil Somaiya**
