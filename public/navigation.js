@@ -27,7 +27,7 @@ const appViews=(()=>{
   const intro=document.querySelector('.intro'),home=get('home-screen');
   if(view==='home')home.prepend(intro);else home.before(intro);
   intro.hidden=view!=='home'&&view!=='assessment'&&view!=='loading';
-  intro.querySelector('h1+p').textContent=view==='home'?'Take a five-step check-in to understand your social media time and how it fits into your daily routine.':'A few details. A clearer picture. No scores or labels.';
+  intro.querySelector('h1+p').textContent=view==='home'?"In five steps, estimate your social media time, reflect on sleep, physical activity, and everyday routines, then see a personal summary based on your answers.":'A few details. A clearer picture. No scores or labels.';
   document.body.classList.toggle('homepage',view==='home');
   const workspace=get('checkin').closest('.workspace');workspace.hidden=view==='home';
   workspace.classList.toggle('flow-active',view==='assessment'||view==='loading');workspace.classList.toggle('results-only',view!=='assessment'&&view!=='loading');
