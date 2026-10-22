@@ -18,8 +18,8 @@ if(typeof document!=='undefined'){
  function renderNextNavigation(){
   if(!nextStep)return;
   const primary=get('next-step-action'),progress=get('next-step-progress');
-  primary.dataset.view=nextStep.view;primary.textContent=nextStep.view==='progress'?(savedState?'Review My Progress':'Save My Check-In in Progress'):nextStep.label;
-  progress.hidden=nextStep.view==='progress';progress.textContent=savedState?'Review My Progress':'Save My Check-In in Progress';
+  primary.dataset.view=nextStep.view;primary.textContent=nextStep.view==='progress'?(savedState?'Review My Progress':'Go to Progress to Save'):nextStep.label;
+  progress.hidden=nextStep.view==='progress';progress.textContent=savedState?'Review My Progress':'Go to Progress to Save';
   get('report-save-note').textContent=savedState?'This check-in is saved on this device. You can review it in Progress.':'This report is not automatically saved. Use Progress to save your check-in. Unsaved results may be lost when you refresh or close this tab.';
  }
  document.addEventListener('checkin:save-state',event=>{savedState=event.detail.saved;renderNextNavigation();});
