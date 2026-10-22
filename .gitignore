@@ -5,3 +5,6 @@
 /artifacts/routing/
 /.cloudflare-build/
 /.wrangler/
+
+/node_modules/
+/artifacts/age/

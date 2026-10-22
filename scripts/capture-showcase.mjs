@@ -10,7 +10,8 @@ const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 await fs.mkdir(output,{recursive:true});
 // Remove only outputs this script owns; a failed run cannot retain a stale gallery.
 const names=['homepage','assessment-step-1','assessment-step-2','assessment-step-2-sliders','assessment-step-3','assessment-step-4','assessment-step-5','results-report','results-insights','results-next-steps','my-tools','sleep-shield','sleep-shield-tracking','reduction-goal','reduction-savings','progress','progress-comparison'];
-for(const name of [...names.map(n=>n+'.png'),'mobile-results.png','manifest.json','failure.png','failure.txt'])await fs.rm(path.join(output,name),{force:true});
+const reportReviews=['no-preference','reduce'].flatMap(mode=>[320,390,768,1280].map(width=>`report-${width}-${mode}.png`));
+for(const name of [...reportReviews,...names.map(n=>n+'.png'),'mobile-results.png','manifest.json','failure.png','failure.txt'])await fs.rm(path.join(output,name),{force:true});
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:process.env.CHROMIUM_PATH?['--no-sandbox','--disable-dev-shm-usage','--use-gl=angle','--use-angle=swiftshader','--disable-gpu-sandbox']:[]});
 const context=await browser.newContext({viewport:{width:1280,height:900},deviceScaleFactor:1,locale:'en-US',timezoneId:'UTC',colorScheme:'light',reducedMotion:'reduce',serviceWorkers:'block'});
 const page=await context.newPage(),errors=[],captures=[];page.setDefaultTimeout(15000);page.on('pageerror',e=>errors.push(e.message));
@@ -51,6 +52,21 @@ async function capture(name,selectors){
  captures.push({file:name+'.png',viewport:page.viewportSize(),framing:selectors,dimensions:{width:clip.width,height:clip.height},bytes:buffer.length,sha256:createHash('sha256').update(buffer).digest('hex')});
  console.log('Captured '+name+' '+clip.width+'×'+clip.height);
 }
+// Preserve the former motion-suite stills in the dedicated visual stage.
+// Freeze animation only during capture; motion behavior is tested without this setting.
+async function captureReportReviews(){
+ for(const reducedMotion of ['no-preference','reduce'])for(const width of [320,390,768,1280]){
+  await page.emulateMedia({reducedMotion});await page.setViewportSize({width,height:1000});
+  await page.locator('#result-title').scrollIntoViewIfNeeded();
+  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`report review ${width}: overflow`);
+  const file=`report-${width}-${reducedMotion}.png`;
+  const buffer=await page.screenshot({type:'png',animations:'disabled',caret:'hide',scale:'css'});
+  await fs.writeFile(path.join(output,file),buffer);
+  captures.push({file,viewport:page.viewportSize(),reducedMotion,animations:'disabled for still capture only',bytes:buffer.length,sha256:createHash('sha256').update(buffer).digest('hex')});
+  console.log('Captured review '+file);
+ }
+ await page.emulateMedia({reducedMotion:'reduce'});
+}
 async function usePlatform(name,minutes){await page.getByRole('slider',{name:name+' daily usage',exact:true}).evaluate((el,n)=>{el.value=platformPosition(n);el.dispatchEvent(new Event('input',{bubbles:true}));},minutes);}
 async function finishAssessment(facebook,showAllSteps=false){
  await usePlatform('Facebook',facebook);await usePlatform('Instagram',90);await usePlatform('YouTube',30);
@@ -79,6 +95,7 @@ try{
  await capture('results-report',['.result-top','#result-title','#report-snapshot']);
  await capture('results-insights',['#report-insights']);
  await capture('results-next-steps',['#report-next']);
+ await captureReportReviews();
  await page.click('#explore-tools');await capture('my-tools',['#tools-screen']);await tool('shield');
  await page.fill('#shield-bedtime','23:00');await page.selectOption('#shield-window','30');await page.selectOption('#shield-activity','Read');await page.click('#shield-use');await capture('sleep-shield',['#sleep-shield']);
  await page.click('#shield-track');await page.locator('.shield-night select').nth(0).selectOption('Yes');await page.getByLabel('Sleep hours',{exact:true}).fill('7');await page.getByLabel('Sleep minutes',{exact:true}).fill('45');await page.locator('.shield-night select').nth(1).selectOption('Rested');
@@ -88,7 +105,7 @@ try{
  assert.equal(await page.locator('#goal-year').textContent(),'182.5');
  await hub();await tool('progress');assert.match(await page.locator('#progress-summary').textContent(),/60 minutes less/);await page.click('#save-checkin');await capture('progress',['#progress-screen']);
  await page.locator('#progress-details > summary').click();await capture('progress-comparison',['#progress-details']);
- assert.deepEqual(errors,[]);assert.equal(captures.length,names.length);
+ assert.deepEqual(errors,[]);assert.equal(captures.length,names.length+reportReviews.length);
  await fs.writeFile(path.join(output,'manifest.json'),JSON.stringify({fixture:'Synthetic Demo, age 30; 240m prior / 180m current; fixed Jan 2026 UTC dates',research:'503 fixture: existing fallback guidance, no successful live retrieval',browser:browser.version(),captures},null,2)+'\n');
  console.log(`PASS: ${captures.length} complete section captures, isolated synthetic storage, fallback research and no overflow.`);
 }catch(error){await fs.writeFile(path.join(output,'failure.txt'),String(error.stack||error));await page.screenshot({path:path.join(output,'failure.png')}).catch(()=>{});throw error;}
