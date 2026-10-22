@@ -1,11 +1,13 @@
 // Requires an existing Playwright/Chromium installation; no app dependency added.
-import assert from 'node:assert/strict';import fs from 'node:fs/promises';import path from 'node:path';
+import assert from 'node:assert/strict';import fs from 'node:fs/promises';
+import {startRoutingServer} from './routing-server.mjs';
+const server=await startRoutingServer();
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:['--no-sandbox','--disable-dev-shm-usage','--use-gl=angle','--use-angle=swiftshader','--disable-gpu-sandbox']});
 const context=await browser.newContext({viewport:{width:390,height:900},hasTouch:true});const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(10000);
 let live=false,requests=0;
 const source={organization:'CDC',title:'Controlled test fixture',url:'https://www.cdc.gov/sleep/about/',date:null};const evidence={statement:'Controlled educational fixture.',population:'Adults',applicability:'Fixture for display testing only.',sources:[source]};
-await context.route('https://preview.local/**',async route=>{const url=new URL(route.request().url());if(url.pathname==='/api/health-information'){requests++;return route.fulfill({status:live?200:503,contentType:'application/json',body:JSON.stringify(live?{benefits:[evidence],risks:[evidence],resources:[{...source,whyRelevant:'Controlled relevance fixture.',population:'Adults',applicability:'Fixture only.'}],checkedAt:new Date().toISOString()}:{code:'test_unavailable'})});}const file=path.resolve('public',url.pathname==='/'?'index.html':url.pathname.slice(1));return route.fulfill({body:await fs.readFile(file),contentType:file.endsWith('.css')?'text/css':file.endsWith('.js')?'text/javascript':'text/html'});});
+await context.route('**/api/health-information',async route=>{requests++;return route.fulfill({status:live?200:503,contentType:'application/json',body:JSON.stringify(live?{benefits:[evidence],risks:[evidence],resources:[{...source,whyRelevant:'Controlled relevance fixture.',population:'Adults',applicability:'Fixture only.'}],checkedAt:new Date().toISOString()}:{code:'test_unavailable'})});});
 const visible=id=>page.locator(id).isVisible(),text=id=>page.locator(id).textContent();
 const getStorage=()=>page.evaluate(()=>({...localStorage}));
 async function hub(){const id=await page.evaluate(()=>appViews.current);if(id==='report')await page.click('#explore-tools');else if(id==='home')await page.locator('#home-screen [data-view="tools"]').click();else if(id!=='tools')await page.locator('#'+({shield:'sleep-shield',reduction:'reduction-screen',progress:'progress-screen'})[id]+' [data-view="tools"]').click();}
@@ -17,7 +19,7 @@ async function capture(name){for(const width of [320,390,768,1280]){await page.s
 async function setGoal(n){await page.locator('#goal-reduction').evaluate((el,v)=>{el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));},n);}
 async function saveNight(hours='7',followed='Yes'){const n=page.locator('.shield-night');await n.locator('select').first().selectOption(followed);await n.getByLabel('Sleep hours',{exact:true}).fill(hours);await n.getByLabel('Sleep minutes',{exact:true}).fill('30');await n.locator('select').last().selectOption('Rested');await n.getByRole('button',{name:'Save night',exact:true}).click();}
 try{
- await page.goto('https://preview.local/');assert(await visible('#home-screen'));assert(!await visible('#home-report'));await capture('homepage');
+ await page.goto(server.origin);assert(await visible('#home-screen'));assert(!await visible('#home-report'));await capture('homepage');
  await page.click('#home-start');await page.fill('#name','Retained draft');await page.fill('#age','30');await page.click('#flow-next');await page.locator('#checkin [data-view="home"]').click();assert.equal(await text('#home-start'),'Continue My Check-In');await page.click('#home-start');assert.equal(await text('#step-count'),'Step 2 of 5');assert.equal(await page.locator('#name').inputValue(),'Retained draft');await page.locator('#checkin [data-view="home"]').click();
  // Clear only the temporary in-memory draft before the normal regression sequence.
  await page.reload();
@@ -47,4 +49,4 @@ try{
  await page.evaluate(()=>{localStorage.removeItem('social-media-sense.reduction-goals.v1');localStorage.setItem('room.saved-checkins.v1',JSON.stringify({version:1,checkins:[{id:'legacy',date:'2025-01-01T00:00:00.000Z',daily:300,platforms:[{name:'Facebook',minutes:300}],sleepMinutes:420,activityMinutes:60,behaviors:{bedtime:'Never',tasks:'Never',movement:'Never',longer:'Never'},opportunity:{area:'Maintain your balance',explanation:'Legacy'},reductionGoal:60}]}));});
  await page.reload();assert(!await visible('#home-report'));await tool('progress');assert.match(await text('#saved-record-summary'),/Not recorded in this older check-in/);await tool('reduction');assert.equal(await page.locator('#goal-reduction').inputValue(),'60');assert.equal((await getStorage())['social-media-sense.reduction-goals.v1'],undefined);
  assert.deepEqual(errors,[]);console.log('PASS read-only report, all views/widths, baseline-bound drafts, explicit save/delete, reload/returning users, seven-night history, research fixtures, zero/low use, celebration, keyboard/touch and reduced motion');
-}finally{await browser.close();}
+}finally{await browser.close();await server.close();}
