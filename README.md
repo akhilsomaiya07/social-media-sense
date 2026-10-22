@@ -90,7 +90,11 @@ Explicitly save summary values and compare later entries for estimated usage, pl
 
 These are **real browser screenshots** captured with fictional answers. They are not generated interface mockups or personal user records. They demonstrate the actual assessment, report and optional tools.
 
-The latest validated **15 to 100 age warning** is shown first. The older homepage capture has been omitted here because it predates the recent homepage-copy update; a new homepage image should only be published after a fresh browser capture is reviewed. Other unchanged screens retain their previously reviewed captures.
+The homepage below is a fresh browser capture of the current introduction. The Step 1 capture also reflects the current age range. Other unchanged screens retain their previously reviewed captures. The age-validation examples show the supported **15 to 100** range.
+
+### Homepage
+
+[![Current Social Media Sense homepage](docs/screenshots/homepage.webp)](docs/screenshots/homepage.webp)
 
 ### Step 1: Age and the warning message
 
@@ -177,6 +181,8 @@ These requests do **not** include the person's nickname, platform names or indiv
 
 Health sources are selected for **educational relevance**, with attention to age applicability, possible benefits as well as risks, and the difference between association and causation. The app shows linked resources where available; live retrieval may fail or have insufficient evidence, in which case it displays previously checked fallback guidance with a notice. Sources do not imply endorsement of the project.
 
+During the 22 October 2026 deployment check, the research endpoint reported missing server-side provider configuration. The current demo therefore uses fallback education; it should not be presented as a successful live-research demonstration.
+
 **Unsaved full reports are temporary.** Browser navigation can preserve an in-progress assessment during the current visit, but refreshing can return a person to Step 1, and opening `/results` without an active completed report will not recreate one. Only deliberately saved summary check-ins remain available through Progress.
 
 ## How I built it
@@ -211,7 +217,7 @@ npm run check:cloudflare
 
 `npm run screenshots` creates real captures from isolated, synthetic browser sessions under `artifacts/screenshots/`. It deliberately does **not** overwrite the reviewed images shown in this README. Images should be compared with the current UI before publication; do not stretch, fabricate or silently replace them.
 
-The screenshot-review GitHub workflow runs build, unit, motion and routing tests before capturing the gallery. **Recent workflow runs have timed out during a motion-test screenshot**, before the new gallery could be captured. That is an outstanding screenshot-pipeline reliability issue, not proof that new screenshots were successfully produced. Check the next CI run before claiming refreshed screenshot coverage.
+The screenshot-review workflow is being checked in [PR 39](https://github.com/akhilsomaiya07/social-media-sense/pull/39). Local build, regression checks and 25 real captures passed. The first CI attempt passed motion checks but reached its overall job limit after a seven-minute dependency install. The [repeat CI run](https://github.com/akhilsomaiya07/social-media-sense/actions/runs/39714017315) passed all stages with a justified longer job budget, including all 25 captures. [Review notes](docs/review/readiness-2026-10-22.md) distinguish completed tests from remaining checks.
 
 For developers, the main files are:
 
