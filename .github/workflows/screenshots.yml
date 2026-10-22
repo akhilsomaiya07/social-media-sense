@@ -22,7 +22,8 @@ concurrency:
 jobs:
   capture:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    # A measured cold npm ci took 7m; retain bounded time for the browser suites.
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v6
         with:

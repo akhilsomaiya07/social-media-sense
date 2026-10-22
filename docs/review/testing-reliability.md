@@ -14,7 +14,7 @@ The screenshot was a bounded viewport, not an oversized full-page capture. The s
 
 - Remove the incidental report PNG capture from `test-motion.mjs`. All behavior, duration, focus, reduced-motion, overflow, errors and single-completion assertions remain.
 - Preserve eight report stills (320/390/768/1280, normal/reduced preference) in the existing dedicated capture script and manifest. Pause animations only while taking stills via Playwright's capture option. This is not used by behavioral tests or production.
-- CI continues independent routing, age, Cloudflare dry-run and capture stages after a failed test, provided setup/build succeeded. Any failed stage still fails the job. No retries, blanket timeout increase, or `continue-on-error` were added.
+- CI continues independent routing, age, Cloudflare dry-run and capture stages after a failed test, provided setup/build succeeded. Any failed stage still fails the job. No retries, browser timeout increases, or `continue-on-error` were added.
 - Include age validation in CI and upload age artifacts. Ignore installed dependencies and generated age captures.
 
 ## Local execution
@@ -26,3 +26,7 @@ Motion covered all four widths under both motion preferences and the unavailable
 Environment limitation: `npx playwright install --with-deps chromium` failed because the local host cannot perform apt identity changes. The browser-only install also failed with invalid downloaded archives. Local checks used available Chromium 153.0.8010.0 through `CHROMIUM_PATH`; CI uses the standard pinned Playwright browser installer. CI verification is therefore necessary and is recorded in the PR, separately from local passes.
 
 The Cloudflare command was a dry-run only. No production deployment, secret changes, merges, or repository visibility changes were performed.
+
+## First CI attempt and bounded job budget
+
+Run 39712965681 passed the entire normal/reduced motion suite (normal loading 2854–2875ms; reduced 234–256ms), then was cancelled during routing at the existing 10-minute job ceiling. Logs show npm ci consumed 7 minutes, browser installation 27 seconds and motion 94 seconds; routing passed 320/390 before cancellation. Age and capture did not execute in this attempt. This is separate from the original screenshot stall. Increase only the overall job budget to 15 minutes to leave time for the measured cold setup plus the unchanged browser suites. No individual Playwright wait, assertion or retry changed. The repeated CI outcome must be checked separately.
