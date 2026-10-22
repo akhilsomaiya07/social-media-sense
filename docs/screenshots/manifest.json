@@ -4,7 +4,7 @@
   "browser": "153.0.8010.0",
   "captures": [
     {
-      "file": "homepage.png",
+      "file": "homepage.webp",
       "viewport": {
         "width": 1280,
         "height": 900
@@ -17,10 +17,13 @@
       ],
       "dimensions": {
         "width": 1280,
-        "height": 756
+        "height": 785
       },
-      "bytes": 542280,
-      "sha256": "848d74333639eefa7322edf0c8e394737e44da023669ff4d257dfa3f5462a991"
+      "bytes": 45456,
+      "sha256": "ebce8f310140ce1f0e8b6da13c566145e2af166e79cc227fffb94afc95815443",
+      "browser": "153.0.8010.0",
+      "reviewed": "2026-10-22",
+      "note": "Actual current-main capture; WebP compression, original dimensions retained."
     },
     {
       "file": "assessment-step-1.png",
