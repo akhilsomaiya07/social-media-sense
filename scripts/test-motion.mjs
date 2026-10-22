@@ -93,8 +93,12 @@ try{
    await page.evaluate(()=>document.getElementById('checkin').requestSubmit());await page.waitForTimeout(90);
    const scale=await page.locator('.step-progress-fill').evaluate(e=>new DOMMatrix(getComputedStyle(e).transform).a);
    assert(reduced?Math.abs(scale-.4)<.001:scale>.2&&scale<.4,`progress must ${reduced?'jump immediately':'interpolate'}: ${scale}`);
-   await step(page,2);await enterUsage(page);
-   await page.click('#flow-back');await step(page,1);assert.equal(await page.locator('#age').inputValue(),'30');await page.click('#flow-next');await step(page,2);
+   await step(page,2);assert.equal(await page.locator('#checkin').getAttribute('data-step-direction'),'forward');
+   assert.equal(await style(page,'.assessment-step:visible','animationName'),reduced?'none':'step-appear');
+   await enterUsage(page);
+   await page.click('#flow-back');await step(page,1);
+   assert.equal(await page.locator('#checkin').getAttribute('data-step-direction'),'backward');assert.equal(await page.locator('#age').inputValue(),'30');await page.click('#flow-next');await step(page,2);
+   assert.equal(await page.locator('#checkin').getAttribute('data-step-direction'),'forward');
    assert.match(await page.locator('#platform-total').textContent(),/3h/);
    await page.click('#flow-next');await step(page,3);
    await page.fill('#sleep-hours','30');await page.click('#flow-next');assert.equal(await page.evaluate(()=>document.activeElement.id),'sleep-hours');assert.match(await page.locator('#error').textContent(),/sleep hours/);
