@@ -43,7 +43,7 @@ function setupAssessmentFlow({form,read,calculate,render,clearFieldErrors,showFi
   clearFieldErrors();get('error').hidden=true;busy=true;get('flow-next').disabled=true;form.hidden=true;get('result').hidden=true;workspace.classList.add('flow-active');get('flow-loading').hidden=false;
   if(typeof appViews!=='undefined')appViews.show('loading',false);
   get('loading-progress').value=1;get('loading-percent').textContent='1%';get('loading-title').focus({preventScroll:true});get('flow-loading').scrollIntoView({block:'start',behavior:'auto'});
-  const duration=matchMedia('(prefers-reduced-motion: reduce)').matches?200:1600;let start;
+  const duration=matchMedia('(prefers-reduced-motion: reduce)').matches?200:2800;let start;
   function tick(timestamp){
    if(start===undefined)start=timestamp;
    const progress=Math.min(100,1+99*(timestamp-start)/duration);
