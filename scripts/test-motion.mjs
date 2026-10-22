@@ -138,7 +138,8 @@ try{
    await page.locator('#tools-screen [data-view="reduction"]').click();assert(await page.locator('#save-goal').isDisabled());await page.hover('#save-goal');assert.equal(await style(page,'#save-goal','transform'),'none');await page.locator('#reduction-screen [data-view="tools"]').click();
    await page.locator('#tools-report').press('Enter');assert.equal(await page.locator('#result').innerText(),report);assert.equal(f.requests(),requests);
    assert.equal(await page.evaluate(()=>window.motionAudit.reveals),reduced?0:1);assert(!await overflow(page));
-   await page.screenshot({path:path.join(output,`report-${width}-${reducedMotion}.png`)});
+   // Still images are captured by npm run screenshots, after behavioral checks.
+   // A compositor capture timeout must not interrupt the remaining motion cases.
    // Mid-session preference changes must not revive an old reveal.
    await page.emulateMedia({reducedMotion:'reduce'});assert.equal(await style(page,'body','animationName','::before'),'none');
    await page.emulateMedia({forcedColors:'active'});

@@ -6,6 +6,7 @@ on:
       - 'public/**'
       - 'scripts/capture-showcase.mjs'
       - 'scripts/test-motion.mjs'
+      - 'scripts/test-age*.mjs'
       - 'scripts/*routing*.mjs'
       - 'cloudflare/worker.mjs'
       - 'wrangler.jsonc'
@@ -31,14 +32,27 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
-      - run: npm run build
-      - run: npm test
+      - id: browser
+        run: npx playwright install --with-deps chromium
+      - id: build
+        run: npm run build
+      - name: Check unit regressions
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: npm test
       - name: Check motion and accessibility
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser.outcome == 'success' }}
         run: npm run test:motion
       - name: Check routes and Worker fallback
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser.outcome == 'success' }}
         run: npm run test:routing
+      - name: Check age validation
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser.outcome == 'success' }}
+        run: npm run test:age
+      - name: Check Cloudflare bundle without deploying
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: npm run check:cloudflare
       - name: Capture local application
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser.outcome == 'success' }}
         run: npm run screenshots
       - name: Upload screenshots and failure diagnostics
         if: ${{ !cancelled() }}
@@ -49,5 +63,6 @@ jobs:
             artifacts/screenshots/
             artifacts/motion/
             artifacts/routing/
+            artifacts/age/
           if-no-files-found: warn
           retention-days: 14
