@@ -90,7 +90,7 @@ Explicitly save summary values and compare later entries for estimated usage, pl
 
 These are **real browser screenshots** captured with fictional answers. They are not generated interface mockups or personal user records. They demonstrate the actual assessment, report and optional tools.
 
-The homepage below is a fresh browser capture of the current introduction. Other unchanged screens retain their previously reviewed captures. The age-validation examples show the supported **15 to 100** range.
+The homepage below is a fresh browser capture of the current introduction. The Step 1 capture also reflects the current age range. Other unchanged screens retain their previously reviewed captures. The age-validation examples show the supported **15 to 100** range.
 
 ### Homepage
 
@@ -217,7 +217,7 @@ npm run check:cloudflare
 
 `npm run screenshots` creates real captures from isolated, synthetic browser sessions under `artifacts/screenshots/`. It deliberately does **not** overwrite the reviewed images shown in this README. Images should be compared with the current UI before publication; do not stretch, fabricate or silently replace them.
 
-The screenshot-review workflow is being checked in [PR 39](https://github.com/akhilsomaiya07/social-media-sense/pull/39). Local build, regression checks and 25 real captures passed. The first CI attempt passed motion checks but reached its overall job limit after a seven-minute dependency install. A repeat run has a justified longer job budget; check its result before claiming complete CI coverage. [Review notes](docs/review/readiness-2026-10-22.md) distinguish completed tests from remaining checks.
+The screenshot-review workflow is being checked in [PR 39](https://github.com/akhilsomaiya07/social-media-sense/pull/39). Local build, regression checks and 25 real captures passed. The first CI attempt passed motion checks but reached its overall job limit after a seven-minute dependency install. The [repeat CI run](https://github.com/akhilsomaiya07/social-media-sense/actions/runs/39714017315) passed all stages with a justified longer job budget, including all 25 captures. [Review notes](docs/review/readiness-2026-10-22.md) distinguish completed tests from remaining checks.
 
 For developers, the main files are:
 

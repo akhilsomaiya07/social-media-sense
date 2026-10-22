@@ -38,8 +38,11 @@
         "width": 662,
         "height": 513
       },
-      "bytes": 62464,
-      "sha256": "30c147fd240def0f8e5747b9b29fa6151923a299faed528bfe446a589b57fcc7"
+      "bytes": 62737,
+      "sha256": "9e752081590c32823832432f812ca31a006859c87aa753f6abfb7d7b603c4ba3",
+      "browser": "153.0.8010.0",
+      "reviewed": "2026-10-22",
+      "note": "Replace obsolete ages 13+ screenshot with current ages 15–100."
     },
     {
       "file": "assessment-step-2.png",
