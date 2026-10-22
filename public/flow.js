@@ -8,6 +8,8 @@ function setupAssessmentFlow({form,read,calculate,render,clearFieldErrors,showFi
  const get=id=>document.getElementById(id),workspace=form.closest('.workspace'),panels=[...form.querySelectorAll('.assessment-step')];
  let step=1,busy=false,complete=false,reached=1;
  function move(next,focus=true){
+  // Direction is presentation-only. Never delay validation, focus, or URL updates.
+  if(next!==step)form.dataset.stepDirection=next>step?'forward':'backward';
   step=next;if(typeof appViews!=='undefined')appViews.show('assessment',false);form.hidden=false;document.body.classList.remove('results-screen');workspace.classList.remove('results-only');clearFieldErrors();get('error').hidden=true;
   for(const panel of panels)panel.hidden=Number(panel.dataset.step)!==step;
   get('step-count').textContent=`Step ${step} of 5`;get('step-progress').value=step;
