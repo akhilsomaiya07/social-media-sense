@@ -56,10 +56,27 @@ async function enterUsage(page){
 }
 async function answerRoutine(page){for(const key of ['bedtime','tasks','movement','people','longer'])await page.check(`input[name="${key}"][value="${key==='bedtime'?'Sometimes':'Never'}"]`);}
 async function finish(page){
- const initial=await page.evaluate(()=>{document.getElementById('checkin').requestSubmit();return {value:document.getElementById('loading-progress').value,visible:!document.getElementById('flow-loading').hidden};});
- assert.deepEqual(initial,{value:1,visible:true});
+ const initial=await page.evaluate(()=>{
+  const form=document.getElementById('checkin'),answers=JSON.stringify([...new FormData(form)]);
+  const check=window.loadingCheck={started:performance.now(),completedBefore:motionAudit.completed,progressIndex:motionAudit.loading.length,expected:matchMedia('(prefers-reduced-motion: reduce)').matches?200:2800};
+  document.addEventListener('checkin:complete',()=>{
+   check.elapsed=performance.now()-check.started;
+   check.finalProgress=document.getElementById('loading-progress').value;
+   check.answersPreserved=JSON.stringify([...new FormData(form)])===answers;
+  },{once:true});
+  form.requestSubmit();form.requestSubmit();form.requestSubmit();
+  return {value:document.getElementById('loading-progress').value,visible:!document.getElementById('flow-loading').hidden,reportHidden:document.getElementById('result').hidden,disabled:document.getElementById('flow-next').disabled};
+ });
+ assert.deepEqual(initial,{value:1,visible:true,reportHidden:true,disabled:true});
  await page.locator('#result').waitFor({state:'visible'});
  await page.waitForFunction(()=>document.getElementById('education-live-status').textContent.includes('could not'));
+ const check=await page.evaluate(()=>({...loadingCheck,completed:motionAudit.completed,progress:motionAudit.loading.slice(loadingCheck.progressIndex)}));
+ // Allow scheduling overhead, while rejecting the old 1.6s path and a long reduced-motion wait.
+ assert(check.elapsed>=check.expected&&check.elapsed<check.expected+1000,`final loading ${check.elapsed.toFixed(0)}ms; expected about ${check.expected}ms`);
+ assert.equal(check.completed,check.completedBefore+1);assert.equal(check.finalProgress,100);assert(check.answersPreserved);
+ assert.equal(check.progress[0],1);assert.equal(check.progress.at(-1),100);assert(check.progress.every((x,i,a)=>i===0||x>=a[i-1]));
+ assert(await page.locator('#flow-loading').isHidden());
+ console.log(`PASS final loading ${page.viewportSize().width}px: ${check.elapsed.toFixed(0)}ms (target ${check.expected}ms), one completion, monotonic 1–100, answers preserved`);
  assert.equal(await page.locator('#loading-progress').evaluate(e=>e.value),100);
  assert.equal(await page.locator('#daily').textContent(),'3h');
  assert.equal(await page.locator('#weekly').textContent(),'21h');
