@@ -310,3 +310,22 @@ footer{color:#c1cee1}
 .age-warning-title{font-size:13px;line-height:1.4}
 .age-warning>span:last-child{grid-column:1/-1}
 @media(forced-colors:active){#age[aria-invalid="true"],.age-warning{border-color:CanvasText}.age-warning{background:Canvas;color:CanvasText}.age-warning-icon,.age-warning-title{color:CanvasText}}
+
+
+/* Read-only report: three main sections, with secondary details at one level. */
+#result #review>p:first-of-type{font-size:16px;line-height:1.65;color:#e4eeee;margin:0 0 16px}
+#result #review>h4[hidden]{display:none}
+#result #platform-ranking{list-style:none;padding-left:0;display:grid;gap:8px}
+#result #biggest-opportunity{border:0;background:none;padding:0;margin:18px 0 10px}
+#result #opportunity-title{font-size:13px;font-weight:500;color:#c2d5d5;margin-bottom:6px}
+#result #opportunity-area{font-size:18px;margin:0 0 8px}
+#result #opportunity-why{margin:0}
+#result .report-secondary{margin-top:28px;border-top:1px solid #456365;padding-top:12px}
+#result .report-secondary>h4{margin:26px 0 8px;font-size:16px}
+#result #report-sleep #sleep-context{border:0;padding:0;margin:0}
+#result #report-save-note{max-width:60ch}
+#result .next-step-actions{gap:10px}
+#result #report-health .education-cards{grid-template-columns:1fr}
+@media(forced-colors:active){#result #review>p:first-of-type,#result #opportunity-title{color:CanvasText}}
+
+#result #report-next>#biggest-opportunity{border:0;padding-top:0;margin-top:12px}

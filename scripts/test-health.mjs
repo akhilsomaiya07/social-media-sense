@@ -82,8 +82,8 @@ assert(!client.balancedHealthPresentation({daily:240,reasons:[{frequency:'Someti
 assert(!client.balancedHealthPresentation({daily:240,reasons:[],worthReviewing:true}));
 sandbox.fetch=async()=>{throw Error('offline')};
 await client.renderHealthEducation({age:40,daily:240,reasons:[],worthReviewing:false});
-assert.equal(ids['education-benefits-title'].textContent,'Keep Your Balance');
-assert(ids['education-benefits'].hidden);assert(ids['education-risks-section'].hidden);
+assert.equal(ids['education-benefits-title'].textContent,'Potential Benefits of Social Media');
+assert(!ids['education-benefits'].hidden);assert(!ids['education-risks-section'].hidden);
 assert(!ids['education-balance-tips'].hidden);assert(!ids['health-resources'].hidden);
 assert.equal(ids['health-resources-title'].textContent,'Learn More');
 assert(ids['health-resource-list'].children.length>=1&&ids['health-resource-list'].children.length<=3);
@@ -96,10 +96,11 @@ console.log('PASS: balanced education, optional fallback reading, and restoratio
 sandbox.fetch=async()=>({ok:true,json:async()=>({benefits:[item],risks:[item],resources:api.verifiedResult(response).resources,checkedAt:new Date().toISOString()})});
 await client.renderHealthEducation({age:40,daily:240,reasons:[],worthReviewing:false});
 assert.equal(ids['health-resource-list'].children.length,1,'Live nodes replace fallback reading rather than appending to it');
-assert(ids['education-risks-section'].hidden);assert(!ids['education-checked'].hidden);
+assert(!ids['education-risks-section'].hidden);assert(!ids['education-checked'].hidden);
 const balanceSandbox={module:{exports:{}}};vm.createContext(balanceSandbox);vm.runInContext(await readFile('public/balance.js','utf8'),balanceSandbox);
 const balanced={daily:240,behaviors:{bedtime:'Never',tasks:'Never',movement:'Never',people:'Never',longer:'Never'}};
 assert.equal(balanceSandbox.module.exports.balanceExperience(balanced),'positive');
 assert.equal(balanceSandbox.module.exports.balanceExperience({...balanced,worthReviewing:true}),'hidden');
 console.log('PASS: live sources replace fallback resources; celebration respects the concern flag.');
+
 
