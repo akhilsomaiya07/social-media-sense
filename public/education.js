@@ -37,11 +37,10 @@ function balancedHealthPresentation(result){
 }
 function setHealthPresentation(result){
  const balanced=balancedHealthPresentation(result),get=id=>document.getElementById(id);
- get('education-benefits-title').textContent=balanced?'Keep Your Balance':'Potential Benefits of Social Media';
+ get('education-benefits-title').textContent='Potential Benefits of Social Media';
  get('education-balance-tips').hidden=!balanced;
- get('education-benefits').hidden=balanced;
- get('education-risks-section').hidden=balanced;
- if(balanced)get('education-benefits-more').hidden=true;
+ get('education-benefits').hidden=false;
+ get('education-risks-section').hidden=false;
  get('health-resources-title').textContent=balanced?'Learn More':'Helpful Resources for Your Results';
  get('health-resources-intro').textContent=balanced?'Optional reading about connection, everyday routines, and digital well-being.':'Sources selected from this assessment’s live search for relevance and evidence quality. Strong sources may appear again in future check-ins.';
  return balanced;
@@ -115,4 +114,5 @@ async function renderHealthEducation(result){
  finally{clearTimeout(timeout)}
 }
 if(typeof module!=='undefined')module.exports={healthSearchContext,showHealthFallback,renderHealthEducation,balancedHealthPresentation};
+
 

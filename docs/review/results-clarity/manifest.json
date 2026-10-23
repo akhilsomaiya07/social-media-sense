@@ -1,0 +1,152 @@
+{
+  "base": "2789df569e76e381ce93005b2ee5987d5c068798",
+  "fixture": "Fictional Demo; cases A\u2013F in scripts/test-report-clarity.mjs; isolated browser storage",
+  "research": "Explicit 503 fallback fixture, not successful live retrieval",
+  "browser": "Chromium 153.0.8010.0",
+  "captures": [
+    {
+      "file": "after-A-1280.webp",
+      "dimensions": [
+        1280,
+        1993
+      ],
+      "bytes": 93234,
+      "sha256": "43ccddfce8c8c9f0fde85e2f8bd926f1398474e304f96d564f9ee19771f7adb5"
+    },
+    {
+      "file": "after-A-390.webp",
+      "dimensions": [
+        390,
+        2270
+      ],
+      "bytes": 81600,
+      "sha256": "a72f1274000904833a45ca3fcd7252f489018f3dbd472208c770e5a1e8f465de"
+    },
+    {
+      "file": "after-B-1280.webp",
+      "dimensions": [
+        1280,
+        2094
+      ],
+      "bytes": 95980,
+      "sha256": "6e1d6f7de42efc16f3d38d956dcee44992cb35c700a430b1a330f0516aedce7d"
+    },
+    {
+      "file": "after-B-390.webp",
+      "dimensions": [
+        390,
+        2364
+      ],
+      "bytes": 86490,
+      "sha256": "3be65e96b4753992be47faa49c8f9f9fee846027d5bec3545813acaf90e1417b"
+    },
+    {
+      "file": "after-C-1280.webp",
+      "dimensions": [
+        1280,
+        2020
+      ],
+      "bytes": 97592,
+      "sha256": "52859d4f05c3a33578a04555e83a00a46a41b97eb8efa196796bdce1fad6afae"
+    },
+    {
+      "file": "after-C-390.webp",
+      "dimensions": [
+        390,
+        2270
+      ],
+      "bytes": 84336,
+      "sha256": "7dba29315183ebcab985e6842547c6284be64e06b53eb455a5d781f351788abe"
+    },
+    {
+      "file": "after-D-1280.webp",
+      "dimensions": [
+        1280,
+        2020
+      ],
+      "bytes": 101290,
+      "sha256": "d84673b464e879874775c3ee6cc0c1fbc5f1b6f5807376e68f3d78337e61a249"
+    },
+    {
+      "file": "after-D-390.webp",
+      "dimensions": [
+        390,
+        2319
+      ],
+      "bytes": 88664,
+      "sha256": "4cf64e9ac526ce477f721c52a0366a02a02438255f6c1f9668bb3c3a0d1921f2"
+    },
+    {
+      "file": "after-E-1280.webp",
+      "dimensions": [
+        1280,
+        2194
+      ],
+      "bytes": 108972,
+      "sha256": "eab37159abe8bb5a08f21173c0a5863644db4f9c5c618882b5e0a83de893600f"
+    },
+    {
+      "file": "after-E-390.webp",
+      "dimensions": [
+        390,
+        2512
+      ],
+      "bytes": 98972,
+      "sha256": "f2b442995b36a7a5a572970e8128663e364885a7c04141ebcff3edf014f1ad10"
+    },
+    {
+      "file": "after-F-1280.webp",
+      "dimensions": [
+        1280,
+        2094
+      ],
+      "bytes": 96272,
+      "sha256": "cc80c85614ad9e25ceff639346c3c4530507f21d2c3993de754c927b95a1de0b"
+    },
+    {
+      "file": "after-F-390.webp",
+      "dimensions": [
+        390,
+        2364
+      ],
+      "bytes": 86708,
+      "sha256": "9eda4d4e18538136698da61a96acd0700dd40de62d8a640cde419a815bfcc10e"
+    },
+    {
+      "file": "before-A-1280.webp",
+      "dimensions": [
+        1280,
+        1933
+      ],
+      "bytes": 100472,
+      "sha256": "65e80b4c4010b047801785d86a7d0bbad203b5a77f5632e67aa4b50b2d843967"
+    },
+    {
+      "file": "before-A-390.webp",
+      "dimensions": [
+        390,
+        2227
+      ],
+      "bytes": 88070,
+      "sha256": "71dbb0429b0b222446e1d74babc4ca9dc873fb33dff087f7500f5301b5074558"
+    },
+    {
+      "file": "before-D-1280.webp",
+      "dimensions": [
+        1280,
+        1910
+      ],
+      "bytes": 102708,
+      "sha256": "2686932cd55d70c03833a4856b3c43f90c05336d04eb46eb7c455a4da142535a"
+    },
+    {
+      "file": "before-D-390.webp",
+      "dimensions": [
+        390,
+        2249
+      ],
+      "bytes": 91048,
+      "sha256": "387da45bbf14a28de03adb5e28f75983991b543d6bb2169234e1397e2c7a88b5"
+    }
+  ]
+}

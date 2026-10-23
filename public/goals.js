@@ -5,21 +5,29 @@ const legacyBehaviorKeys=['bedtime','tasks','movement','longer'];
 function goalTime(minutes){const h=Math.floor(minutes/60),m=minutes%60;return (h?h+'h':'')+(h&&m?' ':'')+(m?m+'m':'')||'0m';}
 function goalProjection(daily,requested){const reduction=Math.min(daily,Math.max(0,Math.round(Number(requested)||0)));return {daily,reduction,target:daily-reduction,week:reduction*7/60,month:reduction*30/60,year:reduction*365/60,days:reduction*365/1440};}
 function groupedPlatforms(platforms){const totals=new Map();for(const p of platforms){const key=p.name.trim().toLowerCase();const existing=totals.get(key)||{name:p.name.trim(),minutes:0};existing.minutes+=p.minutes;totals.set(key,existing);}return [...totals.values()].sort((a,b)=>b.minutes-a.minutes);}
+// Presentation priority only, not a clinical ranking. Never use time or pre-bed use
+// to infer an interruption. Ties follow this stable, documented order.
+const routineAreas=[
+ {key:'bedtime',area:'Bedtime',phrase:'social media keeps you up later than intended',summary:'bedtime'},
+ {key:'longer',area:'Scrolling longer than planned',phrase:'you scroll longer than planned',summary:'scrolling longer than planned'},
+ {key:'tasks',area:'Everyday responsibilities',phrase:'social media interrupts school, work, or everyday responsibilities',summary:'responsibilities'},
+ {key:'movement',area:'Physical activity',phrase:'social media takes time away from physical activity',summary:'physical activity'},
+ {key:'people',area:'Time with other people',phrase:'social media takes time away from people you wanted to spend time with',summary:'time with other people'}
+];
+function selectedRoutine(assessment){
+ const answers=assessment.behaviors||{};
+ for(const frequency of ['Often','Sometimes']){
+  const area=routineAreas.find(item=>answers[item.key]===frequency);
+  if(area)return {...area,frequency};
+ }
+ return null;
+}
 function biggestOpportunity(assessment){
- const choices=[
-  {key:'bedtime',area:'Late-night scrolling',why:'social media keeps you up later than intended.',start:'Choosing a time to stop scrolling before bed may be a practical place to start.'},
-  {key:'longer',area:'Scrolling longer than intended',why:'you scroll longer than planned.',start:'A small daily time goal may be a practical place to start.'},
-  {key:'tasks',area:'Time for everyday responsibilities',why:'social media interrupts school, work, or everyday responsibilities.',start:'Choosing a task to do without checking social media may be a practical place to start.'},
-  {key:'movement',area:'Time for physical activity',why:'social media takes time away from physical activity.',start:'Choosing one active offline activity you want to make time for may be a practical place to start.'},
-  {key:'people',area:'Time with other people',why:'social media takes time away from people you wanted to spend time with.',start:'Choosing one person or offline moment you want to protect may be a practical place to start.'}
- ];
- const score=value=>value==='Often'?2:value==='Sometimes'?1:0;
- const selected=choices.sort((a,b)=>score(assessment.behaviors[b.key])-score(assessment.behaviors[a.key]))[0];
- const answer=assessment.behaviors[selected.key];
- const opportunity=score(answer)?{key:selected.key,area:selected.area,explanation:`You answered “${answer}”: ${selected.why} ${selected.start}`}:{key:'balance',area:'Maintain your balance',explanation:'You did not report routine disruption in this check-in. You can still use the tools below to understand where your time goes.'};
- if(opportunity.key==='bedtime'){opportunity.area='Protect your bedtime';opportunity.explanation+=' Your Sleep Shield below provides a bedtime cutoff and wind-down plan.';}
- else if(opportunity.key!=='balance'&&assessment.prebed==='Often'&&score(answer)<2){opportunity.key='bedtime';opportunity.area='Protect your bedtime';opportunity.explanation='You reported frequent social media use in the hour before sleep. Your Sleep Shield below offers a practical wind-down plan to try.';}
- const top=groupedPlatforms(assessment.platforms)[0];opportunity.platformNote=assessment.daily>0&&top&&top.minutes/assessment.daily>=.4?`${top.name} accounts for about ${Math.round(top.minutes/assessment.daily*100)}% of your reported social media time.`:'';return opportunity;
+ const selected=selectedRoutine(assessment);
+ const opportunity=selected?{key:selected.key,area:selected.area,explanation:`You answered “${selected.frequency}”: ${selected.phrase}.`,platformNote:''}:{key:'balance',area:'Maintain your balance',explanation:'You did not report interruptions in the routine areas asked about. No follow-up action is required.',platformNote:''};
+ const top=groupedPlatforms(assessment.platforms||[])[0];
+ opportunity.platformNote=assessment.daily>0&&top&&top.minutes/assessment.daily>=.4?`${top.name} accounts for about ${Math.round(top.minutes/assessment.daily*100)}% of your reported social media time.`:'';
+ return opportunity;
 }
 function dailyChange(previous,current){const difference=current-previous;const percent=previous>0?difference/previous*100:current===0?0:null;return {difference,percent};}
 function validSavedCheckin(record){
@@ -42,7 +50,7 @@ function clearCheckinsAndGoals(getStorage){
  const storage=getStorage();storage.removeItem(reductionStorageKey);storage.removeItem(checkinStorageKey);
 }
 function freezeCheckin(value){if(value&&typeof value==='object'){Object.values(value).forEach(freezeCheckin);Object.freeze(value);}return value;}
-if(typeof module!=='undefined')module.exports={goalTime,goalProjection,groupedPlatforms,biggestOpportunity,dailyChange,validSavedCheckin,createCheckinStore,checkinStorageKey,reductionStorageKey,createGoalStore,clearCheckinsAndGoals,freezeCheckin};
+if(typeof module!=='undefined')module.exports={goalTime,goalProjection,groupedPlatforms,selectedRoutine,routineAreas,biggestOpportunity,dailyChange,validSavedCheckin,createCheckinStore,checkinStorageKey,reductionStorageKey,createGoalStore,clearCheckinsAndGoals,freezeCheckin};
 if(typeof document!=='undefined'){
  const get=id=>document.getElementById(id),store=createCheckinStore(()=>window.localStorage),goalStore=createGoalStore(()=>window.localStorage);
  let current=null,history=[],goals=[],historyError=false,goalError=false,goalId='',progressId='',returnGoalId='',sequence=0;
@@ -145,3 +153,4 @@ if(typeof document!=='undefined'){
  });
  window.addEventListener('storage',event=>{if([checkinStorageKey,reductionStorageKey,null].includes(event.key)){load();if(appViews.current==='progress')renderProgress();if(appViews.current==='reduction')renderGoal();changed();}});
 }
+
