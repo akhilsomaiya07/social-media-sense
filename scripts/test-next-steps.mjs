@@ -12,3 +12,17 @@ const {routineSummary}=box.module.exports;assert.match(routineSummary({behaviors
 assert.match(routineSummary({behaviors:{...b,bedtime:'Never',tasks:'Never'}}),/did not report/);
 for(const prebed of ['Never','Sometimes','Often'])assert.equal(select({daily:240,prebed,behaviors:{...b,bedtime:'Never',tasks:'Sometimes'}}).view,'reduction');
 console.log('PASS shared frequency priority, tie rule, summaries and pre-bed context independence');
+
+const never={bedtime:'Never',tasks:'Never',movement:'Never',people:'Never',longer:'Never'};
+const titles={bedtime:'Protect your bedtime',tasks:'Protect your focus',movement:'Make room for movement',people:'Be present for one moment',longer:'Set an ending point'};
+for(const [key,title] of Object.entries(titles)){
+ const input={daily:180,prebed:'Often',behaviors:{...never,[key]:'Often'}};
+ const frozen=JSON.stringify(input),result=select(input);
+ assert.equal(result.title,title);assert.match(result.description,/^You could/);assert.match(result.choice,/Only you can decide/);assert.equal(JSON.stringify(input),frozen);
+}
+const allSometimes={daily:60,behaviors:Object.fromEntries(Object.keys(never).map(k=>[k,'Sometimes']))};
+assert.match(select(allSometimes).choice,/same reported frequency/);
+assert.equal(select({...allSometimes,behaviors:{...never,tasks:'Often',movement:'Often'}}).title,'Protect your focus');
+assert.equal(select({daily:0,prebed:'Often',behaviors:never}).description,'');
+assert.equal(select({daily:180,prebed:'Often',behaviors:never}).title,undefined);
+console.log('PASS five optional experiment texts, equal-frequency choice, immutable snapshots and no example for all Never');

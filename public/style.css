@@ -329,3 +329,17 @@ footer{color:#c1cee1}
 @media(forced-colors:active){#result #review>p:first-of-type,#result #opportunity-title{color:CanvasText}}
 
 #result #report-next>#biggest-opportunity{border:0;padding-top:0;margin-top:12px}
+
+/* Option C: visible answers and one optional example; tools remain separate. */
+#result .routine-answers{width:100%;border-collapse:collapse;table-layout:fixed;font-size:14px;line-height:1.5;margin:16px 0}
+#result .routine-answers th,#result .routine-answers td{text-align:left;vertical-align:top;padding:10px 0;border-bottom:1px solid #456365;overflow-wrap:anywhere}
+#result .routine-answers th:first-child{width:auto;padding-right:16px}
+#result .routine-answers thead th:last-child{width:6rem}
+#result .routine-answers td{white-space:nowrap;overflow-wrap:normal}
+#result .routine-answers tbody th{font-weight:400;color:#d4e1e1}
+#result .routine-answers td{font-weight:600;color:#e4eeee}
+#result #report-choice-note{margin-bottom:18px}
+#result #report-health-details .report-health-topic{margin:24px 0 0}
+#result #report-health-details .report-health-topic>h4{font-size:15px}
+#result #report-health-details>summary{font-size:14px}
+@media(forced-colors:active){#result .routine-answers th,#result .routine-answers td{color:CanvasText;border-color:CanvasText}}
