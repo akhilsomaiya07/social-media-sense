@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 import {chromium} from 'playwright';
 import {startRoutingServer} from './routing-server.mjs';
 const before=process.env.REPORT_BEFORE==='1',cwd=process.cwd();
-if(before)process.chdir('artifacts/option-c/baseline');
+if(before)process.chdir('artifacts/everyday-balance/baseline');
 const server=await startRoutingServer();process.chdir(cwd);
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:['--no-sandbox','--disable-dev-shm-usage','--use-gl=angle','--use-angle=swiftshader','--disable-gpu-sandbox']});
 const never={bedtime:'Never',tasks:'Never',movement:'Never',people:'Never',longer:'Never'};
@@ -15,9 +15,11 @@ const cases=[
  {id:'E',daily:180,age:30,b:{...never,tasks:'Often',movement:'Often'},view:'reduction',key:'tasks',summary:/frequent interruptions in responsibilities and physical activity/},
  {id:'F',daily:0,age:30,b:never,view:'progress',key:'balance',summary:/did not report/},
  {id:'G',daily:45,age:15,b:never,view:'progress',key:'balance',summary:/did not report/},
- {id:'H',daily:90,age:75,b:{...never,movement:'Sometimes'},view:'progress',key:'movement',summary:/occasional interruptions in physical activity/}
+ {id:'H',daily:90,age:75,b:{...never,movement:'Sometimes'},view:'progress',key:'movement',summary:/occasional interruptions in physical activity/},
+ {id:'I',daily:180,age:40,b:Object.fromEntries(Object.keys(never).map(k=>[k,'Often'])),view:'shield',key:'bedtime',summary:/frequent interruptions in all five/},
+ {id:'J',daily:120,age:100,b:{...never,people:'Often'},view:'progress',key:'people',summary:/frequent interruptions in time with other people/}
 ];
-await fs.mkdir('artifacts/option-c',{recursive:true});
+await fs.mkdir('artifacts/everyday-balance',{recursive:true});
 try{
  for(const width of before?[390,1280]:[320,390,768,1280]){
  const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce',hasTouch:width<500}),p=await context.newPage(),errors=[];let requests=0;
@@ -32,12 +34,13 @@ try{
    for(const [key,value] of Object.entries(c.b))await p.check(`[name="${key}"][value="${value}"]`);
    await p.click('#flow-next');await p.locator('#result').waitFor({state:'visible'});await p.waitForFunction(()=>document.getElementById('education-live-status').textContent.includes('could not'));
    if(!before){
-    assert.deepEqual(await p.locator('#result > .report-group > h3').allTextContents(),['Your Social Media Time','Habits You Noticed','Choose One Small Change']);
-    assert.match(await p.locator('#review > p').first().innerText(),c.summary);assert.equal(await p.locator('#next-step-action').getAttribute('data-view'),c.view);
+    assert.deepEqual(await p.locator('#result > .report-group > h3').allTextContents(),['Your Time','Your Everyday Balance','Make Room for What Matters']);
+    assert.match(await p.locator('#report-routine-summary').innerText(),c.summary);assert.equal(await p.locator('#next-step-action').getAttribute('data-view'),c.view);
     assert.equal(await p.evaluate(()=>biggestOpportunity({behaviors:Object.fromEntries([...document.querySelectorAll('#questions input:checked')].map(e=>[e.name,e.value]))}).key),c.key);
     assert.equal(await p.locator('#result input,#result select,#result textarea').count(),0);assert.equal(await p.locator('#result details[open]').count(),0);
     assert.equal(await p.locator('#balance-celebrate').isVisible(),['B','F','G'].includes(c.id));
     if(c.tie){const list=await p.locator('#platform-ranking').innerText();assert.match(list,/Facebook — 30m/);assert.match(list,/Instagram — 30m/);assert.equal(await p.locator('#platform-ranking').evaluate(e=>e.tagName),'UL');}
+    await p.locator('#report-health > summary').press('Enter');await p.locator('#report-answers > summary').press('Enter');
     await p.locator('#report-calculation > summary').press('Enter');assert.equal(await p.locator('#yearly').innerText(),await p.evaluate(m=>duration(m*365),c.daily));await p.locator('#report-calculation > summary').press('Enter');
     await p.locator('#report-sleep > summary').press('Enter');assert.match(await p.locator('#sleep-context-reference').innerText(),c.age<18?/24 hours/:c.age>=65?/7–8/:/7 or more/);await p.locator('#report-sleep > summary').press('Enter');
     assert.deepEqual(await p.locator('.routine-answers tbody td').allTextContents(),['bedtime','tasks','movement','people','longer'].map(k=>c.b[k]));
@@ -63,12 +66,13 @@ try{
     await p.locator('#report-health-details > summary').press('Enter');
     assert.equal(requests,countBefore);assert.deepEqual(await p.evaluate(()=>({...localStorage})),storageBefore);
     assert(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+    await p.locator('#report-health > summary').press('Enter');
    }
-   if([390,1280].includes(width)){await p.evaluate(()=>{document.activeElement?.blur();scrollTo(0,0);});await p.screenshot({path:`artifacts/option-c/${before?'before':'after'}-${c.id}-${width}.png`,fullPage:true,animations:'disabled'});}
+   if([390,1280].includes(width)){await p.evaluate(()=>{document.activeElement?.blur();scrollTo(0,0);});await p.screenshot({path:`artifacts/everyday-balance/${before?'before':'after'}-${c.id}-${width}.png`,fullPage:true,animations:'disabled'});}
    if([390,1280].includes(width)&&c.id==='A'){
-    await p.locator('#report-calculation > summary').press('Enter');await p.locator('#report-sleep > summary').press('Enter');
+    await p.locator('#report-health > summary').press('Enter');await p.locator('#report-calculation > summary').press('Enter');await p.locator('#report-sleep > summary').press('Enter');
     if(!before)await p.locator('#report-health-details > summary').press('Enter');
-    await p.screenshot({path:`artifacts/option-c/${before?'before':'after'}-expanded-${width}.png`,fullPage:true,animations:'disabled'});
+    await p.screenshot({path:`artifacts/everyday-balance/${before?'before':'after'}-expanded-${width}.png`,fullPage:true,animations:'disabled'});
     await p.evaluate(()=>document.querySelectorAll('#result details').forEach(d=>d.open=false));
    }
    if(!before){

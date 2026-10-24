@@ -4,13 +4,13 @@
 const smallExperiments={
  bedtime:{title:'Protect your bedtime',text:'You could experiment with stopping social media use a little before your planned bedtime.'},
  tasks:{title:'Protect your focus',text:'You could try completing one planned task without checking social media.'},
- movement:{title:'Make room for movement',text:'You could set aside time for an activity you enjoy before opening social media.'},
- people:{title:'Be present for one moment',text:'You could try putting your phone aside during one conversation or shared activity.'},
+ movement:{title:'Make room for movement',text:'You could make room for a walk, sport, hobby, or other movement you enjoy.'},
+ people:{title:'Be present for one moment',text:'You could try putting your phone aside during one conversation or shared activity with someone important to you.'},
  longer:{title:'Set an ending point',text:'You could choose when you want to stop one scrolling session and see how closely your actual use matches your intention.'}
 };
 function nextStepRecommendation(assessment){
  const selected=selectedRoutine(assessment);
- if(!selected)return {view:'progress',message:'You can finish here. No follow-up action is required.',description:'',choice:''};
+ if(!selected)return {view:'progress',message:'You can keep making room for the routines and connections that matter to you, online and offline. No change is required.',description:'',choice:''};
  const message=`You answered “${selected.frequency}”: ${selected.phrase}.`;
  const ties=routineAreas.filter(area=>assessment.behaviors?.[area.key]===selected.frequency).length;
  const choice=ties>1?'Several routines have the same reported frequency. Only you can decide which matters most to you; the example below is not a personal priority ranking.':'Only you can decide which routine matters most to you. This is one possible experiment, not a prescribed goal.';
@@ -23,13 +23,14 @@ function routineSummary(assessment){
  const b=assessment.behaviors||{};
  const areas=['bedtime','tasks','movement','people','longer'].map(key=>routineAreas.find(area=>area.key===key));
  const join=items=>items.length<2?items.join(''):items.slice(0,-1).join(', ')+' and '+items.at(-1);
- if(areas.every(area=>b[area.key]==='Never'))return 'You did not report social media interrupting any of the five routine areas asked about.';
+ if(areas.every(area=>b[area.key]==='Never'))return 'You did not report interruptions to the five everyday routines we asked about. This reflects your answers, not a medical assessment.';
  const parts=[];
  for(const [frequency,word] of [['Often','frequent'],['Sometimes','occasional']]){
   const matched=areas.filter(area=>b[area.key]===frequency).map(area=>area.summary);
   if(matched.length)parts.push(`${word} interruptions ${matched.length===5?'in all five routine areas':'in '+join(matched)}`);
  }
- const summary=parts.length?'You reported '+parts.join(' and ')+'.':'';
+ const reported=areas.filter(area=>b[area.key]==='Often'||b[area.key]==='Sometimes');
+ const summary=parts.length?'You reported '+parts.join(' and ')+'. '+(reported.length===5?'These cover bedtime, responsibilities, physical activity, time with people and stopping scrolling when intended. ':reported.length===1&&areas.filter(area=>b[area.key]==='Never').length===4?'You did not report interruptions in the other four routines. ':'')+'Total usage time alone does not explain these experiences.':'';
  return summary||'Your recorded routine answers are available below.';
 }
 if(typeof module!=='undefined')module.exports={nextStepRecommendation,routineSummary};
@@ -53,7 +54,7 @@ if(typeof document!=='undefined'){
  }
  more.addEventListener('click',()=>{expanded=!expanded;showPlatforms();});
  // Keep source-renderer IDs; disclosures are native and closed by default.
- const estimate=document.createElement('p');estimate.className='goal-note';estimate.textContent='These are estimates based on your answers, not automatically measured phone usage.';get('report-calculation').before(estimate);
+ const estimate=document.createElement('p');estimate.className='goal-note';estimate.textContent='These estimates reflect the time you reported, not device-measured usage. They do not tell us how much of that time was wasted.';get('platform-breakdown').before(estimate);
  document.addEventListener('checkin:complete',event=>{
   if(!event.detail.assessment)return;
   const assessment=event.detail.assessment;
@@ -65,8 +66,8 @@ if(typeof document!=='undefined'){
   root.querySelectorAll('details').forEach(detail=>{detail.open=false;});
   expanded=false;showPlatforms();
   // Replace the original detailed answer list once, using the submitted snapshot.
-  // All five answers are visible here; pre-bed context lives with sleep/activity.
-  const summary=document.createElement('p');summary.textContent=routineSummary(assessment);
+  // Full answers remain in a native disclosure; the summary stays visible.
+  get('report-routine-summary').textContent=routineSummary(assessment)+(assessment.daily===0&&selectedRoutine(assessment)?' You entered zero usage time alongside reported interruptions; these self-reported answers may refer to different experiences. No time savings are inferred.':'');
   const table=document.createElement('table');table.className='routine-answers';
   const caption=document.createElement('caption');caption.className='sr-only';caption.textContent='Your five routine answers from the past week';table.append(caption);
   const head=document.createElement('thead'),header=document.createElement('tr');
@@ -77,7 +78,7 @@ if(typeof document!=='undefined'){
    const row=document.createElement('tr'),name=document.createElement('th'),answer=document.createElement('td');
    name.scope='row';name.textContent=label;answer.textContent=assessment.behaviors?.[key]||'Not recorded';row.append(name,answer);rows.append(row);
   }
-  table.append(rows);get('review').replaceChildren(summary,table);
+  table.append(rows);get('review').replaceChildren(table);
   get('context').textContent='Reported age: '+assessment.age+'. Physical activity: '+goalTime(assessment.activityMinutes)+' per day. This value does not establish that social media caused reduced activity.';
   get('report-prebed-context').textContent='Social media during the hour before bedtime: '+assessment.prebed+'. This answer alone does not establish a bedtime interruption.';
   const selected=selectedRoutine(assessment);

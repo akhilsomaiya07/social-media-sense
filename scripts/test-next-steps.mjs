@@ -26,3 +26,13 @@ assert.equal(select({...allSometimes,behaviors:{...never,tasks:'Often',movement:
 assert.equal(select({daily:0,prebed:'Often',behaviors:never}).description,'');
 assert.equal(select({daily:180,prebed:'Often',behaviors:never}).title,undefined);
 console.log('PASS five optional experiment texts, equal-frequency choice, immutable snapshots and no example for all Never');
+
+for (const frequency of ['Never','Sometimes','Often']) {
+ const assessment={daily:180,age:40,behaviors:Object.fromEntries(Object.keys(never).map(key=>[key,frequency]))};
+ const summary=routineSummary(assessment);
+ assert.match(summary,frequency==='Never'?/did not report/:frequency==='Sometimes'?/occasional interruptions in all five/:/frequent interruptions in all five/);
+ if(frequency!=='Never')assert.match(summary,/Total usage time alone does not explain/);
+ assert.doesNotMatch(summary,/addicted|unhealthy|wasted/);
+}
+assert.match(routineSummary({behaviors:{...never,people:'Often'}}),/frequent interruptions in time with other people/);
+console.log('PASS everyday-balance frequency summaries and non-diagnostic wording');
