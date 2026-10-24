@@ -312,8 +312,8 @@ footer{color:#c1cee1}
 @media(forced-colors:active){#age[aria-invalid="true"],.age-warning{border-color:CanvasText}.age-warning{background:Canvas;color:CanvasText}.age-warning-icon,.age-warning-title{color:CanvasText}}
 
 
-/* Read-only report: three main sections, with secondary details at one level. */
-#result #review>p:first-of-type{font-size:16px;line-height:1.65;color:#e4eeee;margin:0 0 16px}
+/* Read-only report: three main sections and expandable supporting details. */
+#result #report-routine-summary{font-size:16px;line-height:1.65;color:#e4eeee;margin:0 0 16px}
 #result #review>h4[hidden]{display:none}
 #result #platform-ranking{list-style:none;padding-left:0;display:grid;gap:8px}
 #result #biggest-opportunity{border:0;background:none;padding:0;margin:18px 0 10px}
@@ -326,11 +326,11 @@ footer{color:#c1cee1}
 #result #report-save-note{max-width:60ch}
 #result .next-step-actions{gap:10px}
 #result #report-health .education-cards{grid-template-columns:1fr}
-@media(forced-colors:active){#result #review>p:first-of-type,#result #opportunity-title{color:CanvasText}}
+@media(forced-colors:active){#result #report-routine-summary,#result #opportunity-title{color:CanvasText}}
 
 #result #report-next>#biggest-opportunity{border:0;padding-top:0;margin-top:12px}
 
-/* Option C: visible answers and one optional example; tools remain separate. */
+/* Full routine answers and one optional example; tools remain separate. */
 #result .routine-answers{width:100%;border-collapse:collapse;table-layout:fixed;font-size:14px;line-height:1.5;margin:16px 0}
 #result .routine-answers th,#result .routine-answers td{text-align:left;vertical-align:top;padding:10px 0;border-bottom:1px solid #456365;overflow-wrap:anywhere}
 #result .routine-answers th:first-child{width:auto;padding-right:16px}
