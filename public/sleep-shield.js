@@ -11,11 +11,11 @@ function shieldVisualData(nights,persisted=true){
  const slots=Array.from({length:7},(_,i)=>validateShieldNight(nights?.[i])?nights[i]:null);
  const comparison=shieldComparison(slots),counts={Yes:0,Partly:0,No:0,unrecorded:0};
  slots.forEach(n=>counts[n?n.followed:'unrecorded']++);
- return {slots,comparison,counts,maxMinutes:Math.max(1,...slots.map(n=>n?.sleepMinutes||0)),achievement:persisted&&counts.Yes===7};
+ return {slots,comparison,counts,maxMinutes:Math.max(1,...slots.map(n=>n?.sleepMinutes||0)),achievement:false};
 }
 function shieldFeedback(night,window){
  if(!validateShieldNight(night))return null;
- if(night.followed==='Yes')return {title:'Nice work! 🎉',text:'You reported following your Sleep Shield wind-down plan. Keep building a routine that works for you.'};
+ if(night.followed==='Yes')return {title:'Wind-down plan recorded',text:'You reported following your wind-down plan. This does not establish how consistently you slept; see your multiweek sleep diary for sleep-pattern feedback.'};
  if(night.followed==='Partly')return {title:'You followed part of your plan.',text:window>15?'Would a shorter wind-down period or a different activity make it easier next time?':'Would a different activity or timing make it easier next time?'};
  return {title:"Your plan didn't quite fit this time.",text:'You reported not following your planned wind-down period. Consider adjusting the timing or choosing a different activity for next time.'};
 }
@@ -119,12 +119,12 @@ function buildSleepShield(result,root){
   const bars=add('ol',undefined,'shield-duration-bars',sleep);
   data.slots.forEach((n,i)=>{const row=add('li',undefined,undefined,bars);add('span',`Night ${i+1}`,undefined,row);const bar=add('span',undefined,'shield-duration-track',row);bar.setAttribute('aria-hidden','true');const fill=add('span',undefined,'shield-duration-fill',bar);fill.style.width=(n?n.sleepMinutes/data.maxMinutes*100:0)+'%';if(!n)bar.classList.add('unrecorded');add('strong',n?shieldDuration(n.sleepMinutes):'Not recorded',undefined,row);});
   add('p','These are the sleep durations you reported. Differences between entries do not prove that Sleep Shield changed your sleep.','goal-note',sleep);
-  achievement.hidden=!data.achievement;achievement.replaceChildren();
-  if(data.achievement){add('h4','You Followed Your Plan in All 7 Check-Ins! 🎉',undefined,achievement);add('p','You reported following your Sleep Shield plan in all seven recorded check-ins. Nice work staying committed to your chosen routine!',undefined,achievement);add('p','Based on your self-reported entries, not automatically verified behavior or seven confirmed consecutive dates.','goal-note',achievement);}
+  achievement.hidden=true;achievement.replaceChildren();
+
   if(nights.some(n=>n!==null&&!validateShieldNight(n)))add('p','Some stored entries are incomplete or invalid. They are excluded from these summaries and retained until you explicitly replace or clear them.','goal-note',charts);
   const legacy=data.slots.some(n=>n&&n.adherenceQuestion!=='wind-down-v1');
   progress.textContent=legacy?'Legacy entries answered “Did you follow your Sleep Shield?” They do not specifically confirm staying off social media throughout the wind-down period.':'';
-  if(data.achievement&&legacy)add('p',progress.textContent,'goal-note',achievement);
+
   completedList.replaceChildren();
   data.slots.forEach((n,i)=>{if(!n)return;const row=add('div',undefined,'shield-completed-row',completedList);add('p',`Night ${i+1} · ${n.followed} · ${shieldDuration(n.sleepMinutes)} · ${n.rested}`,undefined,row);
    const plan=n.plan;
