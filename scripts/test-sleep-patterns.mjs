@@ -23,7 +23,7 @@ assert.equal(analyze(rows,null,today).kind,'insufficient');
 assert.equal(analyze(rows,30,'2026-11-01').kind,'insufficient');
 assert.equal(analyze([...rows,rows[0]],30,today).kind,'insufficient');
 assert.equal(analyze(rows.map(r=>({...r,followed:'No'})),30,today).kind,'celebrate');
-assert.equal(variation([1430,10,0]),20);
+assert.equal(variation([1430,10,0]),10);
 assert.equal(ordinal('2026-02-30'),null);
 assert.equal(ordinal('2026-02-28')+1,ordinal('2026-03-01'));
 assert(!valid({...rows[0],sleepMinutes:1441}));
