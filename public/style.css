@@ -353,22 +353,3 @@ footer{color:#c1cee1}
 .shield-feedback:empty{display:none}.shield-feedback,.shield-achievement{margin:18px 0;padding:14px;border:1px solid #526b81;border-radius:10px}.shield-feedback[data-answer="Yes"],.shield-achievement{border-color:#85b7b1;background:#244c50}.shield-feedback h4,.shield-achievement h4{margin-top:0}
 @media(max-width:600px){.shield-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.shield-slot{min-height:76px}.shield-duration-bars li{grid-template-columns:48px minmax(0,1fr) 76px;gap:6px}}
 @media(forced-colors:active){.shield-slot,.shield-feedback,.shield-achievement,.shield-duration-track{border-color:CanvasText}.shield-duration-fill{background:Highlight}}
-
-/* Dated multiweek Sleep Shield diary; legacy numbered check-ins remain accessible. */
-.shield-diary{margin-top:24px;padding-top:20px;border-top:1px solid #526b81}
-.shield-diary-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}
-.shield-diary-form label{display:grid;gap:6px;min-width:0}
-.shield-diary-form label input,.shield-diary-form label select,.shield-diary-form label textarea{min-width:0;width:100%}
-.shield-diary-actions,.shield-diary-form .shield-error{grid-column:1/-1}
-.shield-diary-actions{display:flex;flex-wrap:wrap;gap:10px}
-.shield-pattern-feedback{border:1px solid #526b81;border-radius:10px;padding:14px;margin:16px 0}
-.shield-pattern-feedback[data-kind="celebrate"]{border-color:#85b7b1;background:#244c50}
-.shield-pattern-chart{margin:20px 0}
-.shield-pattern-duration{display:grid;gap:6px;max-height:360px;overflow:auto}
-.shield-pattern-night{display:grid;grid-template-columns:55px minmax(0,1fr) 94px;gap:8px;align-items:center;font-size:12px}
-.shield-pattern-night strong{font-size:12px;text-align:right}
-.shield-pattern-table{border-collapse:collapse;width:100%;font-size:13px}
-.shield-pattern-table td,.shield-pattern-table th{padding:8px;border-bottom:1px solid #526b81;text-align:left}
-.shield-diary-list{display:grid;gap:10px}
-@media(max-width:600px){.shield-diary-form{grid-template-columns:minmax(0,1fr)}.shield-pattern-night{grid-template-columns:44px minmax(0,1fr) 84px;gap:5px}}
-@media(forced-colors:active){.shield-pattern-feedback{border-color:CanvasText}}

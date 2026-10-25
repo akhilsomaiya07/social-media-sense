@@ -78,8 +78,6 @@ These tools can be opened from **My Tools** without first completing the assessm
 
 Set a planned bedtime, choose a **15-, 30-, 45- or 60-minute** social media wind-down window, and select a replacement activity. The tool displays the planned cutoff and can track **seven nights** of self-reported adherence, sleep and how rested the person felt. Saved plans and night entries remain in the browser. **It does not promise better sleep or prove causation.**
 
-The separate **Multiweek Sleep Diary** records dated, self-reported sleep duration, rested feeling, and optional actual sleep/wake times and interruptions. It shows a 28-night duration overview, timing entries, and a rolling two-week reflection. A sustained-pattern acknowledgment requires 14 recent, consecutive recorded nights meeting the app's transparent educational checks; answering Yes to a wind-down plan alone does not earn it. The original seven numbered check-ins are retained as legacy history, not converted to invented dates. This is not a medical sleep assessment.
-
 ### Reduction Goal ,  test a hypothetical target
 
 For a current or saved baseline reporting **more than 120 minutes per day**, explore a target reduction and view **before-versus-after time projections** for a day, week, 30-day month and 365-day year. I use the 120-minute rule only to decide when the optional calculator is available. It's not a health limit. Changing the slider does not mean time has actually been recovered, and saving a goal is a separate action.
