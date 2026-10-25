@@ -37,3 +37,22 @@ view.build=result=>{builds++;node.draft='retained';assert.equal(result,null);};v
 listeners['view:before']({detail:{view:'shield'}});listeners['view:before']({detail:{view:'shield'}});assert.equal(builds,1);assert.equal(node.draft,'retained');
 view.change=()=>contextChanges++;vm.runInContext('shieldRefreshContext=change',view);view.result={reasons:[]};const snapshot=JSON.stringify(view.result);vm.runInContext('renderSleepShield(result)',view);assert.equal(contextChanges,1);assert.equal(builds,1);assert.equal(node.draft,'retained');assert.equal(JSON.stringify(view.result),snapshot);
 console.log('PASS standalone Sleep Shield initialization, no duplicate build, retained draft and separate assessment context');
+
+const entry=(answer='Yes',minutes=450,extra={})=>({...night(answer,minutes),...extra});
+const seven=()=>Array.from({length:7},()=>entry());
+assert.equal(api.shieldVisualData([]).counts.unrecorded,7);
+assert.equal(api.shieldVisualData(seven()).achievement,true);
+assert.equal(api.shieldVisualData(seven(),false).achievement,false);
+for(const last of [entry('Partly'),entry('No'),null,{followed:'Yes'},entry('Yes',1441)])assert.equal(api.shieldVisualData([...seven().slice(0,6),last]).achievement,false);
+for(const answer of ['Partly','No'])assert.equal(api.shieldVisualData(seven().map(()=>entry(answer))).achievement,false);
+const mixed=api.shieldVisualData([entry('Yes',0),entry('Partly',1440),entry('No',300),null]);
+assert.equal(mixed.counts.Yes,1);assert.equal(mixed.counts.Partly,1);assert.equal(mixed.counts.No,1);assert.equal(mixed.counts.unrecorded,4);assert.equal(mixed.maxMinutes,1440);assert.equal(mixed.slots[0].sleepMinutes,0);assert.equal(mixed.slots[3],null);
+assert.equal(api.shieldVisualData(Array(7).fill({followed:'Yes',sleepMinutes:'450',rested:'Rested',note:''})).comparison.complete,0);
+assert.match(api.shieldFeedback(entry('Yes'),30).title,/Nice work/);
+assert.doesNotMatch(JSON.stringify(api.shieldFeedback(entry('Partly'),15)),/shorter|Nice work|🎉/);
+assert.match(api.shieldFeedback(entry('Partly'),30).text,/shorter/);
+assert.doesNotMatch(JSON.stringify(api.shieldFeedback(entry('No'),15)),/Nice work|🎉/);
+assert.equal(api.shieldFeedback(null,30),null);
+const differing=seven().map((n,i)=>({...n,recordedAt:'2026-01-15T12:00:00Z',plan:{bedtime:'23:00',window:[15,30,45,60][i%4],activity:'Read'}}));
+const original=JSON.stringify(differing);assert(api.shieldVisualData(differing).achievement);assert.equal(JSON.stringify(differing),original);
+console.log('PASS seven-slot charts, all achievement exclusions, valid zero/high sleep, legacy/differing plans, immutable data and minimum-window feedback');

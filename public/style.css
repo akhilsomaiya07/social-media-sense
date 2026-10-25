@@ -343,3 +343,13 @@ footer{color:#c1cee1}
 #result #report-health-details .report-health-topic>h4{font-size:15px}
 #result #report-health-details>summary{font-size:14px}
 @media(forced-colors:active){#result .routine-answers th,#result .routine-answers td{color:CanvasText;border-color:CanvasText}}
+
+/* Sleep Shield: self-reported seven-slot charts, with visible text values. */
+.shield-chart{margin:20px 0}.shield-status-grid{list-style:none;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.shield-slot{display:flex;flex-direction:column;gap:8px;padding:10px 6px;border:1px solid #526b81;border-radius:8px;font-size:12px;overflow-wrap:anywhere;background:#243b50}
+.shield-slot[data-status="Yes"]{background:#244c50;border-color:#85b7b1}.shield-slot[data-status="Partly"]{background:#414260;border-style:dashed}.shield-slot[data-status="No"]{background:#303f54}.shield-slot[data-status="Unrecorded"]{background:transparent;border-style:dotted}
+.shield-duration-bars{list-style:none;padding:0;display:grid;gap:12px}.shield-duration-bars li{display:grid;grid-template-columns:52px minmax(0,1fr) 85px;align-items:center;gap:8px;font-size:13px}.shield-duration-bars strong{font-size:12px;text-align:right}
+.shield-duration-track{height:14px;border:1px solid #526b81;border-radius:4px;overflow:hidden;background:#243b50}.shield-duration-track.unrecorded{border-style:dotted;background:transparent}.shield-duration-fill{display:block;height:100%;background:#94c6c1}
+.shield-feedback:empty{display:none}.shield-feedback,.shield-achievement{margin:18px 0;padding:14px;border:1px solid #526b81;border-radius:10px}.shield-feedback[data-answer="Yes"],.shield-achievement{border-color:#85b7b1;background:#244c50}.shield-feedback h4,.shield-achievement h4{margin-top:0}
+@media(max-width:600px){.shield-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.shield-slot{min-height:76px}.shield-duration-bars li{grid-template-columns:48px minmax(0,1fr) 76px;gap:6px}}
+@media(forced-colors:active){.shield-slot,.shield-feedback,.shield-achievement,.shield-duration-track{border-color:CanvasText}.shield-duration-fill{background:Highlight}}
