@@ -15,7 +15,7 @@ function shieldVisualData(nights,persisted=true){
 }
 function shieldFeedback(night,window){
  if(!validateShieldNight(night))return null;
- if(night.followed==='Yes')return {title:'Wind-down plan recorded',text:'You reported following your wind-down plan. This does not establish how consistently you slept; see your multiweek sleep diary for sleep-pattern feedback.'};
+ if(night.followed==='Yes')return {title:'Night check-in saved',text:'You reported following your wind-down plan for this night. Your sleep duration and how rested you felt are available under View My Progress.'};
  if(night.followed==='Partly')return {title:'You followed part of your plan.',text:window>15?'Would a shorter wind-down period or a different activity make it easier next time?':'Would a different activity or timing make it easier next time?'};
  return {title:"Your plan didn't quite fit this time.",text:'You reported not following your planned wind-down period. Consider adjusting the timing or choosing a different activity for next time.'};
 }

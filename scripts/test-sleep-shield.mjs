@@ -48,7 +48,9 @@ for(const answer of ['Partly','No'])assert.equal(api.shieldVisualData(seven().ma
 const mixed=api.shieldVisualData([entry('Yes',0),entry('Partly',1440),entry('No',300),null]);
 assert.equal(mixed.counts.Yes,1);assert.equal(mixed.counts.Partly,1);assert.equal(mixed.counts.No,1);assert.equal(mixed.counts.unrecorded,4);assert.equal(mixed.maxMinutes,1440);assert.equal(mixed.slots[0].sleepMinutes,0);assert.equal(mixed.slots[3],null);
 assert.equal(api.shieldVisualData(Array(7).fill({followed:'Yes',sleepMinutes:'450',rested:'Rested',note:''})).comparison.complete,0);
-assert.match(api.shieldFeedback(entry('Yes'),30).title,/recorded/);
+assert.equal(api.shieldFeedback(entry('Yes'),30).title,'Night check-in saved');
+assert.match(api.shieldFeedback(entry('Yes'),30).text,/View My Progress/);
+assert.doesNotMatch(JSON.stringify(api.shieldFeedback(entry('Yes'),30)),/multiweek|diary|sleep-pattern|🎉/i);
 assert.doesNotMatch(JSON.stringify(api.shieldFeedback(entry('Partly'),15)),/shorter|Nice work|🎉/);
 assert.match(api.shieldFeedback(entry('Partly'),30).text,/shorter/);
 assert.doesNotMatch(JSON.stringify(api.shieldFeedback(entry('No'),15)),/Nice work|🎉/);
