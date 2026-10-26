@@ -9,7 +9,7 @@ const output=path.resolve(root,process.env.SCREENSHOT_DIR||'artifacts/screenshot
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 await fs.mkdir(output,{recursive:true});
 // Remove only outputs this script owns; a failed run cannot retain a stale gallery.
-const names=['homepage','assessment-step-1','assessment-step-2','assessment-step-2-sliders','assessment-step-3','assessment-step-4','assessment-step-5','results-report','results-insights','results-next-steps','my-tools','sleep-shield','sleep-shield-tracking','reduction-goal','reduction-savings','progress','progress-comparison'];
+const names=['homepage','assessment-step-1','assessment-step-2','assessment-step-2-sliders','assessment-step-3','assessment-step-4','assessment-step-5','results-report','results-insights','results-next-steps','my-tools','sleep-shield','sleep-shield-tracking','sleep-tracker-seven-night-summary','reduction-goal','reduction-savings','progress','progress-comparison'];
 const reportReviews=['no-preference','reduce'].flatMap(mode=>[320,390,768,1280].map(width=>`report-${width}-${mode}.png`));
 for(const name of [...reportReviews,...names.map(n=>n+'.png'),'mobile-results.png','manifest.json','failure.png','failure.txt'])await fs.rm(path.join(output,name),{force:true});
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:process.env.CHROMIUM_PATH?['--no-sandbox','--disable-dev-shm-usage','--use-gl=angle','--use-angle=swiftshader','--disable-gpu-sandbox']:[]});
@@ -100,6 +100,20 @@ try{
  await page.fill('#shield-bedtime','23:00');await page.selectOption('#shield-window','30');await page.selectOption('#shield-activity','Read');await page.click('#shield-use');await capture('sleep-shield',['#sleep-shield']);
  await page.click('#shield-track');await page.locator('.shield-night select').nth(0).selectOption('Yes');await page.getByLabel('Sleep hours',{exact:true}).fill('7');await page.getByLabel('Sleep minutes',{exact:true}).fill('45');await page.locator('.shield-night select').nth(1).selectOption('Rested');
  await capture('sleep-shield-tracking',['.shield-night']);await page.getByRole('button',{name:'Save night',exact:true}).click();
+ // Record six more nights in the isolated synthetic browser profile; no production data is read or written.
+ await page.getByRole('button',{name:'Close check-in',exact:true}).click();
+ for(let night=2;night<=7;night++){
+  await page.click('#shield-track');
+  await page.locator('.shield-night select').nth(0).selectOption('Yes');
+  await page.getByLabel('Sleep hours',{exact:true}).fill('8');
+  await page.getByLabel('Sleep minutes',{exact:true}).fill('0');
+  await page.locator('.shield-night select').nth(1).selectOption('Rested');
+  await page.getByRole('button',{name:'Save night',exact:true}).click();
+  await page.getByRole('button',{name:'Close check-in',exact:true}).click();
+ }
+ assert.equal(await page.locator('#shield-sleep-summary').getAttribute('data-outcome'),'positive','seven-night summary should be positive with seven suitable synthetic entries');
+ assert.match(await page.locator('#shield-sleep-summary').innerText(),/7.*check-ins|Nice Work Making Time for Sleep/i);
+ await capture('sleep-tracker-seven-night-summary',['#shield-sleep-summary']);
  await hub();await tool('reduction');await page.locator('#goal-reduction').fill('30');await capture('reduction-goal',['#reduction-screen']);
  await page.locator('#report-goal-breakdown > summary').click();await capture('reduction-savings',['#report-goal-breakdown']);
  assert.equal(await page.locator('#goal-year').textContent(),'182.5');
