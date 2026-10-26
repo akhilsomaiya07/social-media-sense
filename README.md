@@ -90,11 +90,11 @@ Explicitly save summary values and compare later entries for estimated usage, pl
 
 These are **real browser screenshots** captured with fictional answers. They are not generated interface mockups or personal user records. They demonstrate the actual assessment, report and optional tools.
 
-The gallery combines reviewed captures from different development stages. The homepage and age examples were reviewed on October 22, 2026; other screenshots may not reflect the most recent Sleep Tracker or report wording. They are examples of real UI, not evidence that every later update has been visually recaptured. The age-validation examples show the supported **15 to 100** range.
+These screenshots come from the actual application using synthetic check-ins in an isolated browser. They cover the five assessment steps, report sections and the separate tools, including the seven-night Sleep Tracker summary. Each image keeps its natural proportions. The age-validation examples show the supported **15 to 100** range. See the screenshot manifest for capture details; browser-generated examples are not personal user records.
 
 ### Homepage
 
-[![Current Social Media Sense homepage](docs/screenshots/homepage.webp)](docs/screenshots/homepage.webp)
+[![Current Social Media Sense homepage](docs/screenshots/homepage.png)](docs/screenshots/homepage.png)
 
 ### Step 1: Age and the warning message
 
@@ -144,11 +144,15 @@ The red warning explains the requirement and keeps the user on Step 1. It is a v
 
 [![My Tools overview](docs/screenshots/my-tools.png)](docs/screenshots/my-tools.png)
 
-**Sleep Tracker (earlier capture; refresh pending)**
+**Sleep Tracker — the wind-down plan and seven-night check-ins**
 
-[![Sleep Tracker bedtime plan](docs/screenshots/sleep-shield.png)](docs/screenshots/sleep-shield.png)
+[![Sleep Tracker bedtime plan](docs/screenshots/sleep-tracker.png)](docs/screenshots/sleep-tracker.png)
 
-[![Sleep Tracker night-tracking form](docs/screenshots/sleep-shield-tracking.png)](docs/screenshots/sleep-shield-tracking.png)
+[![Sleep Tracker night-tracking form](docs/screenshots/sleep-tracker-tracking.png)](docs/screenshots/sleep-tracker-tracking.png)
+
+**Seven-Night Sleep Summary**
+
+[![The seven-night Sleep Tracker summary with fictional completed check-ins](docs/screenshots/sleep-tracker-seven-night-summary.png)](docs/screenshots/sleep-tracker-seven-night-summary.png)
 
 **Reduction Goal**
 
