@@ -66,7 +66,7 @@ After Step 5, the app displays a short loading transition, followed by **only th
 
 **2. Your Personal Insights.** A summary of the person's reported routine, **One Place to Start** when relevant, and general sleep context. A **Sometimes** or **Often** answer flags an observation for reflection. If every routine answer is **Never**, the report acknowledges that no disruption was reported within these questions; it does not certify that the behavior is risk-free. A conditional balance celebration is available for eligible results.
 
-**3. Your Next Steps.** One optional suggestion based on the actual answers, along with ways to save the check-in, explore tools and inspect educational sources. Reported bedtime interference takes priority for **Sleep Shield**. Other disruption may lead to **Reduction Goal** when the usage-based eligibility rule is met; otherwise **Progress** remains an option. The two-hour reference alone is not used to diagnose or label someone.
+**3. Your Next Steps.** One optional suggestion based on the actual answers, along with ways to save the check-in, explore tools and inspect educational sources. Reported bedtime interference takes priority for **Sleep Tracker**. Other disruption may lead to **Reduction Goal** when the usage-based eligibility rule is met; otherwise **Progress** remains an option. The two-hour reference alone is not used to diagnose or label someone.
 
 I kept the report read-only. Moving a goal slider or tracking a night of sleep doesn't change the original answers. A new assessment creates a new report.
 
@@ -74,23 +74,23 @@ I kept the report read-only. Moving a goal slider or tracking a night of sleep d
 
 These tools can be opened from **My Tools** without first completing the assessment. They are separate from the report.
 
-### Sleep Shield ,  explore a bedtime routine
+### Sleep Tracker — plan a bedtime wind-down
 
-Set a planned bedtime, choose a **15-, 30-, 45- or 60-minute** social media wind-down window, and select a replacement activity. The tool displays the planned cutoff and can track **seven nights** of self-reported adherence, sleep and how rested the person felt. Saved plans and night entries remain in the browser. **It does not promise better sleep or prove causation.**
+Set a planned bedtime, choose a **15-, 30-, 45- or 60-minute** social media wind-down window, and select a replacement activity. The tool displays the planned cutoff and lets people record up to **seven self-reported night check-ins**, including whether they followed the wind-down, sleep duration, how rested they felt, and an optional note. Nights can be edited or cleared. A **Seven-Night Sleep Summary** appears when records are available, with encouraging or practical, non-diagnostic feedback based on what was entered. These are seven numbered check-ins, not a verified sequence of seven calendar nights. Saved plans and night entries remain in the browser. **It does not promise better sleep or prove causation.**
 
-### Reduction Goal ,  test a hypothetical target
+### Reduction Goal — explore a hypothetical target
 
 For a current or saved baseline reporting **more than 120 minutes per day**, explore a target reduction and view **before-versus-after time projections** for a day, week, 30-day month and 365-day year. I use the 120-minute rule only to decide when the optional calculator is available. It's not a health limit. Changing the slider does not mean time has actually been recovered, and saving a goal is a separate action.
 
-### Progress ,  save and compare check-ins
+### Progress — save and compare check-ins
 
-Explicitly save summary values and compare later entries for estimated usage, platforms, sleep, activity and routine responses. Saved check-ins are **summaries, not historical copies of the entire report or its research**. Clearing saved check-ins also removes their linked reduction goals; Sleep Shield records remain separate.
+Explicitly save summary values and compare later entries for estimated usage, platforms, sleep, activity and routine responses. Saved check-ins are **summaries, not historical copies of the entire report or its research**. Clearing saved check-ins also removes their linked reduction goals; Sleep Tracker records remain separate.
 
 ## See the project in action
 
 These are **real browser screenshots** captured with fictional answers. They are not generated interface mockups or personal user records. They demonstrate the actual assessment, report and optional tools.
 
-The homepage below is a fresh browser capture of the current introduction. The Step 1 capture also reflects the current age range. Other unchanged screens retain their previously reviewed captures. The age-validation examples show the supported **15 to 100** range.
+The gallery combines reviewed captures from different development stages. The homepage and age examples were reviewed on October 22, 2026; other screenshots may not reflect the most recent Sleep Tracker or report wording. They are examples of real UI, not evidence that every later update has been visually recaptured. The age-validation examples show the supported **15 to 100** range.
 
 ### Homepage
 
@@ -144,11 +144,11 @@ The red warning explains the requirement and keeps the user on Step 1. It is a v
 
 [![My Tools overview](docs/screenshots/my-tools.png)](docs/screenshots/my-tools.png)
 
-**Sleep Shield**
+**Sleep Tracker (earlier capture; refresh pending)**
 
-[![Sleep Shield bedtime plan](docs/screenshots/sleep-shield.png)](docs/screenshots/sleep-shield.png)
+[![Sleep Tracker bedtime plan](docs/screenshots/sleep-shield.png)](docs/screenshots/sleep-shield.png)
 
-[![Sleep Shield night-tracking form](docs/screenshots/sleep-shield-tracking.png)](docs/screenshots/sleep-shield-tracking.png)
+[![Sleep Tracker night-tracking form](docs/screenshots/sleep-shield-tracking.png)](docs/screenshots/sleep-shield-tracking.png)
 
 **Reduction Goal**
 
@@ -168,20 +168,20 @@ I took these screenshots with fictional data and the regular offline research fa
 
 **Social Media Sense is not a medically validated questionnaire and does not diagnose addiction, anxiety, depression, sleep disorders or other conditions.** It cannot automatically read phone usage, validate that estimates are accurate, or determine that social media caused a reported routine difficulty.
 
-**No account is necessary.** Check-ins, goals and Sleep Shield data that a visitor chooses to save are stored in the **current browser's local storage**. They can be visible to someone else using the same browser profile and may disappear if browser data is cleared. There is no cross-device sync or account backup.
+**No account is necessary.** Check-ins, goals and Sleep Tracker data that a visitor chooses to save are stored in the **current browser's local storage**. They can be visible to someone else using the same browser profile and may disappear if browser data is cleared. There is no cross-device sync or account backup.
 
 **Live health information is not entirely on-device.** The browser sends limited educational context to `/api/health-information`, which the Worker validates and may pass to the configured external research service:
 
 | Research request | Context passed |
 | --- | --- |
 | Report education | Broad age group, total daily social media minutes, five routine-disruption frequencies, and relevant topic labels |
-| Sleep Shield with a current assessment | The above, plus numeric assessment age and the pre-bed social media response |
+| Sleep Tracker with a current assessment | The above, plus numeric assessment age and the pre-bed social media response |
 
 These requests do **not** include the person's nickname, platform names or individual app times, reported sleep/activity durations, planned bedtime, journal entries, saved goals or historical records. This is a statement about the application's request fields, not a guarantee regarding infrastructure logs.
 
 Health sources are selected for **educational relevance**, with attention to age applicability, possible benefits as well as risks, and the difference between association and causation. The app shows linked resources where available; live retrieval may fail or have insufficient evidence, in which case it displays previously checked fallback guidance with a notice. Sources do not imply endorsement of the project.
 
-During the 22 October 2026 deployment check, the research endpoint reported missing server-side provider configuration. The current demo therefore uses fallback education; it should not be presented as a successful live-research demonstration.
+During the October 22, 2026 check, live research could not refresh because server-side provider configuration was unavailable. That was a dated observation, not a permanent claim about the endpoint. Unless a later production request has been verified, treat the gallery as showing offline fallback education, not a successful live search.
 
 **Unsaved full reports are temporary.** Browser navigation can preserve an in-progress assessment during the current visit, but refreshing can return a person to Step 1, and opening `/results` without an active completed report will not recreate one. Only deliberately saved summary check-ins remain available through Progress.
 
@@ -213,11 +213,13 @@ npm run test:routing
 npm run test:age
 npm run screenshots
 npm run check:cloudflare
+node scripts/test-nickname-overflow.mjs
+node scripts/test-seven-night-summary.mjs
 ```
 
 `npm run screenshots` creates real captures from isolated, synthetic browser sessions under `artifacts/screenshots/`. It deliberately does **not** overwrite the reviewed images shown in this README. Images should be compared with the current UI before publication; do not stretch, fabricate or silently replace them.
 
-The screenshot-review workflow is being checked in [PR 39](https://github.com/akhilsomaiya07/social-media-sense/pull/39). Local build, regression checks and 25 real captures passed. The first CI attempt passed motion checks but reached its overall job limit after a seven-minute dependency install. The [repeat CI run](https://github.com/akhilsomaiya07/social-media-sense/actions/runs/39714017315) passed all stages with a justified longer job budget, including all 25 captures. [Review notes](docs/review/readiness-2026-10-22.md) distinguish completed tests from remaining checks.
+A [reviewed screenshot workflow](.github/workflows/screenshots.yml) generates isolated synthetic browser captures for inspection. The curated images in this README are updated only after visual review; the workflow does not silently overwrite them. The earlier [screenshot review notes](docs/SHOWCASE-REVIEW.md) and [readiness notes](docs/review/readiness-2026-10-22.md) record prior QA and should be read as dated evidence.
 
 For developers, the main files are:
 
@@ -232,10 +234,16 @@ For developers, the main files are:
 
 The repository retains a Netlify adapter, but **Cloudflare Workers is the current deployment target**.
 
+## Current verification and what's still limited
+
+In October 2026, the core five-step assessment, validation, custom platform removal, results calculations and normal mobile layouts were tested with synthetic answers. A 200-character nickname originally caused horizontal overflow; the fix was verified on the deployed Cloudflare version at **320, 375, 390 and 1366 pixels** after deployment completed. Both ordinary and empty nicknames also passed. The source build and unit tests passed. These are targeted QA results, not a certification of every device or flow.
+
+Isolated saved-history and seven-night Sleep Tracker browser scenarios were not exhaustively covered during that live QA session, because an existing browser profile might contain personal records. Screenshots and tests must use synthetic data and an isolated profile when modifying local storage. See [screenshot policy](docs/SCREENSHOTS.md) for recapture and review instructions.
+
 ## Where the project stands
 
 **I built Social Media Sense as a small, non-commercial Handshake prototype.** My focus is on explaining the idea clearly, checking that it works, and being upfront about what it cannot tell someone.
 
-I used AI-assisted coding tools while building and reviewing parts of this project. I also made decisions about its purpose, questions, layout, and boundaries. I've kept the test notes and screenshots so anyone looking at the repo can see how it works and what I checked.
+I used AI-assisted coding tools and ChatGPT Work for implementation reviews and browser QA while building this project. I also made decisions about its purpose, questions, layout, and boundaries. I've kept the test notes and screenshots so anyone looking at the repo can see how it works and what I checked.
 
 **Made with ❤️ by Akhil Somaiya**
