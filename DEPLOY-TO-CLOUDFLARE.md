@@ -2,17 +2,11 @@
 
 I host the current version on Cloudflare Workers. These are my setup notes for anyone who wants to run the same project. The Worker serves both the website and the optional health-information endpoint.
 
-This is a full-stack app. Use **Cloudflare Workers with Static Assets**, not a static-only Pages upload. The Worker serves the app and its `/api/health-information` endpoint. Both health education and Sleep Shield use that endpoint.
+This is a full-stack app. Use **Cloudflare Workers with Static Assets**, not a static-only Pages upload. The Worker serves the app and its `/api/health-information` endpoint. Both health education and Sleep Tracker use that endpoint.
 
-## 1. Upload the actual project to GitHub
+## 1. Use the current repository
 
-1. Extract the ZIP.
-2. Open the `social-media-sense` folder inside it.
-3. Upload **the contents of that folder** to your GitHub repository. Keep all subfolders intact.
-4. At the repository's top level, you should see `package.json`, `package-lock.json`, `wrangler.jsonc`, `public/`, `cloudflare/`, `lib/`, and `netlify/`.
-5. Do not upload only the README, the ZIP itself, or only `public/`. Do not upload `node_modules` or secret files.
-
-The app files are already written. No site generator is required.
+Clone or fork this repository, preserving `package.json`, `package-lock.json`, `wrangler.jsonc`, `public/`, `cloudflare/` and `lib/` at the project root. Do not commit `node_modules`, `.dev.vars`, `.env` files containing credentials or generated artifacts. The current production source is maintained on GitHub; no ZIP upload is required.
 
 ## 2. Connect the GitHub repository to Cloudflare
 
@@ -46,7 +40,7 @@ The compatibility flags in `wrangler.jsonc` expose Worker runtime bindings to `p
 
 ## 4. Test the deployed version
 
-Complete the five steps. Verify the total, results screen, and compact Sleep Shield. Open the research disclosures and confirm that current-source notices appear. If a refresh is unavailable, inspect the Worker's runtime logs or the browser's `/api/health-information` response. Do not treat fallback links as proof of a successful live retrieval.
+Complete the five steps. Verify the total, results screen, and compact Sleep Tracker. Open the research disclosures and confirm that current-source notices appear. If a refresh is unavailable, inspect the Worker's runtime logs or the browser's `/api/health-information` response. Do not treat fallback links as proof of a successful live retrieval.
 
 A GET request to `/api/health-information` returns 405 by design; the app sends a same-origin POST. A 503 with `cloudflare_research_not_configured` means runtime provider settings are missing.
 
@@ -71,11 +65,11 @@ npx wrangler login
 npm run deploy
 ```
 
-Login and deployment are actions you perform in your own Cloudflare account. This ZIP has not already been deployed.
+Login and deployment are actions you perform in your own Cloudflare account. The maintainer's version is already deployed at https://social-media-sense.akhilsomaiya7.workers.dev/; deploying a fork requires your own Cloudflare account.
 
 ## Saved information
 
-Saved assessments and Sleep Shield nights live in the browser for a particular website address. A new Cloudflare address will not automatically inherit history from your Netlify address. The export contains source code, not visitors' browser history.
+Saved assessments and Sleep Tracker nights live in the browser for a particular website address. A new Cloudflare address will not automatically inherit history from your Netlify address. The export contains source code, not visitors' browser history.
 
 ## Official references
 
