@@ -1,10 +1,11 @@
 {
   "fixture": "Synthetic Demo, age 30; 240m prior / 180m current; fixed Jan 2026 UTC dates",
   "research": "503 fixture: existing fallback guidance, no successful live retrieval",
-  "browser": "153.0.8010.0",
+  "browser": "151.0.7922.34",
+  "sourceCommit": "115df13d7782f4c5a1c865eb71989b49be30e8d9",
   "captures": [
     {
-      "file": "homepage.webp",
+      "file": "homepage.png",
       "viewport": {
         "width": 1280,
         "height": 900
@@ -19,11 +20,8 @@
         "width": 1280,
         "height": 785
       },
-      "bytes": 45456,
-      "sha256": "ebce8f310140ce1f0e8b6da13c566145e2af166e79cc227fffb94afc95815443",
-      "browser": "153.0.8010.0",
-      "reviewed": "2026-10-22",
-      "note": "Actual current-main capture; WebP compression, original dimensions retained."
+      "bytes": 684652,
+      "sha256": "fe70e89729913eeec9417f88e92a4e65eb8394fbb4f5b4c92bed5456185f4a22"
     },
     {
       "file": "assessment-step-1.png",
@@ -36,13 +34,10 @@
       ],
       "dimensions": {
         "width": 662,
-        "height": 513
+        "height": 512
       },
-      "bytes": 62737,
-      "sha256": "9e752081590c32823832432f812ca31a006859c87aa753f6abfb7d7b603c4ba3",
-      "browser": "153.0.8010.0",
-      "reviewed": "2026-10-22",
-      "note": "Replace obsolete ages 13+ screenshot with current ages 15–100."
+      "bytes": 66267,
+      "sha256": "b3238bc7cc67fd1d998ce0e69265349295e1b11bf7bcab0e7b2bc0c3effcb6d7"
     },
     {
       "file": "assessment-step-2.png",
@@ -63,8 +58,8 @@
         "width": 600,
         "height": 672
       },
-      "bytes": 63044,
-      "sha256": "2c6234df3a2e855de328a835c6647d82fce3da4a3d41c14c72f780ba1450a4da"
+      "bytes": 63798,
+      "sha256": "c5318702df24c6025a74e2f3f8e4a0273fbc3e37ab0d78c9694b99b49bd69844"
     },
     {
       "file": "assessment-step-2-sliders.png",
@@ -79,56 +74,56 @@
         "width": 580,
         "height": 693
       },
-      "bytes": 26417,
-      "sha256": "9f63b86e1e47d65e8e54e0e880cdb1b4a5f161a4cbd7bca8afebaf3147697474"
+      "bytes": 27426,
+      "sha256": "2383bbea9952f93f3eea5a850ff9c694df820d4e7b4e95aa202bc43ecaa72aac"
     },
     {
       "file": "assessment-step-3.png",
       "viewport": {
         "width": 1280,
-        "height": 1288
+        "height": 1287
       },
       "framing": [
         "#checkin"
       ],
       "dimensions": {
         "width": 662,
-        "height": 930
+        "height": 929
       },
-      "bytes": 120826,
-      "sha256": "46181113938d0458fd0766f2bcb33dacbfcb21c14d894c9a5185234c4d98f2f8"
+      "bytes": 122956,
+      "sha256": "9e0b3097b538a2b6c7701d057a6806c7fdc005e70b93edc235898ae9d5f2fd5f"
     },
     {
       "file": "assessment-step-4.png",
       "viewport": {
         "width": 1280,
-        "height": 1026
+        "height": 1025
       },
       "framing": [
         "#checkin"
       ],
       "dimensions": {
         "width": 662,
-        "height": 668
+        "height": 667
       },
-      "bytes": 88054,
-      "sha256": "add367e73205d5d4a851654d7c5c81d0aab0eead2c913a58904ff45382c8fe80"
+      "bytes": 90789,
+      "sha256": "ca3f3fee6ae842a2c43535c51476608741e43d6e0ad4de896e0eb3e0571b93f0"
     },
     {
       "file": "assessment-step-5.png",
       "viewport": {
         "width": 1280,
-        "height": 1241
+        "height": 1240
       },
       "framing": [
         "#checkin"
       ],
       "dimensions": {
         "width": 662,
-        "height": 883
+        "height": 882
       },
-      "bytes": 115175,
-      "sha256": "8596f4d9a7d4aa1237af0bb1c0bddd551d31f668c4e6b90cccb47ed5678b28dd"
+      "bytes": 115457,
+      "sha256": "06a62f0d8839168ceeee3101770a6cf77e6d904dfb9e260cc6d3185cda5464ce"
     },
     {
       "file": "results-report.png",
@@ -143,42 +138,42 @@
       ],
       "dimensions": {
         "width": 732,
-        "height": 555
+        "height": 487
       },
-      "bytes": 37838,
-      "sha256": "ce6e6c5a3e8516ec8c63aacfb48ab434f1d7f89f6af1a8c2aa40eff17498e75b"
+      "bytes": 32163,
+      "sha256": "583e1d90326899dd3f12241b173a6b834e474e641b60e52b07d6cfb3ba6d9300"
     },
     {
       "file": "results-insights.png",
       "viewport": {
         "width": 1280,
-        "height": 1334
+        "height": 900
       },
       "framing": [
         "#report-insights"
       ],
       "dimensions": {
         "width": 732,
-        "height": 609
+        "height": 157
       },
-      "bytes": 59033,
-      "sha256": "5687be27a9fb6ff4480a1a13f70bec80ae4895987d2b7875d77d7b8af6c6e936"
+      "bytes": 16710,
+      "sha256": "219b1c90cd97a0ba96edacc31119eba2689c48632d2c867aaf05270fd7a394dc"
     },
     {
       "file": "results-next-steps.png",
       "viewport": {
         "width": 1280,
-        "height": 1851
+        "height": 1513
       },
       "framing": [
         "#report-next"
       ],
       "dimensions": {
         "width": 732,
-        "height": 524
+        "height": 706
       },
-      "bytes": 36684,
-      "sha256": "aeeb75303d257e05cee50e474875cd7bc9cc70630806333a46fa1858842453f2"
+      "bytes": 65391,
+      "sha256": "485c578b009aed57f6d0cbee74d536129b8d7e84fb7f5f57e900c83fbba8bc3b"
     },
     {
       "file": "my-tools.png",
@@ -193,40 +188,56 @@
         "width": 792,
         "height": 485
       },
-      "bytes": 70544,
-      "sha256": "988933af4485c9377bd6f4297ac95540a0affc3507d4a07ee9e3c48b05accf36"
+      "bytes": 77325,
+      "sha256": "022e4938ec26af3f691af8e40121fcfbc43e5325beae43d5328d2d283e739e19"
     },
     {
-      "file": "sleep-shield.png",
+      "file": "sleep-tracker.png",
       "viewport": {
         "width": 1280,
-        "height": 951
+        "height": 1194
       },
       "framing": [
         "#sleep-shield"
       ],
       "dimensions": {
         "width": 792,
-        "height": 804
+        "height": 1047
       },
-      "bytes": 88158,
-      "sha256": "9e4eae54e7fd7be2ef7a0ed8bf178ae92e893d59ef2236dbee6d2ec4b9e881f1"
+      "bytes": 133086,
+      "sha256": "1b31775d44f23a36fbb5efdfc343928e6508b10fe081980a68565e7598a17a54"
     },
     {
-      "file": "sleep-shield-tracking.png",
+      "file": "sleep-tracker-tracking.png",
       "viewport": {
         "width": 1280,
-        "height": 1173
+        "height": 1245
       },
       "framing": [
         ".shield-night"
       ],
       "dimensions": {
         "width": 700,
-        "height": 522
+        "height": 594
       },
-      "bytes": 29018,
-      "sha256": "16c4abc7f57624e5038374bfd1d19d727e5b5ae3e5a6b468d2554c4f048b68ec"
+      "bytes": 47949,
+      "sha256": "aa52fe338f8622f20d8f6ed59d08b453769043b1f40aeec64f396149eed74a4d"
+    },
+    {
+      "file": "sleep-tracker-seven-night-summary.png",
+      "viewport": {
+        "width": 1280,
+        "height": 1142
+      },
+      "framing": [
+        "#shield-sleep-summary"
+      ],
+      "dimensions": {
+        "width": 732,
+        "height": 258
+      },
+      "bytes": 36036,
+      "sha256": "d5b9e652cc0b703d0bb131af4d8f902796e1582c53d05f871f00d62d7d866a10"
     },
     {
       "file": "reduction-goal.png",
@@ -241,8 +252,8 @@
         "width": 792,
         "height": 1155
       },
-      "bytes": 136577,
-      "sha256": "4a944d34c022916ba23c6b0c186680be2ddf5de58d660a300ff445c854870d94"
+      "bytes": 143670,
+      "sha256": "6edca7d2abb96cd3ac4d4bd7a46e9af260fbad3178b2f56f04116e25c8b6c81c"
     },
     {
       "file": "reduction-savings.png",
@@ -257,8 +268,8 @@
         "width": 732,
         "height": 411
       },
-      "bytes": 32314,
-      "sha256": "7ea1f901d0a526596df5e80776cfc63c81b3e0ece59fdcce0dc4a1fca3cb50e9"
+      "bytes": 32919,
+      "sha256": "72ff027e6c2cc117f56e726f6eef54065a0dc5fe2472b5c2a88086d86a1cad47"
     },
     {
       "file": "progress.png",
@@ -273,8 +284,8 @@
         "width": 792,
         "height": 915
       },
-      "bytes": 121891,
-      "sha256": "d1e5f71037c2285cab78c4d7a21dc522fd116c62c9349241c1347e01c322d92b"
+      "bytes": 129460,
+      "sha256": "aca52f5411b6b79043b44dbae5865638deea148cd952a447bc8f1c01527db3f1"
     },
     {
       "file": "progress-comparison.png",
@@ -289,8 +300,8 @@
         "width": 732,
         "height": 776
       },
-      "bytes": 58692,
-      "sha256": "15f7a305a51565096e338fedcc38080a1f13f17bc15d2b3c39255610fc5a1973"
+      "bytes": 59812,
+      "sha256": "62174eaa721bb4a3c7d289c30191082c309133881e18eb0c8af5f6f68629f7f4"
     }
   ]
 }
