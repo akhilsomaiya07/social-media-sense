@@ -11,9 +11,9 @@ const appViews=(()=>{
   try{const h=JSON.parse(localStorage.getItem('room.saved-checkins.v1')||'null');saved=!!h?.checkins?.length;}catch{storageProblem=true;}
   try{const p=JSON.parse(localStorage.getItem('social-media-sense.sleep-shield.v1')||'null');plan=!!p&&(validShieldBedtime(p.bedtime)||p.nights?.some(n=>validShieldBedtime(n?.plan?.bedtime)));}catch{storageProblem=true;}
   get('tools-report').hidden=!hasReport;get('home-report').hidden=!hasReport;
-  get('shield-open').textContent=plan?'Resume My Plan':'Open Sleep Shield';
+  get('shield-open').textContent=plan?'Resume My Plan':'Open Sleep Tracker';
   get('home-start').textContent=assessmentStarted&&!completed?'Continue My Check-In':hasReport?'Start a New Check-In':'Start My Check-In';
-  const note=hasReport?'Your current report is available during this visit. Save it in Progress if you want to keep its check-in values.':saved?'Saved check-ins are available in Progress. They are not complete historical assessment reports.':plan?'Your saved Sleep Shield plan is available. You do not need another assessment to resume it.':'No assessment is required to explore My Tools. Reduction Goal needs a current or saved check-in.';
+  const note=hasReport?'Your current report is available during this visit. Save it in Progress if you want to keep its check-in values.':saved?'Saved check-ins are available in Progress. They are not complete historical assessment reports.':plan?'Your saved Sleep Tracker plan is available. You do not need another assessment to resume it.':'No assessment is required to explore My Tools. Reduction Goal needs a current or saved check-in.';
   get('tools-state').textContent=storageProblem?'Some saved data could not be read. Open the relevant tool for details; nothing has been replaced.':note;
  }
  function show(view,focus=true){
