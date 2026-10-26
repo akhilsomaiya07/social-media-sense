@@ -4,6 +4,16 @@
 
 [Try the project](https://social-media-sense.akhilsomaiya7.workers.dev/) · [See what it looks like](#see-the-project-in-action) · [Run it locally](#run-it-locally)
 
+### Educational Purpose & Important Disclaimer
+
+**Social Media Sense is an educational project designed for personal reflection and awareness.**
+
+This application helps users explore their self-reported social media habits and consider how those habits fit into everyday routines, including sleep and physical activity.
+
+The results and suggestions are for **educational and informational purposes only**. They are not medical diagnoses, clinically validated assessments, or substitutes for professional health advice.
+
+The goal is to encourage thoughtful reflection—not to judge, diagnose, or determine whether someone's social media habits are healthy or unhealthy.
+
 ## What I built
 
 I made Social Media Sense as a small project for Handshake. I wanted to create something people could actually try, not just a presentation of an idea.
