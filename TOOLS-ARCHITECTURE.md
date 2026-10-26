@@ -2,7 +2,7 @@
 
 I kept the completed check-in separate from bedtime plans, reduction goals, and progress history. This document explains the storage and navigation decisions behind that choice.
 
-Home distinguishes first visits, in-memory assessment drafts, completed current reports, saved check-ins and saved Sleep Shield plans. My Tools opens Sleep Shield, Reduction Goal and Progress. Back to My Results appears only when a completed report exists in this session. Reloading never reconstructs a complete report from incomplete historical fields.
+Home distinguishes first visits, in-memory assessment drafts, completed current reports, saved check-ins and saved Sleep Tracker plans. My Tools opens Sleep Tracker, Reduction Goal and Progress. Back to My Results appears only when a completed report exists in this session. Reloading never reconstructs a complete report from incomplete historical fields.
 
 `navigation.js` controls visibility and focus/scroll restoration, not calculations. The original report DOM remains mounted while tools are open. Draft assessment edits do not mutate it; submitting a new completed assessment replaces it. Superseded research requests are still cancelled.
 
@@ -15,9 +15,9 @@ Home distinguishes first visits, in-memory assessment drafts, completed current 
 - `social-media-sense.sleep-shield.v1` keeps its schema, nights, settings and activities. Check-in deletion never touches it. Night deletion remains a separate confirmed action. Malformed stored JSON is not silently overwritten.
 - Data remains local to the browser. Clearing browser data can remove it.
 
-## Sleep Shield
+## Sleep Tracker
 
-Sleep Shield initializes once without requiring an assessment. With no submitted answers it uses labeled general verified guidance; it does not invent age or bedtime for research. A current assessment updates context without rebuilding controls or changing recorded nights. A saved plan can be resumed without another assessment or storage write. Bedtime is required only for plan activation. Night validation, editing, comparisons and midnight calculations remain unchanged.
+Sleep Tracker initializes once without requiring an assessment. With no submitted answers it uses labeled general verified guidance; it does not invent age or bedtime for research. A current assessment updates context without rebuilding controls or changing recorded nights. A saved plan can be resumed without another assessment or storage write. Bedtime is required only for plan activation. Night validation, editing, comparisons and midnight calculations remain unchanged.
 
 ## Verification
 
