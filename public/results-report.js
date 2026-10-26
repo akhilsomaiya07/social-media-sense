@@ -15,7 +15,7 @@ function nextStepRecommendation(assessment){
  const ties=routineAreas.filter(area=>assessment.behaviors?.[area.key]===selected.frequency).length;
  const choice=ties>1?'Several routines have the same reported frequency. Only you can decide which matters most to you; the example below is not a personal priority ranking.':'Only you can decide which routine matters most to you. This is one possible experiment, not a prescribed goal.';
  const example={message,choice,title:smallExperiments[selected.key].title,description:smallExperiments[selected.key].text};
- if(selected.key==='bedtime')return {...example,view:'shield',label:'Explore Sleep Shield'};
+ if(selected.key==='bedtime')return {...example,view:'shield',label:'Explore Sleep Tracker'};
  if(assessment.daily>120)return {...example,view:'reduction',label:'Explore a Reduction Goal'};
  return {...example,view:'progress'};
 }
@@ -90,7 +90,7 @@ if(typeof document!=='undefined'){
   get('opportunity-platform').hidden=true;
   get('next-step-message').hidden=!!selected;
   get('report-tool-note').hidden=!selected||nextStep.view==='progress';
-  get('report-tool-note').textContent=nextStep.view==='reduction'?'If you also want to explore a time target, Reduction Goal is available. Reducing total time is not required for this experiment.':'Sleep Shield can help you plan a cutoff. No plan is created unless you choose to save one in the tool.';
+  get('report-tool-note').textContent=nextStep.view==='reduction'?'If you also want to explore a time target, Reduction Goal is available. Reducing total time is not required for this experiment.':'Sleep Tracker can help you plan a cutoff. No plan is created unless you choose to save one in the tool.';
   get('report-bedtime-observation').hidden=true;
   if(assessment.age<18)get('sleep-context-reported').textContent='Reported nighttime sleep: '+goalTime(assessment.sleepMinutes)+'. The age reference covers a full 24-hour day.';
   get('report-health-summary').textContent='Health Information and Sources';
