@@ -5,7 +5,7 @@ import {fileURLToPath} from 'node:url';
 import {cleanInput,searchRequest} from '../lib/health.mjs';
 process.chdir(fileURLToPath(new URL('..',import.meta.url)));
 const sandbox={module:{exports:{}}};vm.createContext(sandbox);
-for(const file of ['platforms.js','app.js','sleep-shield.js'])vm.runInContext(await readFile('public/'+file,'utf8'),sandbox);
+for(const file of ['platforms.js','app.js','sleep-context.js','sleep-shield.js'])vm.runInContext(await readFile('public/'+file,'utf8'),sandbox);
 const api=sandbox.module.exports;
 assert.equal(api.shieldPlan('23:00').cutoff,'10:30 PM');
 assert.equal(api.shieldPlan('00:10',30).cutoff,'11:40 PM');assert(api.shieldPlan('00:10',30).previousDay);
@@ -58,3 +58,20 @@ assert.equal(api.shieldFeedback(null,30),null);
 const differing=seven().map((n,i)=>({...n,recordedAt:'2026-01-15T12:00:00Z',plan:{bedtime:'23:00',window:[15,30,45,60][i%4],activity:'Read'}}));
 const original=JSON.stringify(differing);assert.equal(api.shieldVisualData(differing).achievement,false);assert.equal(JSON.stringify(differing),original);
 console.log('PASS legacy seven-slot charts with no sleep success achievement, valid zero/high sleep, legacy/differing plans and minimum-window feedback');
+
+// All seven individual durations must support the summary, independently of adherence.
+const summary=api.sevenNightSleepSummary;
+const full=(minutes=480,rested='Rested')=>Array.from({length:7},(_,i)=>({...entry(['Yes','Partly','No'][i%3],minutes),rested}));
+for(const count of [0,1,6]){const r=summary(full().slice(0,count),35);assert.equal(r.kind,'neutral');assert.equal(r.complete,count);}
+assert.equal(summary(full(),35).kind,'positive');
+const short=full();short[6].sleepMinutes=300;const r=summary(short,35);assert.equal(r.kind,'advice');assert.equal(r.below,1);assert.equal(r.shortest,300);assert.equal(r.longest,480);assert.equal(r.difference,180);
+assert.equal(summary(full(300).map(n=>({...n,followed:'Yes'})),35).kind,'advice');
+assert.equal(summary(full(),35).kind,'positive');
+for(const count of [1,3]){const a=full();for(let i=0;i<count;i++)a[i].rested='Not very rested';assert.equal(summary(a,35).title,'Feeling Rested Matters Too');}
+for(const age of [undefined,null,'',14,101,35.5])assert.equal(summary(full(),age).kind,'neutral');
+assert.equal(summary(full(450),16).kind,'advice');assert.equal(summary(full(480),16).kind,'positive');assert.equal(summary(full(420),35).kind,'positive');assert.equal(summary(full(540),70).kind,'positive');assert.equal(summary(full(600),35).kind,'positive');
+assert.equal(summary(full(0),35).below,7);const bad=full();bad[0].sleepMinutes='480';assert.equal(summary(bad,35).complete,6);assert.equal(summary(bad,35).kind,'neutral');
+assert.equal(summary(full(),35,false).kind,'neutral');const interrupted=full();interrupted[0].interrupted='Yes';assert.equal(summary(interrupted,35).kind,'advice');
+const frozen=JSON.stringify(full());summary(JSON.parse(frozen),35);assert.equal(JSON.stringify(full()),frozen);
+assert.doesNotMatch(summary(full(),35).note,/verified consecutive calendar nights\.$/);assert.match(summary(full(),35).note,/not verified consecutive/);
+console.log('PASS seven-night summary: complete/invalid/missing age, all individual minimums, rested responses, adherence independence, upper ranges, zero, persistence and immutable records');
