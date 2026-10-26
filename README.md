@@ -6,7 +6,9 @@
 
 | |
 | --- |
-| **NOTE: Educational Purpose & Important Disclaimer**<br><br>Social Media Sense is an educational project designed for personal reflection and awareness.<br><br>This application helps users explore their self-reported social media habits and consider how those habits fit into everyday routines, including sleep and physical activity.<br><br>The results and suggestions are for **educational and informational purposes only**. They are not medical diagnoses, clinically validated assessments, or substitutes for professional health advice.<br><br>The goal is to encourage thoughtful reflection, not to judge, diagnose, or determine whether someone's social media habits are healthy or unhealthy. |## What I built
+| **NOTE: Educational Purpose & Important Disclaimer**<br><br>Social Media Sense is an educational project designed for personal reflection and awareness.<br><br>This application helps users explore their self-reported social media habits and consider how those habits fit into everyday routines, including sleep and physical activity.<br><br>The results and suggestions are for **educational and informational purposes only**. They are not medical diagnoses, clinically validated assessments, or substitutes for professional health advice.<br><br>The goal is to encourage thoughtful reflection, not to judge, diagnose, or determine whether someone's social media habits are healthy or unhealthy. |
+
+## What I built
 
 I made Social Media Sense as a small project for Handshake. I wanted to create something people could actually try, not just a presentation of an idea.
 
