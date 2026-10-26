@@ -29,7 +29,7 @@ README previews use a single column and width-only sizing, preserving aspect rat
 
 ## Current gallery freshness
 
-The current gallery is generated from the same source checkout as the PR that publishes it, using the screenshots workflow. A dedicated, branch-restricted screenshot refresh workflow copies successful captures to `docs/screenshots/` on the review branch for comparison before merging. This is an automation for repository documentation, not a capture from a real visitor's browser or proof of successful live research. Recheck representative images and the generated manifest before approval.
+The current gallery was generated from the source checkout for its screenshot-refresh PR, using a one-time, branch-restricted GitHub Actions run. The run copied complete synthetic browser captures to `docs/screenshots/` for review. The temporary publishing workflow was removed after the images were committed. These captures are not from real visitors' browsers and do not prove successful live research. Recheck representative images and the generated manifest before approval.
 
 ## Review and publish manually
 
@@ -45,6 +45,6 @@ The approved workflow is in `.github/workflows/screenshots.yml`. It runs on rele
 
 There is no push trigger, automatic screenshot commit, bot PR creation or deployment step. Documentation-only image changes do not retrigger capture. This prevents an image-update loop. Local checks do not establish CI success; review the run attached to each PR. Manual dispatch is available from the workflow on the default branch. Existing Cloudflare branch-preview automation is separate and may still run if a branch is published.
 
-## Public-release refresh branch
+## Screenshot refresh provenance
 
-The one-time workflow `.github/workflows/publish-screenshot-refresh.yml` runs only on its dedicated screenshot refresh branch. It checks out its own source, builds, runs the existing tests, installs Chromium, and regenerates the curated gallery with synthetic data. It commits generated image files **only to that review branch**, not directly to `main` or production. The PR must be reviewed before merging. This workflow does not read the signed-in user's browser profile or Cloudflare storage. The ordinary `screenshots.yml` workflow stays read-only.
+A one-time GitHub Actions run on the screenshot review branch generated the current gallery. Its publishing workflow was removed after capturing and committing the images; the ordinary read-only `screenshots.yml` check remains. Refreshing screenshots in the future still requires a reviewed PR. Production visitors and real saved browser records are never included in the synthetic fixtures.
