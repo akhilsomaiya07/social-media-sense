@@ -353,3 +353,7 @@ footer{color:#c1cee1}
 .shield-feedback:empty{display:none}.shield-feedback,.shield-achievement{margin:18px 0;padding:14px;border:1px solid #526b81;border-radius:10px}.shield-feedback[data-answer="Yes"],.shield-achievement{border-color:#85b7b1;background:#244c50}.shield-feedback h4,.shield-achievement h4{margin-top:0}
 @media(max-width:600px){.shield-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.shield-slot{min-height:76px}.shield-duration-bars li{grid-template-columns:48px minmax(0,1fr) 76px;gap:6px}}
 @media(forced-colors:active){.shield-slot,.shield-feedback,.shield-achievement,.shield-duration-track{border-color:CanvasText}.shield-duration-fill{background:Highlight}}
+
+/* One compact summary; the existing charts and tracker remain unchanged. */
+.shield-sleep-summary{margin:18px 0;padding:14px;border:1px solid #526b81;border-radius:10px}.shield-sleep-summary h4{margin:0 0 10px}.shield-sleep-summary p{margin:8px 0}.shield-sleep-summary-status{font-weight:600}.shield-sleep-summary[data-outcome="positive"]{border-color:#85b7b1;background:#244c50}
+@media(forced-colors:active){.shield-sleep-summary{border-color:CanvasText}}
