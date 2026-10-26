@@ -7,7 +7,7 @@
 <table>
 <tr>
 <td>
-<p align="center"><strong>NOTE: Educational Purpose &amp; Important Disclaimer</strong></p>
+<h3 align="center">NOTE: Educational Purpose &amp; Important Disclaimer</h3>
 <p align="left">Social Media Sense is an educational project designed for personal reflection and awareness. This application helps users explore their self-reported social media habits and consider how those habits fit into everyday routines, including sleep and physical activity. The results and suggestions are for educational and informational purposes only. They are not medical diagnoses, clinically validated assessments, or substitutes for professional health advice. The goal is to encourage thoughtful reflection, not to judge, diagnose, or determine whether someone's social media habits are healthy or unhealthy.</p>
 </td>
 </tr>
