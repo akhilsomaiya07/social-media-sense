@@ -4,7 +4,7 @@ import {readFile} from 'node:fs/promises';
 // Minimal DOM harness for row state, identity, events and focus; layout is browser-tested.
 let focused;
 class Node{
- constructor(tag='div'){this.tagName=tag;this.children=[];this.events={};this.attrs={};this.value='';this.hidden=false;this.style={setProperty(){}};this.classes=new Set();this.classList={add:(...v)=>v.forEach(x=>this.classes.add(x)),remove:(...v)=>v.forEach(x=>this.classes.delete(x)),toggle:(v,on)=>on?this.classes.add(v):this.classes.delete(v)};}
+ constructor(tag='div'){this.tagName=tag;this.children=[];this.events={};this.attrs={};this.value='';this.textContent='';this.hidden=false;this.style={setProperty(){}};this.classes=new Set();this.classList={add:(...v)=>v.forEach(x=>this.classes.add(x)),remove:(...v)=>v.forEach(x=>this.classes.delete(x)),toggle:(v,on)=>on?this.classes.add(v):this.classes.delete(v)};}
  append(...nodes){for(const node of nodes){node.parent=this;this.children.push(node);}}
  replaceChildren(){this.children=[];}
  remove(){this.parent.children=this.parent.children.filter(n=>n!==this);}
@@ -15,7 +15,7 @@ class Node{
  focus(){focused=this;}
  click(){this.dispatchEvent({type:'click'});}
 }
-const ids=Object.fromEntries(['platform-list','add-platform','platform-total','platform-total-wrap','platform-limit-status','platform-overage','platform-limit-error'].map(id=>[id,new Node()]));
+const ids=Object.fromEntries(['platform-list','add-platform','platform-total','platform-total-wrap','platform-limit-status','platform-overage','platform-limit-error','error'].map(id=>[id,new Node()]));
 const sandbox={document:{getElementById:id=>ids[id],createElement:tag=>new Node(tag)},window:{addEventListener(){},matchMedia:()=>({matches:true})},Event:class{constructor(type,opts={}){this.type=type;Object.assign(this,opts);}},setTimeout,clearTimeout};vm.createContext(sandbox);vm.runInContext(await readFile(new URL('../public/platforms.js',import.meta.url),'utf8'),sandbox);const ui=vm.runInContext('setupPlatformInputs()',sandbox);
 const all=(node,tag)=>node.children.flatMap(n=>[...(n.tagName===tag?[n]:[]),...all(n,tag)]);
 const custom=()=>ids['platform-list'].children.filter(n=>n.classes.has('platform-custom-row'));
@@ -28,5 +28,13 @@ const a=add('A',30),b=add('B',45),c=add('C',60);buttons(b)[0].click();assert.equ
 remove(a);const d=add('D',5);assert.equal(buttons(d)[0].attrs['aria-label'],'Remove custom platform: D');remove(c);assert.equal(custom()[0],d);
 const nodes=all(ids['platform-list'],'input'),identifiers=nodes.map(n=>n.id).filter(Boolean);assert.equal(new Set(identifiers).size,identifiers.length);
 ui.setEntries([{name:'Facebook',hours:12,minutes:0},{name:'Instagram',hours:11,minutes:0},{name:'Custom',hours:2,minutes:0}]);assert.equal(ids['platform-limit-error'].hidden,false);remove(custom()[0]);assert.equal(ids['platform-limit-error'].hidden,true);assert.match(ids['platform-total'].textContent,/23h/);
+const warning='Your entries add up to more than 24 hours in one day. Some app usage may overlap. Adjust the times so your total reflects your actual day.';
+const fixedSlider=index=>all(ids['platform-list'],'input').find(node=>node.id===`platform-${index}-time`);
+input(fixedSlider(0),1080);input(fixedSlider(1),1080);const overageRow=add('Overage',5);
+assert.equal(ids['platform-limit-error'].hidden,false);assert.equal(ids['platform-overage'].textContent,'Currently 5m over the daily limit.');
+ids.error.textContent=warning;ids.error.hidden=false;input(all(overageRow,'input')[1],0);
+assert.equal(ids['platform-limit-error'].hidden,true);assert.equal(ids['platform-overage'].hidden,true);assert.equal(ids.error.hidden,true);assert.equal(ids.error.textContent,'');assert.equal(ids['platform-total'].textContent,'Total reported social media time: 24h / 24h');
+ids.error.textContent=`${warning} Age is required.`;ids.error.hidden=false;input(all(overageRow,'input')[1],5);input(all(overageRow,'input')[1],0);assert.equal(ids.error.hidden,false);assert.equal(ids.error.textContent,'Age is required.');
+ids.error.textContent=warning;ids.error.hidden=false;input(all(overageRow,'input')[1],5);assert.equal(ids['platform-limit-error'].hidden,false);assert(ids.error.textContent.includes(warning));
 ui.setEntries([]);assert.equal(custom().length,0);ui.setEntries([{name:'Facebook',hours:1,minutes:0}]);assert.equal(custom().length,0);ui.reset();assert.equal(custom().length,1);assert.equal(ui.readEntries().length,16);assert.match(ids['platform-total'].textContent,/0m/);
 console.log('PASS custom removal, cancel/confirm, retained values, stable IDs, total/limit updates, zero-custom restoration, focus and default reset');
