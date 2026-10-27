@@ -12,10 +12,10 @@ Social Media Sense is a small Handshake portfolio prototype, not a medical asses
 
 ## Screenshot gallery
 
-- [ ] Install Chromium with `npx playwright install chromium`, then run `npm run screenshots`.
-- [ ] Examine all output in `artifacts/screenshots/`; it is generated from isolated synthetic data, **not** the production site's saved visitor records.
-- [ ] Compare each result to `docs/screenshots/` and replace curated assets only where the newer view is accurate and worth publishing.
-- [ ] Add or update a synthetic screenshot of the newer **Seven-Night Sleep Summary** (the current capture script does not include it).
+- [x] Install Chromium with `npx playwright install chromium`, then run `npm run screenshots` for the current reviewed gallery.
+- [x] Examine the output in `artifacts/screenshots/`; it is generated from isolated synthetic data, **not** the production site's saved visitor records.
+- [x] Compare the captures with `docs/screenshots/` and update curated assets only where the newer view is accurate and worth publishing.
+- [x] Confirm the capture script and curated gallery include the synthetic **Seven-Night Sleep Summary** at `docs/screenshots/sleep-tracker-seven-night-summary.png`.
 - [ ] Refresh old `sleep-shield*.png` frames if they show an obsolete visible feature name; keeping historical filenames is fine if captions are current.
 - [ ] Recheck the README on GitHub desktop and at a mobile width: no cropped headings, stretched images, broken relative links or truncated steps.
 - [ ] Review `docs/screenshots/manifest.json` to ensure file hashes, sizes and dates describe actual reviewed images; do not change metadata without recapturing.

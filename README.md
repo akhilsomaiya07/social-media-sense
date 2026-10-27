@@ -71,11 +71,11 @@ The **30-minute marker** describes a research study's combined-use reduction tar
 
 After Step 5, the app displays a short loading transition, followed by **only the completed, read-only report**. The report has three primary sections:
 
-**1. Your Social Media Snapshot.** Estimated daily and weekly totals, plus top platforms. The yearly projection and assumptions are available in expandable details. Calculations use the entered daily average: **weekly = daily × 7** and **yearly = daily × 365**. They do not represent measured historical usage.
+**1. Your Time.** Estimated daily and weekly totals, plus top platforms. The yearly projection and assumptions are available in expandable details. Calculations use the entered daily average: **weekly = daily × 7** and **yearly = daily × 365**. They do not represent measured historical usage.
 
-**2. Your Personal Insights.** A summary of the person's reported routine, **One Place to Start** when relevant, and general sleep context. A **Sometimes** or **Often** answer flags an observation for reflection. If every routine answer is **Never**, the report acknowledges that no disruption was reported within these questions; it does not certify that the behavior is risk-free. A conditional balance celebration is available for eligible results.
+**2. Your Everyday Balance.** A summary of the person's reported routine, **One optional example** when relevant, and general sleep context. A **Sometimes** or **Often** answer flags an observation for reflection. If every routine answer is **Never**, the report acknowledges that no disruption was reported within these questions; it does not certify that the behavior is risk-free. A conditional balance celebration is available for eligible results.
 
-**3. Your Next Steps.** One optional suggestion based on the actual answers, along with ways to save the check-in, explore tools and inspect educational sources. Reported bedtime interference takes priority for **Sleep Tracker**. Other disruption may lead to **Reduction Goal** when the usage-based eligibility rule is met; otherwise **Progress** remains an option. The two-hour reference alone is not used to diagnose or label someone.
+**3. Make Room for What Matters.** One optional suggestion based on the actual answers, along with ways to save the check-in, explore tools and inspect educational sources. Reported bedtime interference takes priority for **Sleep Tracker**. Other disruption may lead to **Reduction Goal** when the usage-based eligibility rule is met; otherwise **Progress** remains an option. The two-hour reference alone is not used to diagnose or label someone.
 
 I kept the report read-only. Moving a goal slider or tracking a night of sleep doesn't change the original answers. A new assessment creates a new report.
 
@@ -135,15 +135,15 @@ The red warning explains the requirement and keeps the user on Step 1. It is a v
 
 ### What the results look like
 
-**Social media snapshot**
+**Your Time**
 
 [![Daily and weekly estimates and top platforms](docs/screenshots/results-report.png)](docs/screenshots/results-report.png)
 
-**Personal insights and one place to start**
+**Your Everyday Balance**
 
-[![Personal insights and sleep context](docs/screenshots/results-insights.png)](docs/screenshots/results-insights.png)
+[![Your Everyday Balance and sleep context](docs/screenshots/results-insights.png)](docs/screenshots/results-insights.png)
 
-**Optional next steps**
+**Make Room for What Matters**
 
 [![Suggested next step, save link and educational sources](docs/screenshots/results-next-steps.png)](docs/screenshots/results-next-steps.png)
 
@@ -194,7 +194,7 @@ These requests do **not** include the person's nickname, platform names or indiv
 
 Health sources are selected for **educational relevance**, with attention to age applicability, possible benefits as well as risks, and the difference between association and causation. The app shows linked resources where available; live retrieval may fail or have insufficient evidence, in which case it displays previously checked fallback guidance with a notice. Sources do not imply endorsement of the project.
 
-During the October 22, 2026 check, live research could not refresh because server-side provider configuration was unavailable. That was a dated observation, not a permanent claim about the endpoint. Unless a later production request has been verified, treat the gallery as showing offline fallback education, not a successful live search.
+During a synthetic production check on October 26, 2026, live sources could not be refreshed; the report showed its general educational fallback. This is a dated observation, not a permanent claim about the endpoint. The README screenshots use a controlled offline fixture and do not represent a successful live search.
 
 **Unsaved full reports are temporary.** Browser navigation can preserve an in-progress assessment during the current visit, but refreshing can return a person to Step 1, and opening `/results` without an active completed report will not recreate one. Only deliberately saved summary check-ins remain available through Progress.
 
