@@ -194,7 +194,7 @@ These requests do **not** include the person's nickname, platform names or indiv
 
 Health sources are selected for **educational relevance**, with attention to age applicability, possible benefits as well as risks, and the difference between association and causation. The app shows linked resources where available; live retrieval may fail or have insufficient evidence, in which case it displays previously checked fallback guidance with a notice. Sources do not imply endorsement of the project.
 
-During the October 22, 2026 check, live research could not refresh because server-side provider configuration was unavailable. That was a dated observation, not a permanent claim about the endpoint. Unless a later production request has been verified, treat the gallery as showing offline fallback education, not a successful live search.
+During a synthetic production check on October 26, 2026, live sources could not be refreshed; the report showed its general educational fallback. This is a dated observation, not a permanent claim about the endpoint. The README screenshots use a controlled offline fixture and do not represent a successful live search.
 
 **Unsaved full reports are temporary.** Browser navigation can preserve an in-progress assessment during the current visit, but refreshing can return a person to Step 1, and opening `/results` without an active completed report will not recreate one. Only deliberately saved summary check-ins remain available through Progress.
 
