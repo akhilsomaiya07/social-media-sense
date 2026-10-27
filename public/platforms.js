@@ -86,13 +86,23 @@ function setupPlatformInputs(){
  }
  function readEntries(){return rows.map(row=>{const minutes=rowMinutes(row);return {name:row.nameInput?row.nameInput.value||'Other':row.name,hours:Math.floor(minutes/60),minutes:minutes%60};});}
  function refresh(){
+  const previousLimitMessage=get('platform-limit-error').textContent;
   for(const row of rows){if(row.remove)row.remove.setAttribute('aria-label',row.nameInput.value.trim()?`Remove custom platform: ${row.nameInput.value.trim()}`:'Remove unnamed custom platform');const minutes=rowMinutes(row),h=Math.floor(minutes/60),m=minutes%60;row.output.textContent=platformTime(minutes);row.slider.style.setProperty('--usage',`${Number(row.slider.value)/Number(row.slider.max)*100}%`);row.slider.setAttribute('aria-label',`${row.nameInput?row.nameInput.value.trim()||'Other':row.name} daily usage`);row.slider.setAttribute('aria-valuenow',String(minutes));row.slider.setAttribute('aria-valuetext',`${h} hours ${m} minutes per day`);row.previousMinutes=minutes;}
   const summary=platformSummary(readEntries());get('platform-total').textContent=summary.fieldsValid?`Total reported social media time: ${platformTime(summary.total)} / 24h`:'Total reported social media time: check the invalid app times.';
   const over=summary.fieldsValid&&summary.total>1440,near=summary.fieldsValid&&summary.total>=1200&&!over;
   get('platform-total-wrap').classList.toggle('near-limit',near);get('platform-total-wrap').classList.toggle('over-limit',over);
   get('platform-limit-status').hidden=!near;get('platform-limit-status').textContent=summary.total===1440?'At the 24-hour daily limit.':'Approaching the 24-hour daily limit.';
   get('platform-overage').hidden=!over;get('platform-overage').textContent=over?`Currently ${platformTime(summary.total-1440)} over the daily limit.`:'';
-  get('platform-limit-error').hidden=!summary.errors['platform-total'];get('platform-limit-error').textContent=summary.errors['platform-total']||'';
+  const limitError=get('platform-limit-error');limitError.hidden=!summary.errors['platform-total'];limitError.textContent=summary.errors['platform-total']||'';
+  // Remove only the stale platform-limit text from the shared alert. Other
+  // field errors may have been reported at the same time and must remain.
+  if(previousLimitMessage&&limitError.hidden){
+   const error=get('error');
+   if(error&&error.textContent.includes(previousLimitMessage)){
+    error.textContent=error.textContent.replace(previousLimitMessage,'').trim();
+    error.hidden=!error.textContent;
+   }
+  }
  }
  function reset(includeOther=true){for(const row of rows)clearReferenceFeedback(row);list.replaceChildren();rows=[];nextId=0;for(const name of socialPlatforms)addRow(name);if(includeOther)addRow('Other',true);refresh();}
  function setEntries(entries){
