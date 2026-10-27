@@ -33,7 +33,7 @@ const appSandbox={module:{exports:{}},platformSummary:sandbox.module.exports.pla
 const assessmentData=()=>({age:'30','sleep-hours':'7','sleep-minutes':'0','activity-hours':'0','activity-minutes':'0',prebed:'Never',bedtime:'Never',tasks:'Never',movement:'Never',people:'Never',longer:'Never',platforms:ui.readEntries()});
 const fixedSlider=index=>all(ids['platform-list'],'input').find(node=>node.id===`platform-${index}-time`);
 input(fixedSlider(0),1080);input(fixedSlider(1),1080);const overageRow=add('Overage',5);
-assert.equal(ids['platform-limit-error'].hidden,false);assert.equal(ids['platform-overage'].textContent,'Currently 5m over the daily limit.');
+assert.equal(ids['platform-limit-error'].hidden,false);assert.equal(ids['platform-limit-error'].textContent,warning);assert.equal(ids['platform-overage'].textContent,'Currently 5m over the daily limit.');
 assert.throws(()=>appSandbox.module.exports.calculateWithRoutine(assessmentData()),error=>error.fields['platform-total']===warning);
 ids.error.textContent=warning;ids.error.hidden=false;input(all(overageRow,'input')[1],0);
 assert.equal(ids['platform-limit-error'].hidden,true);assert.equal(ids['platform-overage'].hidden,true);assert.equal(ids.error.hidden,true);assert.equal(ids.error.textContent,'');assert.equal(ids['platform-total'].textContent,'Total reported social media time: 24h / 24h');
