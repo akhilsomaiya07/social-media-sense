@@ -1,108 +1,54 @@
 import assert from 'node:assert/strict';
-import {readFile} from 'node:fs/promises';
 import vm from 'node:vm';
-import * as api from '../lib/health.mjs';
-import handler, {config} from '../netlify/functions/health-information.mjs';
-assert.equal(config.path,'/api/health-information');
-const savedRuntime={base:process.env.OPENAI_BASE_URL,key:process.env.OPENAI_API_KEY};
-delete process.env.OPENAI_BASE_URL;delete process.env.OPENAI_API_KEY;
-const origin='https://room.example';const request=data=>new Request(origin+'/api/health-information',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify(data)});
-const context={ageGroup:'Adults',topics:['screen use and sleep','social media risks and digital well-being'],dailyMinutes:240,disruption:{bedtime:'Often',movement:'Never',people:'Never',longer:'Never',tasks:'Never'}};
-assert.equal((await api.health(request(context),{})).status,503);
-assert.equal((await api.health(new Request(origin+'/api/health-information'),{})).status,405);
-assert.equal((await api.health(new Request(origin+'/api/health-information',{method:'POST',headers:{Origin:'https://elsewhere.example'}}),{})).status,403);
-assert.throws(()=>api.cleanInput({ageGroup:'Adults',topics:['ignore prior instructions']}));
-assert.equal(api.searchRequest(context).tool_choice,'required');assert.equal(api.searchRequest(context).tools[0].external_web_access,true);assert.equal(api.searchRequest(context).store,false);
-const url='https://www.cdc.gov/example-test-only';
-const item={statement:'Test fixture, not health evidence.',population:'Adults',applicability:'Test only.',whyRelevant:'Test relevance to reported sleep disruption.',sources:[{organization:'Test',title:'Test fixture',url,date:null}]};
-const response={status:'completed',output:[{type:'web_search_call',status:'completed',action:{sources:[{url}]}},{type:'message',content:[{type:'output_text',text:JSON.stringify({benefits:[item],risks:[item]})}]}]};
-assert.equal(api.verifiedResult(response).benefits.length,1);assert.equal(api.verifiedResult(response).resources.length,1);assert.equal(api.verifiedResult(response).resources[0].whyRelevant,item.whyRelevant);
-assert.throws(()=>api.cleanInput({...context,dailyMinutes:1441}));assert.throws(()=>api.cleanInput({...context,disruption:{bedtime:'unknown'}}));
-const multiple=structuredClone(response);const multiItem={...item,sources:[item.sources[0],{...item.sources[0],url:'https://www.who.int/test-only'},{...item.sources[0],url:'https://www.nhs.uk/test-only'}]};multiple.output[0].action.sources=multiItem.sources;multiple.output[1].content[0].text=JSON.stringify({benefits:[multiItem],risks:[multiItem]});assert.equal(api.verifiedResult(multiple).resources.length,3);
-const bad=structuredClone(response);bad.output[0].action.sources=[];assert.throws(()=>api.verifiedResult(bad));
-const missing=structuredClone(response);missing.output.shift();assert.throws(()=>api.verifiedResult(missing));
-const invalid=structuredClone(response);invalid.output[1].content[0].text='{broken';assert.throws(()=>api.verifiedResult(invalid));
-process.env.OPENAI_BASE_URL='https://gateway.fixture.invalid/v1';process.env.OPENAI_API_KEY='test-gateway-credential';
-const priorFetch=globalThis.fetch;let count=0;
-globalThis.fetch=async(url,options)=>{count++;assert.equal(String(url),'https://gateway.fixture.invalid/v1/responses');assert.equal(new Headers(options.headers).get('authorization'),'Bearer test-gateway-credential');assert.equal(JSON.parse(options.body).input,JSON.stringify(context));return new Response(JSON.stringify(response),{headers:{'Content-Type':'application/json'}})};
-for(let i=0;i<2;i++)assert.equal((await api.health(request(context),{OPENAI_API_KEY:'test-fixture-key'})).status,200);assert.equal(count,2);
-globalThis.fetch=async()=>new Response('unavailable',{status:500});assert.equal((await api.health(request(context),{OPENAI_API_KEY:'test-fixture-key'})).status,503);globalThis.fetch=priorFetch;
-// Frontend test: deterministic DOM and transport fixtures, no live medical data.
-class Node{constructor(){this.children=[];this.hidden=false;this.events={}}append(...n){this.children.push(...n)}replaceChildren(){this.children=[]}setAttribute(){}addEventListener(k,f){this.events[k]=f}}
-const ids=Object.fromEntries(['checkin','education-live-status','education-benefits','education-risks','education-checked','education-age','education-fallback-note','health-resources','health-resource-list','education-benefits-more','education-risks-more','education-benefits-title','education-balance-tips','education-risks-section','health-resources-title','health-resources-intro'].map(id=>[id,new Node()]));let requested;
-const sandbox={document:{getElementById:id=>ids[id],createElement:()=>new Node(),createDocumentFragment:()=>new Node()},AbortController,URL,Date,setTimeout,clearTimeout,module:{exports:{}},fetch:async(url,options)=>{requested=JSON.parse(options.body);return {ok:true,json:async()=>({benefits:[item],risks:[item],resources:api.verifiedResult(response).resources,checkedAt:new Date().toISOString()})}}};
-vm.createContext(sandbox);vm.runInContext(await readFile('public/health-fallback.js','utf8'),sandbox);vm.runInContext(await readFile('public/education.js','utf8'),sandbox);const client=sandbox.module.exports;
-for(const [age,group] of [[15,'Adolescents'],[17,'Adolescents'],[18,'Young adults'],[29,'Young adults'],[30,'Adults'],[64,'Adults'],[65,'Older adults'],[100,'Older adults']])assert.equal(client.healthSearchContext({age,reasons:[]}).ageGroup,group);
-// Compare education's source matching against the actual assessment question definitions.
-const assessmentSandbox={module:{exports:{}}};vm.createContext(assessmentSandbox);
-vm.runInContext(await readFile('public/app.js','utf8'),assessmentSandbox);
-const questionReasons=Array.from(vm.runInContext('questions.map(({id,reason})=>({id,reason}))',assessmentSandbox));
-const topicByQuestion={bedtime:'screen use and sleep',tasks:'school work and everyday responsibilities',movement:'sedentary behavior and physical activity',people:'offline social connection and relationships',longer:'problematic or compulsive social media use'};
-assert.equal(questionReasons.length,5);
-for(const {id,reason} of questionReasons){
- for(const frequency of ['Sometimes','Often']){
-  const actual=client.healthSearchContext({age:25,daily:180,reasons:[{text:reason,frequency}]});
-  assert.equal(actual.disruption[id],frequency,`${id} ${frequency} must reach research context`);
-  assert(actual.topics.includes(topicByQuestion[id]),`${id} must select its research topic`);
-  for(const other of questionReasons)if(other.id!==id)assert.equal(actual.disruption[other.id],'Never');
- }
+import {readFile} from 'node:fs/promises';
+class Node{constructor(tag=''){this.tag=tag;this.children=[];this.hidden=false;this.attributes={}}append(...nodes){this.children.push(...nodes)}replaceChildren(...nodes){this.children=[...nodes]}setAttribute(k,v){this.attributes[k]=v}}
+const ids=Object.fromEntries(['education-live-status','education-benefits','education-risks','education-checked','education-age','education-fallback-note','health-resources','health-resource-list','education-benefits-more','education-risks-more','education-benefits-title','education-balance-tips','education-risks-section','health-resources-title','health-resources-intro'].map(id=>[id,new Node()]));
+let requests=0;const sandbox={module:{exports:{}},fetch(){requests++;throw Error('Network forbidden')},document:{getElementById:id=>ids[id],createElement:t=>new Node(t),createTextNode:t=>({textContent:t})}};
+vm.createContext(sandbox);
+for(const file of ['health-fallback','education'])vm.runInContext(await readFile(`public/${file}.js`,'utf8'),sandbox);
+const library=vm.runInContext('curatedHealthSources',sandbox),select=vm.runInContext('selectHealthResources',sandbox),render=vm.runInContext('renderLocalEducation',sandbox);
+const base={age:30,daily:180,sleep:7,activity:30,prebed:'Never',worthReviewing:false,reasons:[]};
+const original=JSON.stringify(base);
+for(const s of library){assert(s.id&&s.organization&&s.title&&s.summary&&s.population);assert.equal(new URL(s.url).protocol,'https:');assert(s.topics.length);assert.equal(s.applicableAges.length,2);assert(s.date===null||/^\d{4}(-\d{2}(-\d{2})?)?$/.test(s.date));}
+assert.equal(new Set(library.map(s=>s.id)).size,library.length);
+for(const age of [15,17,18,19,29,30,32,33,64,65,100]){
+ const result=select({...base,age});assert(result.benefits.length>=3);assert(result.risks.length>=3);
+ for(const s of result.resources)assert(age>=s.applicableAges[0]&&age<=s.applicableAges[1]);
+ assert.equal(result.resources.some(s=>s.id==='hhs-youth'),age<18);assert.equal(result.resources.some(s=>s.id==='aap-media'),age<18);assert.equal(result.resources.some(s=>s.id==='sleep-study'),age>=19&&age<=32);
+ for(const c of [...result.benefits,...result.risks])for(const s of c.sources)assert(age>=s.applicableAges[0]&&age<=s.applicableAges[1]);
+ render({...base,age});assert.equal(ids['education-live-status'].textContent,'Evidence-based educational resources');assert(!ids['education-risks-section'].hidden);assert(ids['education-checked'].hidden);
 }
-const noDisruption=client.healthSearchContext({age:25,daily:180,reasons:[]});
-for(const {id} of questionReasons)assert.equal(noDisruption.disruption[id],'Never');
-assert(!noDisruption.topics.includes(topicByQuestion.longer));
-await client.renderHealthEducation({age:30,name:'Never send this',daily:600,reasons:[{text:'You said social media kept you up later than intended.'}]});assert(requested.topics.includes('screen use and sleep'));assert.deepEqual(Object.keys(requested).sort(),['ageGroup','dailyMinutes','disruption','topics']);assert(!ids['education-checked'].hidden);assert.equal(ids['education-benefits'].children.length,1);assert(!ids['health-resources'].hidden);assert.equal(ids['health-resource-list'].children.length,1);assert.equal(requested.dailyMinutes,600);
-sandbox.fetch=async()=>({ok:false,json:async()=>({code:'not_configured'})});await client.renderHealthEducation({age:30,reasons:[]});assert.equal(ids['education-benefits'].children.length,5);assert(ids['education-checked'].hidden);assert.equal(ids['education-live-status'].textContent,'Live sources could not be refreshed right now.');
-assert.equal(ids['education-risks'].children.length,7);assert.equal(ids['education-risks'].children.filter(n=>!n.hidden).length,4);ids['education-risks-more'].onclick();assert.equal(ids['education-risks'].children.filter(n=>!n.hidden).length,7);ids['education-risks-more'].onclick();assert.equal(ids['education-risks'].children.filter(n=>!n.hidden).length,4);assert(!ids['education-fallback-note'].hidden);assert(ids['health-resources'].hidden);assert.equal(ids['health-resource-list'].children.length,0);
-sandbox.fetch=async()=>({ok:true,json:async()=>({broken:true})});await client.renderHealthEducation({age:40,reasons:[{text:questionReasons.find(q=>q.id==='longer').reason,frequency:'Often'}]});assert.equal(ids['education-risks'].children[0].children[0].textContent,'Losing track of time or scrolling longer than intended');assert(ids['education-risks'].children[0].children.some(n=>n.className==='education-personal'));
-await client.renderHealthEducation({age:70,reasons:[]});assert(ids['education-age'].textContent.includes('no routine disruption'));assert(ids['education-age'].textContent.includes('older adults'));
-sandbox.fetch=async()=>{throw new DOMException('Timed out','TimeoutError')};await client.renderHealthEducation({age:15,reasons:[]});assert.equal(ids['education-risks'].children.length,7);
-let finish;sandbox.fetch=()=>new Promise(resolve=>finish=resolve);const pending=client.renderHealthEducation({age:30,reasons:[]});const finishOld=finish;sandbox.fetch=async()=>({ok:false,json:async()=>({code:'test'})});await client.renderHealthEducation({age:30,reasons:[]});finishOld({ok:true,json:async()=>({benefits:[item],risks:[item],resources:api.verifiedResult(response).resources,checkedAt:new Date().toISOString()})});await pending;assert.equal(ids['education-benefits'].children.length,5);
-console.log('PASS: source gates, failures, age/topic privacy, fresh requests, safe rendering, stale-response cancellation. Live API retrieval remains unverified.');
-
-delete process.env.OPENAI_BASE_URL;delete process.env.OPENAI_API_KEY;
-let missingKey=await handler(request(context));assert.equal(missingKey.status,503);assert.equal((await missingKey.json()).message,'Netlify AI Gateway is not active in this function runtime.');
-process.env.OPENAI_BASE_URL='https://gateway.fixture.invalid/v1';missingKey=await handler(request(context));assert.equal(missingKey.status,503);assert.equal((await missingKey.json()).message,'Netlify AI Gateway did not provide an OpenAI credential.');
-process.env.OPENAI_API_KEY='test-runtime-rotation';process.env.OPENAI_BASE_URL='https://changed-gateway.fixture.invalid/v1';
-let routed=false;globalThis.fetch=async(url,options)=>{routed=true;assert.equal(String(url),'https://changed-gateway.fixture.invalid/v1/responses');assert.equal(new Headers(options.headers).get('authorization'),'Bearer test-runtime-rotation');return new Response(JSON.stringify(response),{headers:{'Content-Type':'application/json'}})};
-assert.equal((await handler(request(context))).status,200);assert(routed);globalThis.fetch=priorFetch;
-for(const [key,value] of [['OPENAI_BASE_URL',savedRuntime.base],['OPENAI_API_KEY',savedRuntime.key]]){if(value===undefined)delete process.env[key];else process.env[key]=value;}
-console.log('PASS: official SDK uses runtime gateway URL and credential; exact missing-variable messages; runtime changes respected.');
-const candidate=(organization,url)=>({organization,url,title:'Fixture only',date:null,whyRelevant:'Fixture',population:'Adults',applicability:'Fixture'});
-const diverse=[candidate('NIH','https://newsinhealth.nih.gov/fixture-a'),candidate('PubMed','https://pubmed.ncbi.nlm.nih.gov/fixture-b'),candidate('APA','https://www.apa.org/fixture-c'),candidate('American Psychological Association','https://www.apa.org/fixture-d'),candidate('U.S. Surgeon General','https://www.hhs.gov/fixture-e'),candidate('HHS','https://www.hhs.gov/fixture-f'),candidate('WHO','https://www.who.int/fixture-g'),candidate('NHS','https://www.nhs.uk/fixture-h'),candidate('Stanford Medicine','https://med.stanford.edu/fixture-i')];
-const chosen=api.selectDiverseResources(diverse);assert.equal(chosen.length,6);assert.equal(new Set(chosen.map(x=>api.publisherKeys(x).domain)).size,6);assert.equal(new Set(chosen.map(x=>api.publisherKeys(x).organization)).size,6);assert.deepEqual(chosen,api.selectDiverseResources(diverse));
-const insufficient=api.selectDiverseResources(diverse.slice(0,4));assert.equal(insufficient.length,4);assert.equal(api.selectDiverseResources([diverse[0],diverse[0]]).length,1);
-const fourIndependent=api.selectDiverseResources(diverse.slice(0,7));assert.equal(fourIndependent.length,4);assert.equal(new Set(fourIndependent.map(x=>api.publisherKeys(x).domain)).size,4);
-assert.equal(api.publisherKeys(candidate('HealthyChildren.org','https://www.healthychildren.org/fixture')).domain,api.publisherKeys(candidate('AAP','https://www.aap.org/fixture')).domain);
-console.log('PASS: 4–6 independent organizations when available, publisher aliases, duplicate suppression, deterministic relevance order and limited-evidence exception.');
-
-// Same time, different disruption answers: presentation follows routine impact.
-assert(client.balancedHealthPresentation({daily:240,reasons:[],worthReviewing:false}));
-assert(client.balancedHealthPresentation({daily:1200,reasons:[],worthReviewing:false}));
-assert(!client.balancedHealthPresentation({daily:240,reasons:[{frequency:'Sometimes'}],worthReviewing:true}));
-assert(!client.balancedHealthPresentation({daily:240,reasons:[],worthReviewing:true}));
-sandbox.fetch=async()=>{throw Error('offline')};
-await client.renderHealthEducation({age:40,daily:240,reasons:[],worthReviewing:false});
-assert.equal(ids['education-benefits-title'].textContent,'Potential Benefits of Social Media');
-assert(!ids['education-benefits'].hidden);assert(!ids['education-risks-section'].hidden);
-assert(!ids['education-balance-tips'].hidden);assert(!ids['health-resources'].hidden);
-assert.equal(ids['health-resources-title'].textContent,'Learn More');
-assert(ids['health-resource-list'].children.length>=1&&ids['health-resource-list'].children.length<=3);
-await client.renderHealthEducation({age:40,daily:240,reasons:[{text:'You said social media kept you up later than intended.',frequency:'Sometimes'}],worthReviewing:true});
-assert.equal(ids['education-benefits-title'].textContent,'Potential Benefits of Social Media');
-assert(!ids['education-benefits'].hidden);assert(!ids['education-risks-section'].hidden);assert(ids['education-balance-tips'].hidden);
-assert.equal(ids['health-resources-title'].textContent,'Helpful Resources for Your Results');
-console.log('PASS: balanced education, optional fallback reading, and restoration of detailed education after disruption.');
-
-sandbox.fetch=async()=>({ok:true,json:async()=>({benefits:[item],risks:[item],resources:api.verifiedResult(response).resources,checkedAt:new Date().toISOString()})});
-await client.renderHealthEducation({age:40,daily:240,reasons:[],worthReviewing:false});
-assert.equal(ids['health-resource-list'].children.length,1,'Live nodes replace fallback reading rather than appending to it');
-assert(!ids['education-risks-section'].hidden);assert(!ids['education-checked'].hidden);
-const balanceSandbox={module:{exports:{}}};vm.createContext(balanceSandbox);vm.runInContext(await readFile('public/balance.js','utf8'),balanceSandbox);
-const balanced={daily:240,behaviors:{bedtime:'Never',tasks:'Never',movement:'Never',people:'Never',longer:'Never'}};
-assert.equal(balanceSandbox.module.exports.balanceExperience(balanced),'positive');
-assert.equal(balanceSandbox.module.exports.balanceExperience({...balanced,worthReviewing:true}),'hidden');
-console.log('PASS: live sources replace fallback resources; celebration respects the concern flag.');
-
-
-
+const reasons={bedtime:'You said social media kept you up later than intended.',tasks:'You said social media interrupted your everyday responsibilities.',movement:'You said social media took time away from physical activity.',people:'You said social media took time away from people you wanted to spend time with.',longer:'You said you spent longer scrolling than you planned.'};
+for(const [topic,text] of Object.entries(reasons)){
+ const result=select({...base,worthReviewing:true,reasons:[{text,frequency:'Often'}]});assert(result.risks[0].topics.includes(topic));assert(result.risks.some(c=>c.personal.includes(text)));
+}
+assert(select(base).resources.find(s=>s.id==='cdc-sleep').whyRelevant.includes('Sleep duration'));
+assert(select(base).resources.find(s=>s.id==='cdc-activity').whyRelevant.includes('Physical activity'));
+assert(select(base).risks.every(c=>!c.personal));assert(select({...base,prebed:'Often'}).risks.every(c=>!c.personal),'Pre-bed frequency does not establish disruption');
+assert.deepEqual(select({...base,daily:0}),select({...base,daily:1440}),'Daily hours alone do not change educational concerns');
+render({...base,reasons:[{text:reasons.bedtime,frequency:'Sometimes'}],worthReviewing:true});assert(ids['education-balance-tips'].hidden);assert(ids['education-risks'].children.some(c=>c.children.some(n=>n.className==='education-personal')));
+assert.equal(JSON.stringify(base),original);assert.equal(requests,0);
+assert.equal(requests,0);
+assert(!(await readFile('public/education.js','utf8')).includes('openrouter.ai'));
+console.log('PASS local education: citation metadata, exact age boundaries, all disruption topics, sleep/activity relevance, no time-only health cutoff, immutable inputs, offline rendering');
 await import('./test-health-diagnostics.mjs');
+
+// Exercise the optional frontend request with controlled responses, never a provider.
+sandbox.AbortController=AbortController;sandbox.setTimeout=setTimeout;sandbox.clearTimeout=clearTimeout;
+const asyncRender=vm.runInContext('renderHealthEducation',sandbox);
+let sent; sandbox.fetch=async(url,options)=>{requests++;assert.equal(url,'/api/health-information');sent=JSON.parse(options.body);const data=select(base);return {ok:true,json:async()=>({mode:'ai',benefits:data.benefits.slice(0,2).map(c=>c.id),risks:data.risks.slice(0,2).map(c=>c.id)})}};
+await asyncRender({...base,name:'Must not transmit'});
+assert(!JSON.stringify(sent).includes('Must not transmit'));assert.equal(sent.age,30);
+assert.equal(ids['education-benefits'].children.length,2);assert.equal(ids['education-risks'].children.length,2);
+assert.match(ids['education-fallback-note'].textContent,/AI helped/);
+await asyncRender(base);assert.equal(requests,1,'Repeated context uses frontend cache');
+sandbox.fetch=async()=>{requests++;throw Error('offline')};
+await asyncRender({...base,age:40});assert(ids['education-benefits'].children.length>=3);assert(ids['education-risks'].children.length>=3);
+assert(!ids['education-risks-section'].hidden);
+sandbox.fetch=async()=>({ok:true,json:async()=>({mode:'ai',benefits:['invented'],risks:['invented']})});
+await asyncRender({...base,age:41});assert(ids['education-benefits'].children.length>=3,'Invalid server IDs cannot replace local cards');
+let release;sandbox.fetch=()=>new Promise(resolve=>{release=resolve});const earlier=asyncRender({...base,age:42});
+sandbox.fetch=async()=>({ok:true,json:async()=>({mode:'local'})});await asyncRender({...base,age:43});
+const before=ids['education-fallback-note'].textContent;release({ok:true,json:async()=>({mode:'ai',benefits:select(base).benefits.slice(0,2).map(c=>c.id),risks:select(base).risks.slice(0,2).map(c=>c.id)})});await earlier;
+assert.equal(ids['education-fallback-note'].textContent,before,'Stale response cannot overwrite a newer report');
+console.log('PASS frontend local-first rendering, optional success, duplicate suppression, offline/malformed fallback, no name transmission and stale-response protection');

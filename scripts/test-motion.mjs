@@ -69,7 +69,7 @@ async function finish(page){
  });
  assert.deepEqual(initial,{value:1,visible:true,reportHidden:true,disabled:true});
  await page.locator('#result').waitFor({state:'visible'});
- await page.waitForFunction(()=>document.getElementById('education-live-status').textContent.includes('could not'));
+ await page.waitForFunction(()=>document.getElementById('education-live-status').textContent.includes('Evidence-based educational resources'));
  const check=await page.evaluate(()=>({...loadingCheck,completed:motionAudit.completed,progress:motionAudit.loading.slice(loadingCheck.progressIndex)}));
  // Allow scheduling overhead, while rejecting the old 1.6s path and a long reduced-motion wait.
  assert(check.elapsed>=check.expected&&check.elapsed<check.expected+1000,`final loading ${check.elapsed.toFixed(0)}ms; expected about ${check.expected}ms`);
@@ -160,3 +160,4 @@ try{
   console.log('PASS optional motion script unavailable: native progress, navigation and report still work');
  }finally{await f.context.close();}
 }finally{await browser.close();}
+

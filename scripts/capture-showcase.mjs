@@ -78,7 +78,7 @@ async function finishAssessment(facebook,showAllSteps=false){
  for(const [key,value] of Object.entries({bedtime:'Sometimes',tasks:'Never',movement:'Never',people:'Never',longer:'Sometimes'}))await page.check(`input[name="${key}"][value="${value}"]`);
  if(showAllSteps){assert.equal(await page.locator('#questions fieldset').count(),5);await capture('assessment-step-5',['#checkin']);}
  await page.click('#flow-next');await page.locator('#result').waitFor({state:'visible'});
- await page.waitForFunction(()=>document.getElementById('education-live-status').textContent.includes('could not'));
+ await page.waitForFunction(()=>document.getElementById('education-live-status').textContent.includes('Evidence-based educational resources'));
 }
 async function begin(){await page.fill('#name','Demo');await page.fill('#age','30');await page.click('#flow-next');}
 async function hub(){await page.locator('[data-view="tools"]:visible').first().click();}
@@ -120,7 +120,8 @@ try{
  await hub();await tool('progress');assert.match(await page.locator('#progress-summary').textContent(),/60 minutes less/);await page.click('#save-checkin');await capture('progress',['#progress-screen']);
  await page.locator('#progress-details > summary').click();await capture('progress-comparison',['#progress-details']);
  assert.deepEqual(errors,[]);assert.equal(captures.length,names.length+reportReviews.length);
- await fs.writeFile(path.join(output,'manifest.json'),JSON.stringify({fixture:'Synthetic Demo, age 30; 240m prior / 180m current; fixed Jan 2026 UTC dates',research:'503 fixture: existing fallback guidance, no successful live retrieval',browser:browser.version(),captures},null,2)+'\n');
+ await fs.writeFile(path.join(output,'manifest.json'),JSON.stringify({fixture:'Synthetic Demo, age 30; 240m prior / 180m current; fixed Jan 2026 UTC dates',research:'Bundled curated educational resources; no provider requests',browser:browser.version(),captures},null,2)+'\n');
  console.log(`PASS: ${captures.length} complete section captures, isolated synthetic storage, fallback research and no overflow.`);
 }catch(error){await fs.writeFile(path.join(output,'failure.txt'),String(error.stack||error));await page.screenshot({path:path.join(output,'failure.png')}).catch(()=>{});throw error;}
 finally{await context.close();await browser.close();}
+
