@@ -1,4 +1,4 @@
-import { health } from '../lib/health.mjs';
+import { health, researchFailure } from '../lib/health.mjs';
 
 export const applicationRoutes=new Set(['/', '/check-in/about-you', '/check-in/social-media-time', '/check-in/sleep', '/check-in/physical-activity', '/check-in/daily-routine', '/results', '/tools', '/tools/sleep-shield', '/tools/reduction-goal', '/tools/progress']);
 
@@ -9,7 +9,7 @@ export default {
    // Cloudflare populates process.env from server-side bindings. No secrets in assets.
    if (request.method === 'POST' && request.headers.get('Origin') === new URL(request.url).origin) {
     if (!process.env.OPENAI_BASE_URL || !process.env.OPENAI_API_KEY) {
-     return Response.json({ code: 'cloudflare_research_not_configured', message: 'Live research requires server-side provider configuration on this Cloudflare Worker.' }, { status: 503, headers: { 'Cache-Control': 'private, no-store' } });
+     return researchFailure('cloudflare_research_not_configured',503,'Live research requires server-side provider configuration on this Cloudflare Worker.');
     }
    }
    return health(request);
