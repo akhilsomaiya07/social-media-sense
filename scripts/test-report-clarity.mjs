@@ -32,7 +32,7 @@ try{
    for(const [name,time] of c.tie?[['Facebook',30],['Instagram',30]]:[['Facebook',c.daily]])await p.getByRole('slider',{name:name+' daily usage',exact:true}).evaluate((el,m)=>{el.value=platformPosition(m);el.dispatchEvent(new Event('input',{bubbles:true}));},time);
    await p.click('#flow-next');await p.fill('#sleep-hours','7');await p.fill('#sleep-minutes','0');await p.check('[name="prebed"][value="Often"]');await p.click('#flow-next');await p.fill('#activity-hours','1');await p.fill('#activity-minutes','0');await p.click('#flow-next');
    for(const [key,value] of Object.entries(c.b))await p.check(`[name="${key}"][value="${value}"]`);
-   await p.click('#flow-next');await p.locator('#result').waitFor({state:'visible'});await p.waitForFunction(()=>document.getElementById('education-live-status').textContent.includes('could not'));
+   await p.click('#flow-next');await p.locator('#result').waitFor({state:'visible'});await p.waitForFunction(()=>document.getElementById('education-live-status').textContent.includes('Evidence-based educational resources'));
    if(!before){
     assert.deepEqual(await p.locator('#result > .report-group > h3').allTextContents(),['Your Time','Your Everyday Balance','Make Room for What Matters']);
     assert.match(await p.locator('#report-routine-summary').innerText(),c.summary);assert.equal(await p.locator('#next-step-action').getAttribute('data-view'),c.view);
@@ -58,7 +58,7 @@ try{
     const countBefore=requests,storageBefore=await p.evaluate(()=>({...localStorage}));
     await p.locator('#report-health-details > summary').press('Enter');
     assert(await p.locator('#education-benefits').isVisible());assert(await p.locator('#education-risks').isVisible());
-    assert.match(await p.locator('#education-fallback-note').innerText(),/not refreshed/);assert(!await p.locator('#education-checked').isVisible());
+    assert.match(await p.locator('#education-fallback-note').innerText(),/locally curated/);assert(!await p.locator('#education-checked').isVisible());
     assert((await p.locator('#education-benefits a[href^="https:"]').count())>0);
     assert.equal(await p.locator('#education-benefits a').first().evaluate(e=>getComputedStyle(e).color),'rgb(224, 251, 158)');
     assert.equal(await p.locator('#daily').innerText(),await p.evaluate(m=>duration(m),c.daily));
@@ -95,3 +95,4 @@ try{
  }finally{await context.close();}
  }
 }finally{await browser.close();await server.close();}
+

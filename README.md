@@ -183,24 +183,17 @@ I took these screenshots with fictional data and the regular offline research fa
 
 **No account is necessary.** Check-ins, goals and Sleep Tracker data that a visitor chooses to save are stored in the **current browser's local storage**. They can be visible to someone else using the same browser profile and may disappear if browser data is cleared. There is no cross-device sync or account backup.
 
-**Live health information is not entirely on-device.** The browser sends limited educational context to `/api/health-information`, which the Worker validates and may pass to the configured external research service:
+**Educational resources are selected on-device.** The report and Sleep Tracker use a bundled, curated library of CDC, HHS, AAP, NIH and age-appropriate peer-reviewed resources. Selection uses reported age, sleep, physical activity and routine answers without sending them to a research provider. No API key or AI service is required.
 
-| Research request | Context passed |
-| --- | --- |
-| Report education | Broad age group, total daily social media minutes, five routine-disruption frequencies, and relevant topic labels |
-| Sleep Tracker with a current assessment | The above, plus numeric assessment age and the pre-bed social media response |
+Health sources are selected for **educational relevance**, with age scope, source dates and clickable citations. Both potential benefits and possible risks remain available. The label “Evidence-based educational resources” describes reviewed educational material, not a live search or clinical validation. The library needs periodic manual review; publication dates are not assessment timestamps. Sources do not imply endorsement of the project.
 
-These requests do **not** include the person's nickname, platform names or individual app times, reported sleep/activity durations, planned bedtime, journal entries, saved goals or historical records. This is a statement about the application's request fields, not a guarantee regarding infrastructure logs.
-
-Health sources are selected for **educational relevance**, with attention to age applicability, possible benefits as well as risks, and the difference between association and causation. The app shows linked resources where available; live retrieval may fail or have insufficient evidence, in which case it displays previously checked fallback guidance with a notice. Sources do not imply endorsement of the project.
-
-During a synthetic production check on October 26, 2026, live sources could not be refreshed; the report showed its general educational fallback. This is a dated observation, not a permanent claim about the endpoint. The README screenshots use a controlled offline fixture and do not represent a successful live search.
+The existing screenshots reflect the previous fallback presentation. The current version selects local resources directly and never attempts the retired paid search endpoint.
 
 **Unsaved full reports are temporary.** Browser navigation can preserve an in-progress assessment during the current visit, but refreshing can return a person to Step 1, and opening `/results` without an active completed report will not recreate one. Only deliberately saved summary check-ins remain available through Progress.
 
 ## How I built it
 
-The frontend uses **HTML, CSS and vanilla JavaScript**. A **Cloudflare Worker** serves the static files, supports readable URLs via the History API and handles the optional research endpoint. The server-side research integration uses the official OpenAI JavaScript SDK. **Node.js, Wrangler and Playwright** support local development, validation, browser tests and screenshot reviews.
+The frontend uses **HTML, CSS and vanilla JavaScript**. A **Cloudflare Worker** serves the static files, supports readable URLs via the History API and retains a retired research endpoint for older clients. Health education runs locally without OpenAI requests. **Node.js, Wrangler and Playwright** support local development, validation, browser tests and screenshot reviews.
 
 The project uses explicit client-side validation, accessible error messages, reduced-motion support, browser route guards, immutable report presentation and local-storage boundaries. These decisions support the scope of a working prototype without adding an account system or a frontend framework.
 
@@ -215,7 +208,7 @@ npm test
 npm run dev
 ```
 
-Open the URL displayed by Wrangler. The basic assessment and fallback education do not require live research credentials. For the optional live research service, configure `OPENAI_BASE_URL` and `OPENAI_API_KEY` **only in the server runtime**; never commit credentials or expose them in frontend code.
+Open the URL displayed by Wrangler. Assessment, tools and curated health education work without API credentials. The old `/api/health-information` endpoint returns `410 research_retired` to same-origin POSTs and cannot invoke a paid provider.
 
 ### Additional checks and real screenshots
 
@@ -242,7 +235,7 @@ For developers, the main files are:
 | Interface and navigation | `public/index.html`, `public/style.css`, `public/navigation.js`, `public/routing.js` |
 | Report and educational context | `public/results-report.js`, `public/education.js`, `public/sleep-context.js` |
 | Optional tools | `public/goals.js`, `public/sleep-shield.js` |
-| Hosting and research | `cloudflare/worker.mjs`, `lib/health.mjs`, `wrangler.jsonc` |
+| Hosting and educational resources | `cloudflare/worker.mjs`, `lib/health.mjs`, `public/health-fallback.js`, `public/education.js`, `wrangler.jsonc` |
 | Tests and reviewed screenshots | `scripts/`, `docs/screenshots/`, `docs/review/` |
 
 The repository retains a Netlify adapter, but **Cloudflare Workers is the current deployment target**.
@@ -260,3 +253,4 @@ Isolated saved-history and seven-night Sleep Tracker browser scenarios were not 
 I used AI-assisted coding tools and ChatGPT Work for implementation reviews and browser QA while building this project. I also made decisions about its purpose, questions, layout, and boundaries. I've kept the test notes and screenshots so anyone looking at the repo can see how it works and what I checked.
 
 **Made with ❤️ by Akhil Somaiya**
+

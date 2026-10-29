@@ -38,9 +38,9 @@ try{
    for(const [view,path] of [['shield','/tools/sleep-shield'],['reduction','/tools/reduction-goal'],['progress','/tools/progress']]){
     await page.locator(`#tools-screen [data-view="${view}"]`).click();await expectPath(page,path);await page.goBack();await expectPath(page,'/tools');await page.goForward();await expectPath(page,path);await page.locator(`[data-view="tools"]:visible`).first().click();await expectPath(page,'/tools');
    }
-   await page.click('#tools-report');await expectPath(page,'/results');assert.equal(await page.locator('#result').innerText(),report);assert.deepEqual(await page.evaluate(()=>window.routeAudit),{complete:1,reveal:1});assert.equal(requests,callCount+1,'Sleep Shield may request its existing research once; report returns must not refresh it');assert.deepEqual(await page.evaluate(()=>Object.keys(localStorage)),[]);
+   await page.click('#tools-report');await expectPath(page,'/results');assert.equal(await page.locator('#result').innerText(),report);assert.deepEqual(await page.evaluate(()=>window.routeAudit),{complete:1,reveal:1});assert.equal(requests,callCount,'Sleep Tracker education is local; tool/report navigation must not request research');assert.deepEqual(await page.evaluate(()=>Object.keys(localStorage)),[]);
    // New draft can coexist with the prior immutable report; history cannot reset it.
-   await page.click('#start-new-checkin');await expectPath(page,paths[0]);await page.fill('#name','New Draft');await page.goBack();await expectPath(page,'/results');assert.equal(await page.locator('#result').innerText(),report);assert.equal(requests,callCount+1);await page.goForward();await expectPath(page,paths[0]);assert.equal(await page.locator('#name').inputValue(),'New Draft');await answers(page);await page.click('#flow-next');await expectPath(page,'/results');assert.equal(await page.evaluate(()=>window.routeAudit.complete),2);assert.match(await page.locator('#result-title').textContent(),/New Draft/);
+   await page.click('#start-new-checkin');await expectPath(page,paths[0]);await page.fill('#name','New Draft');await page.goBack();await expectPath(page,'/results');assert.equal(await page.locator('#result').innerText(),report);assert.equal(requests,callCount);await page.goForward();await expectPath(page,paths[0]);assert.equal(await page.locator('#name').inputValue(),'New Draft');await answers(page);await page.click('#flow-next');await expectPath(page,'/results');assert.equal(await page.evaluate(()=>window.routeAudit.complete),2);assert.match(await page.locator('#result-title').textContent(),/New Draft/);
    // Refresh cannot manufacture a full report from saved summaries.
    await page.reload();await expectPath(page,'/');assert.match(await page.locator('#route-notice').textContent(),/full report is not available/);assert(await page.locator('#result').isHidden());
    for(const path of paths){await page.goto(server.origin+path);await expectPath(page,paths[0]);assert.equal(await page.locator('#age').inputValue(),'');}
@@ -57,3 +57,4 @@ try{
   }catch(error){await page.screenshot({path:`${output}/failure-${width}.png`}).catch(()=>{});throw error;}finally{await context.close();}
  }
 }finally{await browser.close();await server.close();}
+

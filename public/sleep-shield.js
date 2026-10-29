@@ -38,7 +38,7 @@ function shieldFeedback(night,window){
  return {title:"Your plan didn't quite fit this time.",text:'You reported not following your planned wind-down period. Consider adjusting the timing or choosing a different activity for next time.'};
 }
 function shieldOpportunity(result){const late=result.reasons.find(r=>r.text==='You said social media kept you up later than intended.');if(!late&&['Sometimes','Often'].includes(result.prebed))return {heading:'Create a screen-free wind-down',text:`You reported using social media ${result.prebed.toLowerCase()} during the hour before bed. This experiment focuses on that bedtime habit; it does not assume it caused your reported sleep amount.`};if(!result.reasons.length)return {heading:'Keep your current bedtime routine',text:'Your answers do not currently suggest much bedtime disruption from social media. Sleep Tracker can help you maintain that routine.'};if(late)return {heading:late.frequency==='Often'?'Reduce late-night scrolling':'Protect your bedtime',text:`You reported that social media ${late.frequency.toLowerCase()} keeps you awake later than intended. Late-night social media may be one area worth reviewing.`};return {heading:result.prebed==='Never'?'Keep your current bedtime routine':'Create a screen-free wind-down',text:'You did not report social media keeping you up later than intended. You can use this plan as a practical way to protect your bedtime routine.'};}
-let shieldResearchId=0,shieldResearchAbort;
+
 function validShieldBedtime(value){return typeof value==='string'&&/^([01]\d|2[0-3]):[0-5]\d$/.test(value);}
 function savedShieldBedtime(stored,result){
  const candidates=[stored.bedtime,result?.sleepBedtime,...(Array.isArray(stored.nights)?stored.nights.slice().reverse().map(n=>n?.plan?.bedtime):[])];
@@ -192,20 +192,20 @@ function buildSleepShield(result,root){
   contextResult=next;summaryAge=next?.age;
   renderSleepSummary();
   whyDescription.textContent=next?shieldOpportunity(next).text:'Choose a wind-down period that fits your routine. No assessment is required to make or resume a plan.';
-  researchContextNote.textContent=next?`Research context: your completed check-in, with ${shieldDuration(Math.round(next.sleep*60))} reported sleep per night. Live research uses your age, daily social media time and frequency answers. Plan details and recorded nights are not sent.`:'No current assessment is available. The guidance below is general; no age, sleep duration or disruption answers have been assumed.';
+  researchContextNote.textContent=next?`Research context: your completed check-in, with ${shieldDuration(Math.round(next.sleep*60))} reported sleep per night. Educational resources are selected locally using your age and answers. Plan details and recorded nights are not sent.`:'No current assessment is available. The guidance below is general; no age, sleep duration or disruption answers have been assumed.';
   loadShieldResearch(next,research,el);
  }
  shieldSummaryReset=()=>{summaryAge=undefined;renderSleepSummary();};
  shieldRefreshContext=refreshContext;refreshContext(result);
 }
 
-async function loadShieldResearch(result,root,el){
- const id=++shieldResearchId;shieldResearchAbort?.abort();const controller=new AbortController();shieldResearchAbort=controller;const timeout=setTimeout(()=>controller.abort(),50000);
- function fallback(notice){root.replaceChildren(el('p',notice,'goal-note'));const p=el('p','Previously verified general guidance: CDC includes switching off electronic devices before bedtime among its sleep-habit tips. This is general education, not a personalized sleep-duration recommendation.','goal-note'),a=el('a','CDC · About Sleep · Read Source');a.href='https://www.cdc.gov/sleep/about/index.html';a.target='_blank';a.rel='noopener noreferrer';root.append(p,a);}
- if(!result){fallback('General guidance from previously verified sources. Complete a check-in for personalized research context.');clearTimeout(timeout);return;}
- fallback('Checking current sleep sources…');
- try{const context=healthSearchContext(result);const response=await fetch('/api/health-information',{method:'POST',headers:{'Content-Type':'application/json'},cache:'no-store',signal:controller.signal,body:JSON.stringify({...context,sleepShield:{age:result.age,prebed:result.prebed}})});const data=await response.json();if(id!==shieldResearchId)return;if(!response.ok||!Array.isArray(data.benefits)||!data.benefits.length||!Array.isArray(data.risks)||!Number.isFinite(Date.parse(data.checkedAt)))throw Error('Unavailable');const fragment=document.createDocumentFragment();fragment.append(el('p','Current sleep sources checked for this assessment · '+new Date(data.checkedAt).toLocaleString(),'goal-note'));const items=result.reasons.length?[...data.benefits,...data.risks].slice(0,4):data.benefits.slice(0,3);for(const item of items){if(typeof item.statement!=='string'||typeof item.population!=='string'||typeof item.applicability!=='string'||!Array.isArray(item.sources)||!item.sources.length)throw Error('Malformed');const card=el('div',undefined,'shield-research-card');card.append(el('p',item.statement),el('p',`Evidence population: ${item.population}. ${item.applicability}`,'goal-note'));for(const s of item.sources){const url=new URL(s.url);if(url.protocol!=='https:'||typeof s.organization!=='string'||typeof s.title!=='string')throw Error('Malformed source');card.append(el('p',`${s.organization} — ${s.title}${s.date?' · '+s.date:' · Date not available'}`,'goal-note'));const a=el('a','Read Source');a.href=url.href;a.target='_blank';a.rel='noopener noreferrer';card.append(a);}fragment.append(card);}root.replaceChildren(fragment);}catch{if(id===shieldResearchId)fallback('Live sleep research could not be refreshed right now.');}finally{clearTimeout(timeout);}
+function loadShieldResearch(result,root,el){
+ root.replaceChildren(el('p','Evidence-based educational resources','goal-note'));
+ const items=selectHealthResources(result).resources.filter(s=>s.topics.includes('sleep')).slice(0,2);
+ for(const source of items){const card=el('div',undefined,'shield-research-card');card.append(el('p',source.summary),el('p',`${source.organization} — ${source.title} · ${source.date||'Publication/update date not available'}`,'goal-note'),el('p',source.population,'goal-note'));const link=el('a','Read Source');link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';card.append(link);root.append(card);}
+ root.append(el('p','Curated guidance, not live research or a medical diagnosis. A wind-down plan does not guarantee additional sleep.','goal-note'));
 }
 if(typeof module!=='undefined')module.exports={validShieldBedtime,savedShieldBedtime,shieldPlan,shieldClock,shieldDuration,validateShieldNight,shieldComparison,shieldVisualData,sevenNightSleepSummary,shieldFeedback,shieldOpportunity};
+
 
 
