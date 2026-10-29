@@ -104,3 +104,5 @@ assert.equal(balanceSandbox.module.exports.balanceExperience({...balanced,worthR
 console.log('PASS: live sources replace fallback resources; celebration respects the concern flag.');
 
 
+
+await import('./test-health-diagnostics.mjs');
