@@ -23,26 +23,17 @@ The project is named `social-media-sense` in `wrangler.jsonc`. If your existing 
 
 Wrangler reads `cloudflare/worker.mjs` and uploads `public/` as static assets. Do not add an unrelated `dist` output directory or use a Pages deploy command.
 
-## 3. Configure live research on Cloudflare
+## 3. Optional free-model personalization
 
-**Netlify AI Gateway credentials are supplied by Netlify only. They are not included in this ZIP and do not automatically exist in Cloudflare.** The frontend, calculations, plans, saved check-ins, and verified fallback education can run without live credentials. Live source refresh needs an authorized provider connection on Cloudflare.
+Local educational cards work without credentials. To enable optional selection of reviewed explanations, add runtime bindings named `OPENROUTER_API_KEY` (encrypted secret) and `OPENROUTER_MODEL` (an explicitly chosen `vendor/model:free` identifier). Never put the key in frontend files, Git, build variables or logs. No model is enabled by default. Existing OpenAI secrets are not used or deleted.
 
-In your Worker's runtime Settings → Variables and Secrets, configure:
-
-- `OPENAI_BASE_URL`: the base URL supplied by your OpenAI-compatible provider or gateway. It must support the OpenAI Responses API and its hosted `web_search` tool.
-- `OPENAI_API_KEY`: the authorized credential for that provider, stored as a **Secret**.
-
-These are runtime settings, not just build-time variables. Do not put either credential into `public/`, GitHub, or frontend JavaScript. Do not copy an ephemeral Netlify-injected credential into Cloudflare. No Netlify dashboard variable changes are needed.
-
-The existing research code uses `new OpenAI()` and model `gpt-5.5`; your provider/account must support that model and Responses web search. A generic text-completion endpoint or a Workers AI model without Responses web-search support is not a substitute. Provider usage may incur charges. This export does not provision credentials or a gateway account.
-
-The compatibility flags in `wrangler.jsonc` expose Worker runtime bindings to `process.env`, so the existing server-side SDK connection can run unchanged.
+See [OpenRouter safeguards and limitations](docs/OPENROUTER.md) before enabling it. No paid storage, paid search or paid-model fallback is required.
 
 ## 4. Test the deployed version
 
-Complete the five steps. Verify the total, results screen, and compact Sleep Tracker. Open the research disclosures and confirm that current-source notices appear. If a refresh is unavailable, inspect the Worker's runtime logs or the browser's `/api/health-information` response. Do not treat fallback links as proof of a successful live retrieval.
+Complete the five steps and open Health Information and Sources. “Evidence-based educational resources,” benefits, risks and citations appear immediately from the library. An optional same-origin POST may select reviewed cards using a configured free model. Missing configuration, provider errors and invalid output leave local education visible. Do not interpret a local fallback as proof of successful AI access.
 
-A GET request to `/api/health-information` returns 405 by design; the app sends a same-origin POST. A 503 with `cloudflare_research_not_configured` means runtime provider settings are missing.
+Sleep Tracker retains its existing renderer, tracking and verified fallback. Its legacy research payload does not enable this new AI path.
 
 ## Local development / deployment
 
@@ -56,7 +47,7 @@ npm run check:cloudflare
 npm run dev
 ```
 
-For local live requests, copy `.dev.vars.example` to `.dev.vars` and provide your authorized provider settings there. That file is ignored by Git. Do not publish it.
+Local education requires no `.dev.vars` file or provider credentials.
 
 For command-line deployment:
 
@@ -77,3 +68,4 @@ Saved assessments and Sleep Tracker nights live in the browser for a particular 
 - Runtime environment variables: https://developers.cloudflare.com/workers/configuration/environment-variables/
 - Secrets: https://developers.cloudflare.com/workers/configuration/secrets/
 - Wrangler commands: https://developers.cloudflare.com/workers/wrangler/commands/
+
