@@ -26,3 +26,18 @@ let release,n=0;const dedupe=make({transport:()=>{n++;return new Promise(r=>rele
 const bounded=make({maxCache:1,minuteLimit:20,dayLimit:20});const before=calls;await bounded(req(),env);await bounded(req({daily:300}),env);await bounded(req(),env);assert.equal(calls,before+3,'bounded cache evicts');
 assert.equal((await handler(req({age:14}),env)).status,400);
 console.log('PASS free-only configuration, zero-price routing, missing/unavailable models, 429/timeout/body timeout, strict reviewed text/citations, bounded cache/expiry, request dedupe, per-isolate minute/day limits and privacy');
+
+const events=[];const capture=entry=>events.push(entry);
+const fallback=async(options,bindings=env)=>{const h=make({diagnostic:capture,...options});assert.equal((await (await h(req({name:'SENSITIVE_SENTINEL'}),bindings)).json()).mode,'local');return h;};
+await fallback({},{});assert.equal(events.at(-1).category,'configuration_missing');
+const failed=await fallback({transport:async()=>new Response('SENSITIVE_SENTINEL',{status:429})});assert.deepEqual(events.at(-1),{event:'health_selection',category:'upstream_http_rejection',status:429});await failed(req(),env);assert.equal(events.at(-1).category,'cache_hit');
+await fallback({transport:async()=>{throw Error('SENSITIVE_SENTINEL')}});assert.equal(events.at(-1).category,'network_failure');
+await fallback({transport:()=>new Promise(()=>{}),timeoutMs:5});assert.equal(events.at(-1).category,'timeout');
+await fallback({transport:async()=>new Response('SENSITIVE_SENTINEL')});assert.equal(events.at(-1).category,'invalid_json');
+await fallback({transport:async()=>reply(selected,'wrong/model')});assert.equal(events.at(-1).category,'model_mismatch');
+await fallback({transport:async()=>new Response(JSON.stringify({model:env.OPENROUTER_MODEL,choices:[{finish_reason:'length'}]}))});assert.equal(events.at(-1).category,'invalid_finish_reason');
+await fallback({transport:async()=>reply({invented:'SENSITIVE_SENTINEL'})});assert.equal(events.at(-1).category,'response_validation_failure');
+await fallback({minuteLimit:0});assert.equal(events.at(-1).category,'rate_limit');
+assert(!JSON.stringify(events).includes('SENSITIVE_SENTINEL'));assert(!JSON.stringify(events).includes(env.OPENROUTER_API_KEY));assert(events.every(e=>Object.keys(e).every(k=>['event','category','status'].includes(k))));
+const brokenLogger=make({diagnostic:()=>{throw Error('logger')},transport:async()=>reply()});assert.equal((await (await brokenLogger(req(),{})).json()).mode,'local');
+console.log('PASS fixed safe diagnostic categories, upstream status, no sensitive strings and logger failure isolation');
