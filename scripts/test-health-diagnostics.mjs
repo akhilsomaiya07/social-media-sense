@@ -41,3 +41,19 @@ await fallback({minuteLimit:0});assert.equal(events.at(-1).category,'rate_limit'
 assert(!JSON.stringify(events).includes('SENSITIVE_SENTINEL'));assert(!JSON.stringify(events).includes(env.OPENROUTER_API_KEY));assert(events.every(e=>Object.keys(e).every(k=>['event','category','status'].includes(k))));
 const brokenLogger=make({diagnostic:()=>{throw Error('logger')},transport:async()=>reply()});assert.equal((await (await brokenLogger(req(),{})).json()).mode,'local');
 console.log('PASS fixed safe diagnostic categories, upstream status, no sensitive strings and logger failure isolation');
+
+// Native Worker fetch must receive manual mode; mock responses never contact a provider.
+for(const status of [301,302,303,307,308]){
+ let requests=0;const logs=[];
+ const h=createHealthService({diagnostic:e=>logs.push(e),transport:async(url,options)=>{
+  requests++;assert.equal(url,'https://openrouter.ai/api/v1/chat/completions');
+  assert.equal(options.redirect,'manual','Cloudflare-compatible redirect mode');
+  return new Response('',{status,headers:{Location:'https://redirect.invalid/blocked'}});
+ }});
+ assert.deepEqual(await (await h(req(),env)).json(),{mode:'local'});
+ assert.equal(requests,1,'No redirected request or credential forwarding');
+ assert.deepEqual(logs,[{event:'health_selection',category:'upstream_http_rejection',status}]);
+}
+const compatible=createHealthService({diagnostic:()=>{},transport:async(url,options)=>{assert.equal(options.redirect,'manual');return reply();}});
+assert.equal((await (await compatible(req(),env)).json()).mode,'ai');
+console.log('PASS manual redirect compatibility, all five redirect statuses rejected, one destination only, and normal success');
