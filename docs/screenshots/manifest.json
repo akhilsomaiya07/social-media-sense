@@ -1,8 +1,14 @@
 {
-  "fixture": "Synthetic Demo, age 30; 240m prior / 180m current; fixed Jan 2026 UTC dates",
-  "research": "503 fixture: existing fallback guidance, no successful live retrieval",
+  "sourceCommit": "984998c84f76927c8dbd900c69a773b23d7177c4",
+  "productionReference": {
+    "commit": "4f2b0428995a746b3c1dac5a405ce6dc3e8ed85e",
+    "workerVersion": "c085db03",
+    "checked": "2026-11-09",
+    "captureSource": "local checkout with identical application assets"
+  },
+  "fixture": "Synthetic Test User, age 25; 270m prior / 210m current; fixed Jan 2026 UTC dates",
+  "research": "Bundled curated educational resources; no provider requests",
   "browser": "151.0.7922.34",
-  "sourceCommit": "115df13d7782f4c5a1c865eb71989b49be30e8d9",
   "captures": [
     {
       "file": "homepage.png",
@@ -36,8 +42,24 @@
         "width": 662,
         "height": 512
       },
-      "bytes": 66267,
-      "sha256": "b3238bc7cc67fd1d998ce0e69265349295e1b11bf7bcab0e7b2bc0c3effcb6d7"
+      "bytes": 66585,
+      "sha256": "513f90beb573bfc823c5b3d5461bb793d2a0fac1f8206004226efd51580378b1"
+    },
+    {
+      "file": "assessment-age-validation-mobile.png",
+      "viewport": {
+        "width": 390,
+        "height": 1118
+      },
+      "framing": [
+        "#checkin"
+      ],
+      "dimensions": {
+        "width": 386,
+        "height": 708
+      },
+      "bytes": 75023,
+      "sha256": "cb91af5523282b0cc3f26ca8d04373d6768c7f01c306b79306c0497c2dedd0f0"
     },
     {
       "file": "assessment-step-2.png",
@@ -58,8 +80,8 @@
         "width": 600,
         "height": 672
       },
-      "bytes": 63798,
-      "sha256": "c5318702df24c6025a74e2f3f8e4a0273fbc3e37ab0d78c9694b99b49bd69844"
+      "bytes": 64223,
+      "sha256": "dbc1f67513e04271149de15cd715e208e7e0ecc2fbf73e92fe2b23470560ed5c"
     },
     {
       "file": "assessment-step-2-sliders.png",
@@ -74,8 +96,8 @@
         "width": 580,
         "height": 693
       },
-      "bytes": 27426,
-      "sha256": "2383bbea9952f93f3eea5a850ff9c694df820d4e7b4e95aa202bc43ecaa72aac"
+      "bytes": 27062,
+      "sha256": "809d2c463244e282e4de78159ea33bc18114d0432dfa2adf2f1ae1d68a97bee4"
     },
     {
       "file": "assessment-step-3.png",
@@ -122,8 +144,8 @@
         "width": 662,
         "height": 882
       },
-      "bytes": 115457,
-      "sha256": "06a62f0d8839168ceeee3101770a6cf77e6d904dfb9e260cc6d3185cda5464ce"
+      "bytes": 115845,
+      "sha256": "8ae0a940baca55b64d7e7d354f668c693cbc0e55fb9f4e2a4a0419a0b6759511"
     },
     {
       "file": "results-report.png",
@@ -140,8 +162,8 @@
         "width": 732,
         "height": 487
       },
-      "bytes": 32163,
-      "sha256": "583e1d90326899dd3f12241b173a6b834e474e641b60e52b07d6cfb3ba6d9300"
+      "bytes": 34360,
+      "sha256": "b49a42f0cdca35d7d8884c4810db39305ecb36ece849174d49f3b0cd14d7f4d5"
     },
     {
       "file": "results-insights.png",
@@ -154,26 +176,42 @@
       ],
       "dimensions": {
         "width": 732,
-        "height": 157
+        "height": 183
       },
-      "bytes": 16710,
-      "sha256": "219b1c90cd97a0ba96edacc31119eba2689c48632d2c867aaf05270fd7a394dc"
+      "bytes": 20075,
+      "sha256": "811657ebb777dd31ea260c61fe7d86121b6fe7701667bfc144f62aa129ab8db4"
     },
     {
       "file": "results-next-steps.png",
       "viewport": {
         "width": 1280,
-        "height": 1513
+        "height": 1540
       },
       "framing": [
         "#report-next"
       ],
       "dimensions": {
         "width": 732,
-        "height": 706
+        "height": 707
       },
-      "bytes": 65391,
-      "sha256": "485c578b009aed57f6d0cbee74d536129b8d7e84fb7f5f57e900c83fbba8bc3b"
+      "bytes": 65401,
+      "sha256": "bbccbcffff1b41096c406ca247763a36f454b2a74072d2996d89399373b0a495"
+    },
+    {
+      "file": "health-education.png",
+      "viewport": {
+        "width": 1280,
+        "height": 4563
+      },
+      "framing": [
+        "#report-health-details"
+      ],
+      "dimensions": {
+        "width": 732,
+        "height": 2885
+      },
+      "bytes": 389125,
+      "sha256": "1f0f3f87fe603340df2c49ef59b08ccf9c78b9bc35519b5902348755fe09c55b"
     },
     {
       "file": "my-tools.png",
@@ -195,17 +233,17 @@
       "file": "sleep-tracker.png",
       "viewport": {
         "width": 1280,
-        "height": 1194
+        "height": 1213
       },
       "framing": [
         "#sleep-shield"
       ],
       "dimensions": {
         "width": 792,
-        "height": 1047
+        "height": 1066
       },
-      "bytes": 133086,
-      "sha256": "1b31775d44f23a36fbb5efdfc343928e6508b10fe081980a68565e7598a17a54"
+      "bytes": 137188,
+      "sha256": "aa23c05d87204cb61123213c2ce6074e4e1a3e34aee7669f1a5d0d44a622c10d"
     },
     {
       "file": "sleep-tracker-tracking.png",
@@ -220,8 +258,8 @@
         "width": 700,
         "height": 594
       },
-      "bytes": 47949,
-      "sha256": "aa52fe338f8622f20d8f6ed59d08b453769043b1f40aeec64f396149eed74a4d"
+      "bytes": 48104,
+      "sha256": "c325898fe38e9eb82943affb2c416e332c68e8bd2b5acaf205bb6462fa46e8f2"
     },
     {
       "file": "sleep-tracker-seven-night-summary.png",
@@ -252,8 +290,8 @@
         "width": 792,
         "height": 1155
       },
-      "bytes": 143670,
-      "sha256": "6edca7d2abb96cd3ac4d4bd7a46e9af260fbad3178b2f56f04116e25c8b6c81c"
+      "bytes": 144349,
+      "sha256": "77220acb03170424ac34c1d90947f4de0360cad6d31b0d51cd03b3213cdd1278"
     },
     {
       "file": "reduction-savings.png",
@@ -284,8 +322,8 @@
         "width": 792,
         "height": 915
       },
-      "bytes": 129460,
-      "sha256": "aca52f5411b6b79043b44dbae5865638deea148cd952a447bc8f1c01527db3f1"
+      "bytes": 130206,
+      "sha256": "0079bb6ce30b0854cf67e6be6e26f0d0acc60bb47532060622b4ee48e3c070ad"
     },
     {
       "file": "progress-comparison.png",
@@ -300,8 +338,100 @@
         "width": 732,
         "height": 776
       },
-      "bytes": 59812,
-      "sha256": "62174eaa721bb4a3c7d289c30191082c309133881e18eb0c8af5f6f68629f7f4"
+      "bytes": 59028,
+      "sha256": "9af1b3bf22c18b77678faa05c8e4343bfe1ca368095193e2ac9c411a0ea14c1c"
     }
-  ]
+  ],
+  "additionalReviewArtifacts": [
+    {
+      "file": "report-320-no-preference.png",
+      "viewport": {
+        "width": 320,
+        "height": 1000
+      },
+      "reducedMotion": "no-preference",
+      "animations": "disabled for still capture only",
+      "bytes": 116888,
+      "sha256": "2cc9f41def958a637e86dc0f8fcb3dcb55855df7558d41c78638f51240d20cef"
+    },
+    {
+      "file": "report-390-no-preference.png",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "reducedMotion": "no-preference",
+      "animations": "disabled for still capture only",
+      "bytes": 129988,
+      "sha256": "5114f34ab517d6c606f9fce024418f85674e75535b94487fb4d11059ae86b67f"
+    },
+    {
+      "file": "report-768-no-preference.png",
+      "viewport": {
+        "width": 768,
+        "height": 1000
+      },
+      "reducedMotion": "no-preference",
+      "animations": "disabled for still capture only",
+      "bytes": 216854,
+      "sha256": "d387f56d9857dc5aa44e7a203154960af09038f61eec2939e1dbd45e54176232"
+    },
+    {
+      "file": "report-1280-no-preference.png",
+      "viewport": {
+        "width": 1280,
+        "height": 1000
+      },
+      "reducedMotion": "no-preference",
+      "animations": "disabled for still capture only",
+      "bytes": 460598,
+      "sha256": "bf6097ef110d8f47af13aceba9bb82ede26eea906c0865d3238b6d54628df1bf"
+    },
+    {
+      "file": "report-320-reduce.png",
+      "viewport": {
+        "width": 320,
+        "height": 1000
+      },
+      "reducedMotion": "reduce",
+      "animations": "disabled for still capture only",
+      "bytes": 118052,
+      "sha256": "e66e16b4099044237ed965cde0905c8bc6b6669ba5f88aef2bfa3f0a90410ec2"
+    },
+    {
+      "file": "report-390-reduce.png",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "reducedMotion": "reduce",
+      "animations": "disabled for still capture only",
+      "bytes": 129512,
+      "sha256": "5e1e90fdb5752e4a66224f6b0de12e2d4463cc28f7a03d2f6fd8f66081ff974c"
+    },
+    {
+      "file": "report-768-reduce.png",
+      "viewport": {
+        "width": 768,
+        "height": 1000
+      },
+      "reducedMotion": "reduce",
+      "animations": "disabled for still capture only",
+      "bytes": 216330,
+      "sha256": "33c556dbf170bff9dfa1ed2ea65fe307d4e2833f256b7a8dace24f8a45eb628b"
+    },
+    {
+      "file": "report-1280-reduce.png",
+      "viewport": {
+        "width": 1280,
+        "height": 1000
+      },
+      "reducedMotion": "reduce",
+      "animations": "disabled for still capture only",
+      "bytes": 462422,
+      "sha256": "e00c5e6b5160ed68f7af01b99a606382d043b1b0769b517c3a466fd2e3df005a"
+    }
+  ],
+  "workflowRun": "https://github.com/akhilsomaiya07/social-media-sense/actions/runs/42751593373",
+  "artifactId": 13733413555
 }
