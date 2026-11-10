@@ -18,6 +18,7 @@ try{
     renderLocalEducation(result,ai?{benefits:data.benefits.slice(0,2).map(c=>c.id),risks:data.risks.slice(0,2).map(c=>c.id)}:undefined);
     document.getElementById('home-screen').hidden=true;document.getElementById('checkin').hidden=true;
     document.getElementById('result').hidden=false;
+    document.querySelector('.workspace').classList.remove('flow-active');document.querySelector('.workspace').classList.add('results-only');document.body.classList.add('results-screen');
     document.getElementById('report-health').open=true;document.getElementById('report-health-details').open=true;
    },{daily,topic,frequency,ai});
    assert(await page.locator('#education-benefits').isVisible());
