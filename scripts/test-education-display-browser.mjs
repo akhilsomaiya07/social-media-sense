@@ -8,7 +8,13 @@ try{
   const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'});
   await context.route('**/api/health-information',r=>r.fulfill({status:200,json:{mode:'local'}}));
   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(server.origin);
+  await page.goto(server.origin);await page.click('#home-start');await page.fill('#age','25');
+  await page.click('#flow-next');await page.click('#flow-next');
+  await page.fill('#sleep-hours','7');await page.check('[name="prebed"][value="Never"]');await page.click('#flow-next');
+  await page.fill('#activity-minutes','30');await page.click('#flow-next');
+  for(const key of ['bedtime','tasks','movement','people','longer'])await page.check(`[name="${key}"][value="Never"]`);
+  await page.click('#flow-next');await page.waitForURL(server.origin+'/results');
+  await page.locator('#result').waitFor({state:'visible'});
   for(const ai of [false,true])for(const [daily,topic,frequency,expected] of [[29,null,null,false],[30,null,null,false],[60,null,null,false],[119,null,null,false],[120,null,null,true],[121,null,null,true],[20,'bedtime','Often',true],[90,'tasks','Sometimes',true],[180,null,null,true]]){
    // Exercise the real renderer and native controls with isolated synthetic report fixtures.
    await page.evaluate(({daily,topic,frequency,ai})=>{
@@ -16,9 +22,6 @@ try{
     const result={age:25,daily,sleep:7.5,activity:30,reasons:topic?[{text:texts[topic],frequency}]:[]};
     const data=selectHealthResources(result);
     renderLocalEducation(result,ai?{benefits:data.benefits.slice(0,2).map(c=>c.id),risks:data.risks.slice(0,2).map(c=>c.id)}:undefined);
-    document.getElementById('home-screen').hidden=true;document.getElementById('checkin').hidden=true;
-    document.getElementById('result').hidden=false;
-    document.querySelector('.workspace').classList.remove('flow-active');document.querySelector('.workspace').classList.add('results-only');document.body.classList.add('results-screen');
     document.getElementById('report-health').open=true;document.getElementById('report-health-details').open=true;
    },{daily,topic,frequency,ai});
    assert(await page.locator('#education-benefits').isVisible());
