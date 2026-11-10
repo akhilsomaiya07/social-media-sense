@@ -107,9 +107,9 @@ These screenshots come from the actual application using synthetic check-ins in 
 
 ### Step 1: Age and the warning message
 
-[![Social Media Sense Step 1 with age 15 to 100 guidance](docs/review/age/after-1280.jpg)](docs/review/age/after-1280.jpg)
+[![Social Media Sense Step 1 with age 15 to 100 guidance](docs/screenshots/assessment-step-1.png)](docs/screenshots/assessment-step-1.png)
 
-[![Mobile underage warning for a submitted age of 14](docs/review/age/underage-390.jpg)](docs/review/age/underage-390.jpg)
+[![Mobile underage warning for a submitted age of 14](docs/screenshots/assessment-age-validation-mobile.png)](docs/screenshots/assessment-age-validation-mobile.png)
 
 The red warning explains the requirement and keeps the user on Step 1. It is a validation message, not a medical or emergency alert.
 
@@ -141,11 +141,15 @@ The red warning explains the requirement and keeps the user on Step 1. It is a v
 
 **Your Everyday Balance**
 
-[![Your Everyday Balance and sleep context](docs/screenshots/results-insights.png)](docs/screenshots/results-insights.png)
+[![Reported everyday-routine interruptions](docs/screenshots/results-insights.png)](docs/screenshots/results-insights.png)
 
 **Make Room for What Matters**
 
 [![Suggested next step, save link and educational sources](docs/screenshots/results-next-steps.png)](docs/screenshots/results-next-steps.png)
+
+**Health Information and Sources**
+
+[![Age-relevant local educational benefits, risks and linked sources](docs/screenshots/health-education.png)](docs/screenshots/health-education.png)
 
 ### My Tools
 

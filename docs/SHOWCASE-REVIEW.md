@@ -68,3 +68,12 @@ Capture uses Chromium 153 in this environment via the existing executable overri
 The README is longer because it now covers complete forms and separate report/tool sections. On narrow phones, screenshot text necessarily becomes smaller; each preview links to the original for zooming. Step 2 intentionally shows four representative platform rows, not every platform. Advanced disclosures remain collapsed unless the screenshot specifically shows their expanded details. These images are examples, not documentation of every possible result state.
 
 The screenshot workflow remains artifact-only. No automatic documentation publishing, merging or deployment has been added.
+
+
+## November 2026 gallery refresh (PR #71)
+
+Production was checked against main commit `4f2b0428995a746b3c1dac5a405ce6dc3e8ed85e`, active Worker `c085db03`. The screenshots render the matching local application in isolated Chromium, not production visitor records. [Capture run 42751593373](https://github.com/akhilsomaiya07/social-media-sense/actions/runs/42751593373) passed build, unit, motion, routing, age, Cloudflare bundle and screenshot checks.
+
+All 19 previously displayed gallery images have current replacements. The two historical age-review references now point to current Step 1 and 390px validation captures; historical files remain unchanged. One additional health-education image makes the current locally curated benefits, risks and citations visible, for 20 gallery images total. Desktop capture width is 1280px; mobile validation width is 390px. Complete sections retain natural proportions. The manifest records exact viewports, image dimensions and SHA-256 hashes.
+
+The fixture uses Test User, age 25, current social media use 210 minutes/day, prior use 270 minutes/day, sleep 7h 30m and activity 45m. Seven fictional sleep entries and two synthetic saved check-ins populate the tool comparisons. External requests are blocked; health content uses the bundled educational fallback. No AI success or production research is claimed. All 20 PNG files were decoded and checked against manifest hashes, then visually reviewed for clipping, labels and figures. Eight responsive report-review frames remain in the CI artifact rather than the curated gallery.
