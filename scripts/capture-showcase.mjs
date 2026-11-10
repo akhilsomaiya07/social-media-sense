@@ -10,7 +10,7 @@ const output=path.resolve(root,process.env.SCREENSHOT_DIR||'artifacts/screenshot
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 await fs.mkdir(output,{recursive:true});
 // Remove only outputs this script owns; a failed run cannot retain a stale gallery.
-const names=['homepage','assessment-step-1','assessment-age-validation-mobile','assessment-step-2','assessment-step-2-sliders','assessment-step-3','assessment-step-4','assessment-step-5','results-report','results-insights','results-next-steps','my-tools','sleep-tracker','sleep-tracker-tracking','sleep-tracker-seven-night-summary','reduction-goal','reduction-savings','progress','progress-comparison'];
+const names=['homepage','assessment-step-1','assessment-age-validation-mobile','assessment-step-2','assessment-step-2-sliders','assessment-step-3','assessment-step-4','assessment-step-5','results-report','results-insights','results-next-steps','health-education','my-tools','sleep-tracker','sleep-tracker-tracking','sleep-tracker-seven-night-summary','reduction-goal','reduction-savings','progress','progress-comparison'];
 const reportReviews=['no-preference','reduce'].flatMap(mode=>[320,390,768,1280].map(width=>`report-${width}-${mode}.png`));
 for(const name of [...reportReviews,...names.map(n=>n+'.png'),'mobile-results.png','manifest.json','failure.png','failure.txt'])await fs.rm(path.join(output,name),{force:true});
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:process.env.CHROMIUM_PATH?['--no-sandbox','--disable-dev-shm-usage','--use-gl=angle','--use-angle=swiftshader','--disable-gpu-sandbox']:[]});
@@ -97,6 +97,10 @@ try{
  await capture('results-insights',['#report-insights']);
  await capture('results-next-steps',['#report-next']);
  await captureReportReviews();
+ await page.locator('#report-health > summary').click();
+ await page.locator('#report-health-details > summary').click();
+ await capture('health-education',['#report-health-details']);
+ await page.locator('#report-health > summary').click();
  await page.click('#explore-tools');await capture('my-tools',['#tools-screen']);await tool('shield');
  await page.fill('#shield-bedtime','23:00');await page.selectOption('#shield-window','30');await page.selectOption('#shield-activity','Read');await page.click('#shield-use');await capture('sleep-tracker',['#sleep-shield']);
  await page.click('#shield-track');await page.locator('.shield-night select').nth(0).selectOption('Yes');await page.getByLabel('Sleep hours',{exact:true}).fill('7');await page.getByLabel('Sleep minutes',{exact:true}).fill('30');await page.locator('.shield-night select').nth(1).selectOption('Rested');
