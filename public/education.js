@@ -29,6 +29,12 @@ function limitEducationCards(kind){
 }
 
 function balancedHealthPresentation(result){return Number.isInteger(result.daily)&&result.daily>=0&&result.daily<=1440&&Array.isArray(result.reasons)&&result.reasons.length===0&&!result.worthReviewing;}
+// Presentation only: time markers are not medical safety thresholds.
+function healthEducationDisplay(result){
+ const disruption=Object.values(healthSearchContext(result).disruption).some(value=>value==='Sometimes'||value==='Often');
+ return {showRisks:result.daily>=120||disruption,disruption};
+}
+let educationDisplayResult=null;
 function renderLocalEducation(result,selection){
  const get=id=>document.getElementById(id),data=selectHealthResources(result),balanced=balancedHealthPresentation(result);
  function element(tag,text,className){const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(className)node.className=className;return node;}
@@ -40,7 +46,14 @@ function renderLocalEducation(result,selection){
  get('education-checked').hidden=true;get('education-fallback-note').hidden=false;
  get('education-fallback-note').textContent='Selected from a locally curated library. No live search is performed. Optional AI selection uses only reviewed library explanations. Sources may have newer versions; open each citation to check.';
  get('education-age').textContent='Resources are filtered to their stated age scope. General guidance is not an age-specific study. Your answers guide relevance, not a diagnosis or a judgment about safe usage.';
- get('education-benefits-title').textContent='Potential Benefits of Social Media';get('education-balance-tips').hidden=!balanced;get('education-benefits').hidden=false;get('education-risks-section').hidden=false;
+ get('education-benefits-title').textContent='Potential Benefits of Social Media';get('education-balance-tips').hidden=!balanced;get('education-benefits').hidden=false;get('education-risks-title').textContent='Potential Risks of Social Media';
+ const display=healthEducationDisplay(result),riskSection=get('education-risks-section'),riskToggle=get('education-risks-toggle');
+ // An AI selection for the same report must not reset the visitor's disclosure choice.
+ if(educationDisplayResult!==result){riskSection.hidden=!display.showRisks;educationDisplayResult=result;}
+ riskToggle.hidden=display.showRisks;
+ function updateRiskToggle(){riskToggle.textContent=riskSection.hidden?'View potential risks':'Hide potential risks';riskToggle.setAttribute('aria-expanded',String(!riskSection.hidden));}
+ riskToggle.onclick=()=>{riskSection.hidden=!riskSection.hidden;updateRiskToggle();};updateRiskToggle();
+ get('education-risks-context').textContent=display.disruption?'These resources relate to the routine interruptions you reported. They do not establish that social media caused a medical condition.':'General educational context, not evidence that you have a problem. The time references are reflection markers, not clinically validated safety thresholds.';
  for(const kind of ['benefits','risks']){
   const list=get('education-'+kind);list.replaceChildren();
   if(selection?.[kind])data[kind]=selection[kind].map(id=>data[kind].find(c=>c.id===id)).filter(Boolean);
@@ -71,4 +84,5 @@ async function renderHealthEducation(result){
  renderLocalEducation(result,selection);
  document.getElementById('education-fallback-note').textContent='AI helped select and arrange reviewed explanations from the curated library. No live web research was performed. Educational information, not a medical diagnosis.';
 }
-if(typeof module!=='undefined')module.exports={healthSearchContext,renderLocalEducation,renderHealthEducation,balancedHealthPresentation};
+if(typeof module!=='undefined')module.exports={healthSearchContext,renderLocalEducation,renderHealthEducation,balancedHealthPresentation,healthEducationDisplay};
+
