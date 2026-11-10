@@ -57,3 +57,6 @@ try{
   }catch(error){await page.screenshot({path:`${output}/failure-${width}.png`}).catch(()=>{});throw error;}finally{await context.close();}
  }
 }finally{await browser.close();await server.close();}
+
+
+await import("./test-education-display-browser.mjs");

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFile} from 'node:fs/promises';
 class Node{constructor(tag=''){this.tag=tag;this.children=[];this.hidden=false;this.attributes={}}append(...nodes){this.children.push(...nodes)}replaceChildren(...nodes){this.children=[...nodes]}setAttribute(k,v){this.attributes[k]=v}}
-const ids=Object.fromEntries(['education-live-status','education-benefits','education-risks','education-checked','education-age','education-fallback-note','health-resources','health-resource-list','education-benefits-more','education-risks-more','education-benefits-title','education-balance-tips','education-risks-section','health-resources-title','health-resources-intro'].map(id=>[id,new Node()]));
+const ids=Object.fromEntries(['education-risks-title','education-risks-toggle','education-risks-context','education-live-status','education-benefits','education-risks','education-checked','education-age','education-fallback-note','health-resources','health-resource-list','education-benefits-more','education-risks-more','education-benefits-title','education-balance-tips','education-risks-section','health-resources-title','health-resources-intro'].map(id=>[id,new Node()]));
 let requests=0;const sandbox={module:{exports:{}},fetch(){requests++;throw Error('Network forbidden')},document:{getElementById:id=>ids[id],createElement:t=>new Node(t),createTextNode:t=>({textContent:t})}};
 vm.createContext(sandbox);
 for(const file of ['health-fallback','education'])vm.runInContext(await readFile(`public/${file}.js`,'utf8'),sandbox);
@@ -52,3 +52,31 @@ sandbox.fetch=async()=>({ok:true,json:async()=>({mode:'local'})});await asyncRen
 const before=ids['education-fallback-note'].textContent;release({ok:true,json:async()=>({mode:'ai',benefits:select(base).benefits.slice(0,2).map(c=>c.id),risks:select(base).risks.slice(0,2).map(c=>c.id)})});await earlier;
 assert.equal(ids['education-fallback-note'].textContent,before,'Stale response cannot overwrite a newer report');
 console.log('PASS frontend local-first rendering, optional success, duplicate suppression, offline/malformed fallback, no name transmission and stale-response protection');
+
+
+// Display boundaries apply equally to the local library and validated AI selections.
+for(const [daily,topic,frequency,showRisks] of [
+ [0,null,null,false],[20,null,null,false],[29,null,null,false],[30,null,null,false],
+ [60,null,null,false],[119,null,null,false],[120,null,null,true],[121,null,null,true],
+ [180,null,null,true],[20,'bedtime','Often',true],[90,'tasks','Sometimes',true],
+ [5,'movement','Sometimes',true],[5,'people','Often',true],[5,'longer','Sometimes',true]
+])for(const ai of [false,true]){
+ const result={...base,daily,reasons:topic?[{text:reasons[topic],frequency}]:[]};
+ const saved=JSON.stringify(result),data=select(result);
+ const selection=ai?{benefits:data.benefits.slice(0,2).map(c=>c.id),risks:data.risks.slice(0,2).map(c=>c.id)}:undefined;
+ render(result,selection);
+ assert.equal(ids['education-benefits'].hidden,false);
+ assert.equal(ids['education-risks-section'].hidden,!showRisks,`${daily}m ${topic} AI=${ai}`);
+ assert.equal(ids['education-risks-toggle'].hidden,showRisks);
+ assert.equal(ids['education-risks-title'].textContent,'Potential Risks of Social Media');
+ if(!showRisks){
+  assert.equal(ids['education-risks-toggle'].attributes['aria-expanded'],'false');
+  ids['education-risks-toggle'].onclick();assert(!ids['education-risks-section'].hidden);
+  render(result,selection);assert(!ids['education-risks-section'].hidden,'AI refresh preserves optional expansion');
+  ids['education-risks-toggle'].onclick();assert(ids['education-risks-section'].hidden);
+ }else if(!topic)assert.match(ids['education-risks-context'].textContent,/not evidence that you have a problem/);
+ assert.equal(JSON.stringify(result),saved);
+}
+render({...base,daily:20,prebed:'Often',reasons:[]});
+assert(ids['education-risks-section'].hidden,'Pre-bed usage alone is not a reported interruption');
+console.log('PASS education display boundaries, local/AI parity, optional risk access, choice preservation and immutable reports');
