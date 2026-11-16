@@ -9,6 +9,26 @@ try{for(const width of [320,390,768,1280]){
  const context=await browser.newContext({viewport:{width,height:1000},hasTouch:width<500,reducedMotion:width===320?'reduce':'no-preference'}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto(server.origin);await page.click('#home-start');await page.waitForTimeout(300);
  await page.screenshot({path:`${output}/after-${width}.jpg`,quality:85,fullPage:true});
+ // Both fields are required, but no errors appear before interaction.
+ assert.equal(await page.locator('#name-error').count(),0);assert.equal(await page.locator('#age-error').count(),0);
+ for(const id of ['name','age']){assert(await page.locator('#'+id).evaluate(e=>e.required));assert.match(await page.locator('#'+id).evaluate(e=>e.closest('label').textContent),/\*/);}
+ assert(!/optional/i.test(await page.locator('#name').evaluate(e=>e.closest('label').textContent)));
+ await page.click('#flow-next');assert.equal(await page.evaluate(()=>document.activeElement.id),'name');
+ assert.equal(await page.locator('#name-error').textContent(),'Enter your name or nickname to continue.');assert(await page.locator('#age-error').isVisible());
+ await page.fill('#age','25');
+ for(const name of ['   ','12345','1@#$%','Akhil123','John@','!!!','😀','<script>','---','-Anne','Anne-','Anne--Marie']){
+  await page.fill('#name',name);await page.click('#flow-next');assert.equal(await page.locator('#step-count').textContent(),'Step 1 of 5');assert.equal(await page.evaluate(()=>document.activeElement.id),'name');
+  assert.equal(await page.locator('#name').getAttribute('aria-invalid'),'true');assert.equal(await page.locator('#name').getAttribute('aria-describedby'),'name-error');assert.equal(await page.locator('#name-error').getAttribute('role'),'alert');
+  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+ }
+ await page.fill('#name','John@');assert.equal(await page.locator('#name-error').textContent(),'Use letters only. Spaces, hyphens, and apostrophes are allowed.');assert.equal(await page.locator('#name').inputValue(),'John@');
+ for(const name of ['Akhil','Mary Jane','Anne-Marie',"O'Connor",'José','Nguyễn','李','A','A'.repeat(200)]){
+  await page.fill('#name',name);assert.equal(await page.locator('#name-error').count(),0);assert.equal(await page.locator('#name').getAttribute('aria-invalid'),null);
+  await page.locator('#name').press('Enter');assert.equal(await page.locator('#step-count').textContent(),'Step 2 of 5');await page.click('#flow-back');assert.equal(await page.locator('#name').inputValue(),name);
+ }
+ await page.fill('#name','  Mary   Jane  ');await page.locator('#name').press('Tab');assert.equal(await page.locator('#name').inputValue(),'Mary Jane');
+ // An invalid restored/edited name cannot bypass prerequisites through direct navigation.
+ await page.fill('#name','');await page.evaluate(()=>assessmentFlow.navigate(2));assert.equal(await page.locator('#step-count').textContent(),'Step 1 of 5');
  await page.fill('#name','Example');await page.fill('#age','1');assert.equal(await page.locator('#age-error').count(),0);await page.locator('#age').press('5');assert.equal(await page.locator('#age').inputValue(),'15');assert.equal(await page.locator('#age-error').count(),0);
  const step1=page.url();const storage=await page.evaluate(()=>({...localStorage}));
  for(const [age,message,title] of [['0',under,'Age requirement not met'],['13',under,'Age requirement not met'],['14',under,'Age requirement not met'],['101','Social Media Sense currently supports ages 15–100. Please check the age you entered.','Age outside supported range'],['120','Social Media Sense currently supports ages 15–100. Please check the age you entered.','Age outside supported range'],['','Please enter your age to continue.','Check your age'],['15.5','Please enter your age in whole years.','Check your age']]){

@@ -1,5 +1,5 @@
 'use strict';
-const assessmentStepFields=[['age'],['hours','minutes'],['sleep','sleep-hours','sleep-minutes','prebed'],['activity','activity-hours','activity-minutes'],['bedtime','tasks','movement','people','longer']];
+const assessmentStepFields=[['name','age'],['hours','minutes'],['sleep','sleep-hours','sleep-minutes','prebed'],['activity','activity-hours','activity-minutes'],['bedtime','tasks','movement','people','longer']];
 function fieldAssessmentStep(key){return key.startsWith('platform-')?2:assessmentStepFields.findIndex(fields=>fields.includes(key))+1;}
 function assessmentErrorsForStep(calculate,data,step){
  try{calculate(data);return {}}catch(error){if(!error.fields)throw error;return Object.fromEntries(Object.entries(error.fields).filter(([key])=>fieldAssessmentStep(key)===step));}
@@ -20,8 +20,8 @@ function setupAssessmentFlow({form,read,calculate,render,clearFieldErrors,showFi
  }
  function report(fields){
   clearFieldErrors(Boolean(fields.age));showFieldErrors(fields);
-  // The age field has its own live alert; retain the summary for other fields only.
-  const messages=Object.entries(fields).filter(([key])=>key!=='age').map(([,message])=>message);
+  // Name and age fields have their own live alerts; retain the summary for other fields only.
+  const messages=Object.entries(fields).filter(([key])=>key!=='age'&&key!=='name').map(([,message])=>message);
   get('error').textContent=[...new Set(messages)].join(' ');get('error').hidden=!messages.length;
   const key=Object.keys(fields)[0],input=get(key)||form.querySelector(`input[name="${key}"]`);
   if(input)input.focus();

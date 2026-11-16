@@ -381,3 +381,9 @@ footer{color:#c1cee1}
 #report-health-details #health-resource-list h5{font:inherit;font-size:15px;font-weight:600;line-height:1.5;margin:0 0 8px}
 #report-health-details .education-source,#report-health-details .education-scope{overflow-wrap:anywhere}
 @media(forced-colors:active){#report-health-details .education-guidance{background:Canvas;border-color:CanvasText}#report-health-details .education-intro,#report-health-details .education-guidance h4,#report-health-details .education-guidance ul,#report-health-details .health-education>h4{color:CanvasText}}
+
+/* Step 1 inline name feedback uses the existing field-error presentation. */
+#name[aria-invalid="true"]{border:2px solid #a42b35}
+.assessment-step[data-step="1"] .two>label{min-width:0}
+#name-error{overflow-wrap:anywhere}
+@media(forced-colors:active){#name[aria-invalid="true"]{border-color:CanvasText}}

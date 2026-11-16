@@ -30,7 +30,7 @@ const nodes=all(ids['platform-list'],'input'),identifiers=nodes.map(n=>n.id).fil
 ui.setEntries([{name:'Facebook',hours:12,minutes:0},{name:'Instagram',hours:11,minutes:0},{name:'Custom',hours:2,minutes:0}]);assert.equal(ids['platform-limit-error'].hidden,false);remove(custom()[0]);assert.equal(ids['platform-limit-error'].hidden,true);assert.match(ids['platform-total'].textContent,/23h/);
 const warning='Your entries add up to more than 24 hours in one day. Some app usage may overlap. Adjust the times so your total reflects your actual day.';
 const appSandbox={module:{exports:{}},platformSummary:sandbox.module.exports.platformSummary};vm.createContext(appSandbox);vm.runInContext(await readFile(new URL('../public/app.js',import.meta.url),'utf8'),appSandbox);
-const assessmentData=()=>({age:'30','sleep-hours':'7','sleep-minutes':'0','activity-hours':'0','activity-minutes':'0',prebed:'Never',bedtime:'Never',tasks:'Never',movement:'Never',people:'Never',longer:'Never',platforms:ui.readEntries()});
+const assessmentData=()=>({name:'Test User',age:'30','sleep-hours':'7','sleep-minutes':'0','activity-hours':'0','activity-minutes':'0',prebed:'Never',bedtime:'Never',tasks:'Never',movement:'Never',people:'Never',longer:'Never',platforms:ui.readEntries()});
 const fixedSlider=index=>all(ids['platform-list'],'input').find(node=>node.id===`platform-${index}-time`);
 input(fixedSlider(0),1080);input(fixedSlider(1),1080);const overageRow=add('Overage',5);
 assert.equal(ids['platform-limit-error'].hidden,false);assert.equal(ids['platform-limit-error'].textContent,warning);assert.equal(ids['platform-overage'].textContent,'Currently 5m over the daily limit.');
