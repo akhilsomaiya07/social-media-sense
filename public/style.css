@@ -357,3 +357,10 @@ footer{color:#c1cee1}
 /* One compact summary; the existing charts and tracker remain unchanged. */
 .shield-sleep-summary{margin:18px 0;padding:14px;border:1px solid #526b81;border-radius:10px}.shield-sleep-summary h4{margin:0 0 10px}.shield-sleep-summary p{margin:8px 0}.shield-sleep-summary-status{font-weight:600}.shield-sleep-summary[data-outcome="positive"]{border-color:#85b7b1;background:#244c50}
 @media(forced-colors:active){.shield-sleep-summary{border-color:CanvasText}}
+
+
+/* Static explanation, scoped to the completed report. */
+#result .report-answer-note{margin-top:16px;padding:12px 14px;background:#244e50;border:1px solid #456365;border-radius:8px;overflow-wrap:anywhere}
+#result .report-answer-note>h4{margin:0 0 8px;font-size:14px;line-height:1.5;color:#e0fb9e}
+#result .report-answer-note>p{margin:6px 0 0;font-size:13px;line-height:1.6;color:#e5efef}
+@media(forced-colors:active){#result .report-answer-note{background:Canvas;border-color:CanvasText}#result .report-answer-note>h4,#result .report-answer-note>p{color:CanvasText}}
