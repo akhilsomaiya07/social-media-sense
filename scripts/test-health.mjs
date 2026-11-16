@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFile} from 'node:fs/promises';
 class Node{constructor(tag=''){this.tag=tag;this.children=[];this.hidden=false;this.attributes={}}append(...nodes){this.children.push(...nodes)}replaceChildren(...nodes){this.children=[...nodes]}setAttribute(k,v){this.attributes[k]=v}}
-const ids=Object.fromEntries(['education-risks-title','education-risks-toggle','education-risks-context','education-live-status','education-benefits','education-risks','education-checked','education-age','education-fallback-note','health-resources','health-resource-list','education-benefits-more','education-risks-more','education-benefits-title','education-balance-tips','education-risks-section','health-resources-title','health-resources-intro'].map(id=>[id,new Node()]));
+const ids=Object.fromEntries(['education-guidance','education-risks-title','education-risks-toggle','education-risks-context','education-live-status','education-benefits','education-risks','education-checked','education-age','education-fallback-note','health-resources','health-resource-list','education-benefits-more','education-risks-more','education-benefits-title','education-balance-tips','education-risks-section','health-resources-title','health-resources-intro'].map(id=>[id,new Node()]));
 let requests=0;const sandbox={module:{exports:{}},fetch(){requests++;throw Error('Network forbidden')},document:{getElementById:id=>ids[id],createElement:t=>new Node(t),createTextNode:t=>({textContent:t})}};
 vm.createContext(sandbox);
 for(const file of ['health-fallback','education'])vm.runInContext(await readFile(`public/${file}.js`,'utf8'),sandbox);
@@ -80,3 +80,35 @@ for(const [daily,topic,frequency,showRisks] of [
 render({...base,daily:20,prebed:'Often',reasons:[]});
 assert(ids['education-risks-section'].hidden,'Pre-bed usage alone is not a reported interruption');
 console.log('PASS education display boundaries, local/AI parity, optional risk access, choice preservation and immutable reports');
+
+
+// Compact citations must never discard evidence, metadata or population limits.
+const textOf=node=>[node.textContent||'',...(node.children||[]).map(textOf)].join(' ');
+for(const age of [15,17,18,25,40,70])for(const ai of [false,true]){
+ const result={...base,age,daily:20,reasons:[]},data=select(result);
+ const selection=ai?{benefits:data.benefits.slice(0,2).map(c=>c.id),risks:data.risks.slice(0,2).map(c=>c.id)}:undefined;
+ render(result,selection);
+ assert.equal(ids['health-resources-title'].textContent,'Sources and Further Reading');
+ assert.equal(ids['health-resource-list'].children.length,data.resources.length,'All eligible source details remain available');
+ for(const [i,source] of data.resources.entries()){
+  const node=ids['health-resource-list'].children[i],text=textOf(node);
+  for(const value of [source.organization,source.title,source.summary,source.whyRelevant,source.population,source.date||'Publication/update date not available'])assert(text.includes(value),value);
+  assert(node.children.some(p=>p.children.some(a=>a.href===source.url)));
+ }
+ for(const kind of ['benefits','risks']){
+  const expected=selection?selection[kind].map(id=>data[kind].find(c=>c.id===id)):data[kind];
+  assert.equal(ids['education-'+kind].children.length,expected.length);
+  for(const [i,card] of expected.entries()){
+   const node=ids['education-'+kind].children[i],text=textOf(node);
+   assert(text.includes(card.heading));assert(text.includes(card.statement));if(card.personal)assert(text.includes(card.personal));
+   for(const source of card.sources){assert(text.includes(source.organization));assert(text.includes(source.population));assert(node.children.some(p=>p.children.some(a=>a.href===source.url)));}
+  }
+  const before=ids['education-'+kind].children.length,button=ids['education-'+kind+'-more'];
+  button.onclick();assert(ids['education-'+kind].children.every(c=>!c.hidden));assert.equal(button.attributes['aria-expanded'],'true');
+  button.onclick();assert.equal(ids['education-'+kind].children.filter(c=>!c.hidden).length,Math.min(4,before));assert.equal(ids['education-'+kind].children.length,before);
+ }
+ assert.equal(ids['education-guidance'].hidden,ids['education-balance-tips'].hidden);
+ render(result,selection);assert.equal(ids['health-resource-list'].children.length,data.resources.length,'No duplicate sources on refresh');
+}
+render({...base,reasons:[{text:reasons.bedtime,frequency:'Often'}]});assert(ids['education-guidance'].hidden);
+console.log('PASS organized education: intact claims, full citation metadata, direct links, age scopes, guidance and show-more/local/AI parity');
