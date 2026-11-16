@@ -38,15 +38,15 @@ let educationDisplayResult=null;
 function renderLocalEducation(result,selection){
  const get=id=>document.getElementById(id),data=selectHealthResources(result),balanced=balancedHealthPresentation(result);
  function element(tag,text,className){const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(className)node.className=className;return node;}
- function citation(source,parent){
-  const text=element('p',`${source.organization} · ${source.title} · ${source.date?'Published/updated: '+source.date:'Publication/update date not available'}`,'education-source');
+ function citation(source,parent,compact=false){
+  const text=element('p',compact?`Source: ${source.organization}`:`${source.organization} · ${source.date?'Published/updated: '+source.date:'Publication/update date not available'}`,'education-source');
   const link=element('a','View source');link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';link.setAttribute('aria-label',`View source: ${source.title} (opens in a new tab)`);text.append(document.createTextNode(' · '),link);parent.append(text,element('p',source.population,'education-scope'));
  }
  get('education-live-status').hidden=false;get('education-live-status').textContent='Evidence-based educational resources';
  get('education-checked').hidden=true;get('education-fallback-note').hidden=false;
  get('education-fallback-note').textContent='Selected from a locally curated library. No live search is performed. Optional AI selection uses only reviewed library explanations. Sources may have newer versions; open each citation to check.';
  get('education-age').textContent='Resources are filtered to their stated age scope. General guidance is not an age-specific study. Your answers guide relevance, not a diagnosis or a judgment about safe usage.';
- get('education-benefits-title').textContent='Potential Benefits of Social Media';get('education-balance-tips').hidden=!balanced;get('education-benefits').hidden=false;get('education-risks-title').textContent='Potential Risks of Social Media';
+ get('education-benefits-title').textContent='Potential Benefits of Social Media';get('education-balance-tips').hidden=!balanced;get('education-guidance').hidden=!balanced;get('education-benefits').hidden=false;get('education-risks-title').textContent='Potential Risks of Social Media';
  const display=healthEducationDisplay(result),riskSection=get('education-risks-section'),riskToggle=get('education-risks-toggle');
  // An AI selection for the same report must not reset the visitor's disclosure choice.
  if(educationDisplayResult!==result){riskSection.hidden=!display.showRisks;educationDisplayResult=result;}
@@ -57,13 +57,13 @@ function renderLocalEducation(result,selection){
  for(const kind of ['benefits','risks']){
   const list=get('education-'+kind);list.replaceChildren();
   if(selection?.[kind])data[kind]=selection[kind].map(id=>data[kind].find(c=>c.id===id)).filter(Boolean);
-  for(const item of data[kind]){const li=element('li');li.append(element('h4',item.heading),element('p',item.statement));if(item.personal)li.append(element('p',item.personal,'education-personal'));for(const source of item.sources)citation(source,li);list.append(li);}
+  for(const item of data[kind]){const li=element('li');li.append(element('h5',item.heading),element('p',item.statement));if(item.personal)li.append(element('p',item.personal,'education-personal'));for(const source of item.sources)citation(source,li,true);list.append(li);}
   limitEducationCards(kind);
  }
- get('health-resources-title').textContent=balanced?'Learn More':'Helpful Resources for Your Results';
+ get('health-resources-title').textContent='Sources and Further Reading';
  get('health-resources-intro').textContent='Reviewed resources appropriate to your age and reported routines. Not a live research search.';
  const resources=get('health-resource-list');resources.replaceChildren();
- for(const source of data.resources.slice(0,balanced?3:6)){const li=element('li');li.append(element('h4',source.title),element('p',source.summary),element('p',source.whyRelevant,'education-personal'));citation(source,li);resources.append(li);}
+ for(const source of data.resources){const li=element('li');li.append(element('h5',source.title),element('p',source.summary),element('p',source.whyRelevant,'education-personal'));citation(source,li);resources.append(li);}
  get('health-resources').hidden=false;
 }
 
@@ -85,4 +85,5 @@ async function renderHealthEducation(result){
  document.getElementById('education-fallback-note').textContent='AI helped select and arrange reviewed explanations from the curated library. No live web research was performed. Educational information, not a medical diagnosis.';
 }
 if(typeof module!=='undefined')module.exports={healthSearchContext,renderLocalEducation,renderHealthEducation,balancedHealthPresentation,healthEducationDisplay};
+
 

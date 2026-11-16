@@ -364,3 +364,20 @@ footer{color:#c1cee1}
 #result .report-answer-note>h4{margin:0 0 8px;font-size:14px;line-height:1.5;color:#e0fb9e}
 #result .report-answer-note>p{margin:6px 0 0;font-size:13px;line-height:1.6;color:#e5efef}
 @media(forced-colors:active){#result .report-answer-note{background:Canvas;border-color:CanvasText}#result .report-answer-note>h4,#result .report-answer-note>p{color:CanvasText}}
+
+
+/* Health education hierarchy only; source content and disclosure rules are unchanged. */
+#report-health-details .education-intro{font-size:14px;line-height:1.6;margin:14px 0 6px;color:#e5efef}
+#report-health-details .education-guidance{margin:20px 0;padding:12px 14px;border-left:2px solid #6b8787;background:#244e50;border-radius:0 8px 8px 0}
+#report-health-details .education-guidance h4{font-size:14px;color:#e0fb9e;margin:0 0 8px}
+#report-health-details .education-guidance ul{margin:0;padding-left:18px;font-size:13px;line-height:1.6;color:#d4e1e1}
+#report-health-details .health-education>h4{color:#e0fb9e;margin:0 0 12px;line-height:1.5}
+#report-health-details .education-cards h5{font:inherit;font-size:16px;font-weight:600;line-height:1.4;margin:0 0 9px}
+#report-health-details .education-cards>li{display:flex;flex-direction:column}
+#report-health-details .education-cards .education-source{margin-top:auto;padding-top:10px}
+#report-health-details .education-source a{display:inline-block;min-height:24px;line-height:24px}
+#report-health-details #health-resource-list>li{margin:0;padding:18px 0;border-bottom:1px solid #456365;min-width:0;overflow-wrap:anywhere}
+#report-health-details #health-resource-list>li:last-child{border-bottom:0}
+#report-health-details #health-resource-list h5{font:inherit;font-size:15px;font-weight:600;line-height:1.5;margin:0 0 8px}
+#report-health-details .education-source,#report-health-details .education-scope{overflow-wrap:anywhere}
+@media(forced-colors:active){#report-health-details .education-guidance{background:Canvas;border-color:CanvasText}#report-health-details .education-intro,#report-health-details .education-guidance h4,#report-health-details .education-guidance ul,#report-health-details .health-education>h4{color:CanvasText}}
