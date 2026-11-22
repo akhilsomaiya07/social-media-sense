@@ -387,3 +387,10 @@ footer{color:#c1cee1}
 .assessment-step[data-step="1"] .two>label{min-width:0}
 #name-error{overflow-wrap:anywhere}
 @media(forced-colors:active){#name[aria-invalid="true"]{border-color:CanvasText}}
+
+#sleep-input-warning{background:#fff1f1;border:1px solid #cf9197;border-radius:9px;padding:12px 14px;margin-top:12px;color:#75232c;overflow-wrap:anywhere}
+#sleep-input-warning h3{font-size:14px;line-height:1.5;margin:0 0 6px;color:#75232c}
+#sleep-input-warning p{font-size:13px;line-height:1.5;margin:6px 0}
+#sleep-input-warning a{font-size:13px;color:#75232c;text-decoration:underline}
+#sleep-input-warning a:focus-visible{outline:3px solid #173f41;outline-offset:3px}
+@media(forced-colors:active){#sleep-input-warning{border-color:CanvasText;background:Canvas;color:CanvasText}#sleep-input-warning h3,#sleep-input-warning a{color:CanvasText}}
