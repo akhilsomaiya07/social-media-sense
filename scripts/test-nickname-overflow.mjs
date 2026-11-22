@@ -17,13 +17,13 @@ async function completeAssessment(page,name){
  await page.click('#flow-next');
  assert.equal(await page.locator('#step-count').textContent(),'Step 3 of 5');
  await page.fill('#sleep-hours','7');
- await page.check('input[name="prebed"][value="Never"]');
+ 
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'assessment overflow on step 3');
  await page.click('#flow-next');
  assert.equal(await page.locator('#step-count').textContent(),'Step 4 of 5');
  await page.fill('#activity-hours','0');
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'assessment overflow on step 4');
- await page.click('#flow-next');
+ await page.click('#flow-next');await page.check('input[name="prebed"][value="Never"]');
  assert.equal(await page.locator('#step-count').textContent(),'Step 5 of 5');
  for(const id of ['bedtime','tasks','movement','people','longer'])await page.check(`input[name="${id}"][value="Never"]`);
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'assessment overflow on step 5');

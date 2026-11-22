@@ -34,3 +34,11 @@ assert.equal(s.nameValidation('1@#$%').message,'Use letters only. Spaces, hyphen
 console.log('PASS required Unicode names, separators, normalization, length and Step 1 validation');
 
 for(const age of [-1,'2e1','0x17','23.0'])assert(s.ageValidation(age));
+
+assert.equal(s.assessmentErrorsForStep(s.calculateWithRoutine,{...base,prebed:undefined},3).prebed,undefined);
+assert(s.assessmentErrorsForStep(s.calculateWithRoutine,{...base,prebed:undefined},5).prebed);
+for(const prebed of ['Never','Sometimes','Often']){const result=s.calculateWithRoutine({...base,prebed});assert.equal(result.worthReviewing,false);assert.equal(result.reasons.length,0);assert.equal(result.daily,210);}
+const markup=await readFile('public/index.html','utf8');
+assert(!markup.split('data-step="3"')[1].split('</section>')[0].includes('name="prebed"'));
+assert.equal((markup.split('data-step="5"')[1].split('</section>')[0].match(/name="prebed"/g)||[]).length,3);
+console.log('PASS pre-bed required validation moved to Step 5; usage alone is not disruption');

@@ -12,8 +12,8 @@ try{
   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(server.origin);await page.click('#home-start');await page.fill('#age','25');
   await page.click('#flow-next');await page.click('#flow-next');
-  await page.fill('#sleep-hours','7');await page.check('[name="prebed"][value="Never"]');await page.click('#flow-next');
-  await page.fill('#activity-minutes','30');await page.click('#flow-next');
+  await page.fill('#sleep-hours','7');await page.click('#flow-next');
+  await page.fill('#activity-minutes','30');await page.click('#flow-next');await page.check('[name="prebed"][value="Never"]');
   for(const key of ['bedtime','tasks','movement','people','longer'])await page.check(`[name="${key}"][value="Never"]`);
   await page.click('#flow-next');await page.waitForURL(server.origin+'/results');
   await page.locator('#result').waitFor({state:'visible'});

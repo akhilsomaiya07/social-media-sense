@@ -92,6 +92,7 @@ if(typeof document!=='undefined'){
  const $=id=>document.getElementById(id), form=$('checkin');let latest=null;
  const platformUI=setupPlatformInputs();
  $('questions').innerHTML=questions.map(q=>`<fieldset class="question"><legend>${q.text}</legend><div class="choices">${['Never','Sometimes','Often'].map((v,i)=>`<label class="choice"><input type="radio" name="${q.id}" value="${v}" required><span>${v}</span></label>`).join('')}</div></fieldset>`).join('');
+ $('questions').firstElementChild.after($('prebed-question'));
  function clearFieldErrors(preserveAge=false){
   for(const node of form.querySelectorAll('.field-error'))if(node.id!=='platform-limit-error'&&!(preserveAge&&node.id==='age-error'))node.remove();
   for(const input of form.querySelectorAll('[aria-invalid]')){if(preserveAge&&input.id==='age')continue;input.removeAttribute('aria-invalid');input.removeAttribute('aria-describedby');}

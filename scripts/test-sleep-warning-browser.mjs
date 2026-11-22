@@ -11,7 +11,7 @@ try{for(const width of [320,390,768,1280]){
  assert.equal(await warning.locator('a').getAttribute('href'),'https://www.cdc.gov/sleep/about/');
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
  await page.screenshot({path:`/tmp/sleep-warning-${width}.png`,fullPage:true});
- await page.check('input[name="prebed"][value="Never"]');await page.click('#flow-next');assert.equal(await page.locator('#step-count').textContent(),'Step 4 of 5');await page.click('#flow-back');assert(await warning.isVisible());
+ await page.click('#flow-next');assert.equal(await page.locator('#step-count').textContent(),'Step 4 of 5');await page.click('#flow-back');assert(await warning.isVisible());
  await page.fill('#sleep-hours','8');assert(!await warning.isVisible());await page.fill('#sleep-hours','6');assert(await warning.isVisible());
  await page.fill('#sleep-minutes','60');assert(!await warning.isVisible());await page.click('#flow-next');assert.equal(await page.locator('#step-count').textContent(),'Step 3 of 5');assert.equal(await page.locator('#sleep-minutes').getAttribute('aria-invalid'),'true');
  await page.fill('#sleep-minutes','');assert(!await warning.isVisible());assert.equal(await warning.count(),1);await page.close();console.log(`PASS sleep warning ${width}px`);

@@ -71,13 +71,13 @@ async function captureReportReviews(){
 async function usePlatform(name,minutes){await page.getByRole('slider',{name:name+' daily usage',exact:true}).evaluate((el,n)=>{el.value=platformPosition(n);el.dispatchEvent(new Event('input',{bubbles:true}));},minutes);}
 async function finishAssessment(instagram,showAllSteps=false){
  await usePlatform('Instagram',instagram);await usePlatform('YouTube',60);await usePlatform('TikTok',30);
- await page.click('#flow-next');await page.fill('#sleep-hours','7');await page.fill('#sleep-minutes','30');await page.check('input[name="prebed"][value="Sometimes"]');
+ await page.click('#flow-next');await page.fill('#sleep-hours','7');await page.fill('#sleep-minutes','30');
  if(showAllSteps)await capture('assessment-step-3',['#checkin']);
  await page.click('#flow-next');await page.fill('#activity-hours','0');await page.fill('#activity-minutes','45');
  if(showAllSteps)await capture('assessment-step-4',['#checkin']);
- await page.click('#flow-next');
+ await page.click('#flow-next');await page.check('input[name="prebed"][value="Sometimes"]');
  for(const [key,value] of Object.entries({bedtime:'Sometimes',tasks:'Sometimes',movement:'Never',people:'Sometimes',longer:'Sometimes'}))await page.check(`input[name="${key}"][value="${value}"]`);
- if(showAllSteps){assert.equal(await page.locator('#questions fieldset').count(),5);await capture('assessment-step-5',['#checkin']);}
+ if(showAllSteps){assert.equal(await page.locator('#questions fieldset').count(),6);await capture('assessment-step-5',['#checkin']);}
  await page.click('#flow-next');await page.locator('#result').waitFor({state:'visible'});
  await page.waitForFunction(()=>document.getElementById('education-live-status').textContent.includes('Evidence-based educational resources'));
 }

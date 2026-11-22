@@ -13,8 +13,8 @@ try{
   try{
    await page.goto(server.origin);await page.click('#home-start');await page.fill('#name','Review Demo');await page.fill('#age','30');await page.click('#flow-next');
    await page.locator('.platform-slider').first().evaluate(e=>{e.value=platformPosition(180);e.dispatchEvent(new Event('input',{bubbles:true}));});
-   await page.click('#flow-next');await page.fill('#sleep-hours','7');await page.fill('#sleep-minutes','30');await page.check('[name="prebed"][value="Sometimes"]');
-   await page.click('#flow-next');await page.fill('#activity-hours','0');await page.fill('#activity-minutes','45');await page.click('#flow-next');
+   await page.click('#flow-next');await page.fill('#sleep-hours','7');await page.fill('#sleep-minutes','30');
+   await page.click('#flow-next');await page.fill('#activity-hours','0');await page.fill('#activity-minutes','45');await page.click('#flow-next');await page.check('[name="prebed"][value="Sometimes"]');
    for(const key of ['bedtime','tasks','movement','people','longer'])await page.check(`[name="${key}"][value="${key==='bedtime'?bedtime:'Never'}"]`);
    await page.click('#flow-next');await page.locator('#result').waitFor({state:'visible'});
    const snapshot=await page.locator('#report-snapshot').innerText();assert.match(snapshot,/3h/);
