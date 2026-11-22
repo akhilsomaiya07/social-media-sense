@@ -49,9 +49,9 @@ I designed the assessment for **ages 15 to 100**, including both endpoints. A ni
 | --- | --- | --- |
 | **1. About you** | Optional nickname and age | Selects relevant educational context. Ages outside 15 to 100 cannot continue. |
 | **2. Social media time** | Estimated time for each platform on an average day | Shows a combined total and the platforms contributing to it. |
-| **3. Sleep** | Typical nighttime sleep and pre-bed social media frequency | Provides age-relevant sleep context without assuming social media caused a sleep pattern. |
+| **3. Sleep** | Typical nighttime sleep and age-related sleep context | Provides age-relevant sleep context without assuming social media caused a sleep pattern. |
 | **4. Physical activity** | Typical daily activity in hours and minutes | Adds routine context, rather than a fitness grade. |
-| **5. Everyday routine** | Five **Never / Sometimes / Often** answers about the past week | Determines which reported habits, if any, may be worth reviewing. |
+| **5. Everyday routine** | Five routine-disruption answers plus a separate pre-bed social media use question | Determines which reported habits, if any, may be worth reviewing. |
 
 ### Why I ask for age
 

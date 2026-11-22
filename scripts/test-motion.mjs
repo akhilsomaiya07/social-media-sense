@@ -119,8 +119,8 @@ try{
    assert.match(await page.locator('#platform-total').textContent(),/3h/);
    await page.click('#flow-next');await step(page,3);
    await page.fill('#sleep-hours','30');await page.click('#flow-next');assert.equal(await page.evaluate(()=>document.activeElement.id),'sleep-hours');assert.match(await page.locator('#error').textContent(),/sleep hours/);
-   await page.fill('#sleep-hours','7');await page.fill('#sleep-minutes','30');await page.check('input[name="prebed"][value="Sometimes"]');await page.click('#flow-next');await step(page,4);
-   await page.fill('#activity-hours','0');await page.fill('#activity-minutes','45');await page.click('#flow-next');await step(page,5);await answerRoutine(page);
+   await page.fill('#sleep-hours','7');await page.fill('#sleep-minutes','30');await page.click('#flow-next');await step(page,4);
+   await page.fill('#activity-hours','0');await page.fill('#activity-minutes','45');await page.click('#flow-next');await page.check('input[name="prebed"][value="Sometimes"]');await step(page,5);await answerRoutine(page);
    await page.click('#flow-back');await step(page,4);assert.equal(await page.locator('#activity-minutes').inputValue(),'45');await page.click('#flow-next');await step(page,5);
    // Rapid alternating navigation interrupts CSS naturally; never queues a stale step.
    await page.evaluate(()=>{document.getElementById('flow-back').click();document.getElementById('checkin').requestSubmit();document.getElementById('flow-back').click();});
@@ -147,7 +147,7 @@ try{
    await page.emulateMedia({forcedColors:'none',reducedMotion});
    await page.click('#start-new-checkin');await step(page,1);assert.equal(await page.locator('#name').inputValue(),'');
    if(width===1280){
-    await page.fill('#age','30');await page.click('#flow-next');await enterUsage(page);await page.click('#flow-next');await page.fill('#sleep-hours','7');await page.check('input[name="prebed"][value="Never"]');await page.click('#flow-next');await page.fill('#activity-hours','0');await page.click('#flow-next');await answerRoutine(page);await finish(page);await page.waitForTimeout(550);
+    await page.fill('#age','30');await page.click('#flow-next');await enterUsage(page);await page.click('#flow-next');await page.fill('#sleep-hours','7');await page.click('#flow-next');await page.fill('#activity-hours','0');await page.click('#flow-next');await page.check('input[name="prebed"][value="Never"]');await answerRoutine(page);await finish(page);await page.waitForTimeout(550);
     assert.equal(await page.evaluate(()=>window.motionAudit.completed),2);assert.equal(await page.evaluate(()=>window.motionAudit.reveals),reduced?0:2);
    }
    assert.deepEqual(f.errors,[]);console.log(`PASS motion ${width}px ${reducedMotion}: steps, values, validation, focus, progress, loading, figures, report return, reset, forced colors, no overflow/errors`);
@@ -156,7 +156,7 @@ try{
  const f=await fixture(390,'no-preference',true),{page}=f;
  try{
   assert.equal(await page.locator('.step-progress-track').count(),0);
-  await page.click('#home-start');await step(page,1,false);await page.fill('#age','30');await page.click('#flow-next');await step(page,2,false);await enterUsage(page);await page.click('#flow-next');await page.fill('#sleep-hours','7');await page.check('input[name="prebed"][value="Never"]');await page.click('#flow-next');await page.fill('#activity-hours','0');await page.click('#flow-next');await answerRoutine(page);await finish(page);assert.deepEqual(f.errors,[]);
+  await page.click('#home-start');await step(page,1,false);await page.fill('#age','30');await page.click('#flow-next');await step(page,2,false);await enterUsage(page);await page.click('#flow-next');await page.fill('#sleep-hours','7');await page.click('#flow-next');await page.fill('#activity-hours','0');await page.click('#flow-next');await page.check('input[name="prebed"][value="Never"]');await answerRoutine(page);await finish(page);assert.deepEqual(f.errors,[]);
   console.log('PASS optional motion script unavailable: native progress, navigation and report still work');
  }finally{await f.context.close();}
 }finally{await browser.close();}

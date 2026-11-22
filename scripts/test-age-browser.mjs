@@ -43,6 +43,17 @@ try{for(const width of [320,390,768,1280]){
  for(const age of ['15','16','17','18','29','30','64','65','99','100']){
   await page.fill('#age',age);assert.equal(await page.locator('#age-error').count(),0);assert.equal(await page.locator('#age').getAttribute('aria-invalid'),null);await page.click('#flow-next');assert.match(page.url(),/\/check-in\/social-media-time$/);assert.equal(await page.locator('#step-count').textContent(),'Step 2 of 5');await page.click('#flow-back');assert.equal(page.url(),step1);assert.equal(await page.locator('#age').inputValue(),age);
  }
+
+ await page.fill('#name','Test User');await page.fill('#age','25');await page.click('#flow-next');await page.click('#flow-next');
+ assert.equal(await page.locator('[data-step="3"] [name="prebed"]').count(),0);
+ await page.fill('#sleep-hours','7');await page.click('#flow-next');await page.fill('#activity-hours','0');await page.click('#flow-next');
+ assert.equal(await page.locator('#questions fieldset').count(),6);
+ assert.equal(await page.locator('#questions fieldset').nth(1).getAttribute('id'),'prebed-question');
+ assert.equal(await page.locator('#prebed-question legend').textContent(),'Do you usually use social media during the hour before you try to sleep?');
+ await page.click('#flow-next');assert.equal(await page.locator('#step-count').textContent(),'Step 5 of 5');
+ for(const value of ['Never','Sometimes','Often']){await page.check(`[name="prebed"][value="${value}"]`);await page.click('#flow-back');await page.click('#flow-next');assert(await page.locator(`[name="prebed"][value="${value}"]`).isChecked());}
+ assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+ for(let i=0;i<4;i++)await page.click('#flow-back');
  assert.deepEqual(await page.evaluate(()=>({...localStorage})),storage);
  await page.emulateMedia({forcedColors:'active'});await page.fill('#age','14');await page.click('#flow-next');assert(await page.locator('#age-error').isVisible());assert.notEqual(await page.locator('#age').evaluate(e=>getComputedStyle(e).borderStyle),'none');
  assert.deepEqual(errors,[]);await context.close();console.log(`PASS age browser ${width}px: messages, blur/typing, focus, routes, boundaries, no overflow/storage writes, forced colors`);

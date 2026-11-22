@@ -30,7 +30,7 @@ try{
   for(const c of before?cases.filter(c=>['A','D'].includes(c.id)):cases){
    await p.fill('#name','Demo');await p.fill('#age',String(c.age));await p.click('#flow-next');
    for(const [name,time] of c.tie?[['Facebook',30],['Instagram',30]]:[['Facebook',c.daily]])await p.getByRole('slider',{name:name+' daily usage',exact:true}).evaluate((el,m)=>{el.value=platformPosition(m);el.dispatchEvent(new Event('input',{bubbles:true}));},time);
-   await p.click('#flow-next');await p.fill('#sleep-hours','7');await p.fill('#sleep-minutes','0');await p.check('[name="prebed"][value="Often"]');await p.click('#flow-next');await p.fill('#activity-hours','1');await p.fill('#activity-minutes','0');await p.click('#flow-next');
+   await p.click('#flow-next');await p.fill('#sleep-hours','7');await p.fill('#sleep-minutes','0');await p.click('#flow-next');await p.fill('#activity-hours','1');await p.fill('#activity-minutes','0');await p.click('#flow-next');await p.check('[name="prebed"][value="Often"]');
    for(const [key,value] of Object.entries(c.b))await p.check(`[name="${key}"][value="${value}"]`);
    await p.click('#flow-next');await p.locator('#result').waitFor({state:'visible'});await p.waitForFunction(()=>document.getElementById('education-live-status').textContent.includes('Evidence-based educational resources'));
    if(!before){
