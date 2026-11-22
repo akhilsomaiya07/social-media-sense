@@ -43,3 +43,13 @@ function renderSleepContext(result){
  noConnection.textContent='Your answers did not indicate that social media is currently interfering with your bedtime, so this check-in does not assume social media is responsible for your reported sleep amount.';
 }
 if(typeof module!=='undefined')module.exports={sleepReference,sleepContext,sleepBedtimeConnection,sleepShieldIntro};
+
+// Step 3 guidance only. Does not change report interpretation or validation.
+function sleepInputWarning(age,minutes){
+ const reference=sleepReference(age);
+ if(!reference||!Number.isInteger(minutes)||minutes<0||minutes>1440||minutes>=reference.min)return null;
+ const hours=Math.floor(minutes/60),remainder=minutes%60;
+ const reported=[hours?`${hours} ${hours===1?'hour':'hours'}`:'',remainder?`${remainder} ${remainder===1?'minute':'minutes'}`:''].filter(Boolean).join(' ')||'0 minutes';
+ const recommendation=reference.max?`${reference.min/60}–${reference.max/60} hours`:'at least 7 hours';
+ return `You reported ${reported} per night. For your age, the CDC recommends ${recommendation}. Consider making more time for sleep.`;
+}

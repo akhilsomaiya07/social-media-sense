@@ -148,9 +148,14 @@ if(typeof document!=='undefined'){
   $('sleep-age-scope').textContent=reference?.group==='Teen'?'This reference covers total sleep over 24 hours. This check-in asks about nighttime sleep only, so daytime naps may also matter.':'';
   const context=Object.keys(sleepTime.errors).length?null:sleepContext(data.age,sleepTime.total);
   $('sleep-age-feedback').textContent=context?.text||'';
+  const warning=Object.keys(sleepTime.errors).length?null:sleepInputWarning(data.age,sleepTime.total);
+  $('sleep-input-warning').hidden=!warning;
+  if($('sleep-input-warning-text').textContent!==(warning||''))$('sleep-input-warning-text').textContent=warning||'';
+
   for(const prefix of ['sleep','activity']){const time=routineTime(data,prefix);$(prefix+'-selected').textContent=Object.keys(time.errors).length?'Enter valid hours and minutes to see your total.':duration(time.total)+(prefix==='sleep'?' per night':' of physical activity per day');}
  }
  for(const id of ['age','sleep-hours','sleep-minutes','activity-hours','activity-minutes'])$(id).addEventListener('input',refreshRoutineTimes);
+ document.addEventListener('assessment:step',event=>{if(event.detail.step===3)refreshRoutineTimes();});
  refreshRoutineTimes();
  function render(result){clearFieldErrors();latest=result;$('error').hidden=true;$('state-label').textContent='CHECK-IN COMPLETE';$('result-title').textContent=result.name?`${result.name}, here’s your check-in.`:'Here’s your check-in.';$('result-sub').textContent="Here's a summary of your reported social media time and daily routine.";for(const key of ['daily','weekly','yearly'])$(key).textContent=duration(result[key]);$('day-fill').style.width=(result.daily/1440*100)+'%';$('day-caption').textContent=(result.daily/1440*100).toFixed(1)+'% of a 24-hour day';
  const review=$('review');review.replaceChildren();const heading=document.createElement('h4');heading.textContent=result.worthReviewing?'Some habits may be worth reviewing':'No routine disruption reported';review.append(heading);const explanation=document.createElement('p');explanation.textContent=result.worthReviewing?'Your answers identified routine interruptions. Choose one place to start below.':'Your answers did not identify routine interruptions in this check-in.';review.append(explanation);

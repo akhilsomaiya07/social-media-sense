@@ -18,3 +18,13 @@ for(const hours of [0,6,8,24]){const r=calculate({...base,'sleep-hours':hours});
 assert.equal(sleepBedtimeConnection(calculate({...base,prebed:'Often'})).related,true);
 assert.equal(sleepBedtimeConnection(calculate({...base,bedtime:'Sometimes'})).related,true);
 console.log('PASS age boundaries, neutral upper-range wording, either bedtime answer, unchanged concern logic and totals');
+
+const warning=vm.runInContext('sleepInputWarning',sandbox);
+for(const [age,minutes,show] of [[15,479,true],[16,390,true],[17,480,false],[18,419,true],[25,420,false],[40,390,true],[60,420,false],[61,419,true],[64,420,false],[65,390,true],[70,420,false],[100,450,false]])assert.equal(Boolean(warning(age,minutes)),show);
+for(const minutes of [null,undefined,NaN,-1,1441,390.5])assert.equal(warning(25,minutes),null);
+for(const age of ['',14,101,16.5])assert.equal(warning(age,390),null);
+assert.equal(warning(16,390),'You reported 6 hours 30 minutes per night. For your age, the CDC recommends 8–10 hours. Consider making more time for sleep.');
+assert.match(warning(25,360),/6 hours per night.*at least 7 hours/);
+assert.match(warning(70,390),/7–8 hours/);assert.match(warning(61,390),/7–9 hours/);
+for(const age of [16,25,61,70]){const result=calculate({...base,age,'sleep-hours':5});assert.equal(result.sleep,5);assert.equal(result.worthReviewing,false);}
+console.log('PASS Step 3 warning thresholds, exact minutes, wording, invalid values and non-blocking low sleep');
