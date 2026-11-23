@@ -231,7 +231,7 @@ I took these screenshots with fictional data and the regular offline research fa
 
 Health sources are selected for **educational relevance**, with age scope, source dates and clickable citations. Both potential benefits and possible risks remain available. The label “Evidence-based educational resources” describes reviewed educational material, not a live search or clinical validation. The library needs periodic manual review; publication dates are not assessment timestamps. Sources do not imply endorsement of the project.
 
-The existing screenshots reflect the previous fallback presentation. The current version renders local resources first and may request free-model selection at the same-origin endpoint; it does not use the retired paid search provider.
+The screenshots show the current locally curated educational resources. The current version renders local resources first and may request free-model selection at the same-origin endpoint; it does not use the retired paid search provider.
 
 **Unsaved full reports are temporary.** Browser navigation can preserve an in-progress assessment during the current visit, but refreshing can return a person to Step 1, and opening `/results` without an active completed report will not recreate one. Only deliberately saved summary check-ins remain available through Progress.
 
@@ -286,7 +286,7 @@ The repository retains a Netlify adapter, but **Cloudflare Workers is the curren
 
 ## Current verification and what's still limited
 
-The latest review passed the build, unit suite, age browser checks at 320/390/768/1280px, Cloudflare bundle dry run and screenshot capture in GitHub Actions. Motion and routing browser checks stopped at older assertions that expect Age to receive focus when both required fields are empty; the current form focuses Name first. Those suites are not reported as passing. Production DOM inspection confirmed required name/age, the sleep-warning element and the Step 5 pre-bed placement, but did not establish a deployment SHA or complete a production assessment. See [the review record](docs/REPOSITORY-REFRESH.md).
+The latest review passed the build, unit suite, age browser checks at 320/390/768/1280px, Cloudflare bundle dry run and screenshot capture in GitHub Actions. Motion and routing browser checks stopped at older assertions that expect Age to receive focus when both required fields are empty; the current form focuses Name first. Those suites are not reported as passing. Production DOM inspection confirmed required name/age, the sleep-warning element and the Step 5 pre-bed placement, and the follow-up verified Cloudflare version `c0b55146` serving main `53512b3` at 100% traffic. A complete isolated production assessment remains unverified. See [the original review record](docs/REPOSITORY-REFRESH.md) and [follow-up verification](docs/VERIFICATION-FOLLOWUP.md).
 
 In October 2026, the core five-step assessment, validation, custom platform removal, results calculations and normal mobile layouts were tested with synthetic answers. A 200-character nickname originally caused horizontal overflow; the fix was verified on the deployed Cloudflare version at **320, 375, 390 and 1366 pixels** after deployment completed. Both ordinary and empty nicknames also passed at that time; empty names are now rejected by Step 1. The source build and unit tests passed. These are targeted QA results, not a certification of every device or flow.
 
