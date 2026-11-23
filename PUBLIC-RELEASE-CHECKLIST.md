@@ -12,20 +12,22 @@ Social Media Sense is a small Handshake portfolio prototype, not a medical asses
 
 ## Screenshot gallery
 
+The checked gallery items were rechecked during the current refresh. See [capture evidence and remaining limitations](docs/REPOSITORY-REFRESH.md).
+
 - [x] Install Chromium with `npx playwright install chromium`, then run `npm run screenshots` for the current reviewed gallery.
 - [x] Examine the output in `artifacts/screenshots/`; it is generated from isolated synthetic data, **not** the production site's saved visitor records.
 - [x] Compare the captures with `docs/screenshots/` and update curated assets only where the newer view is accurate and worth publishing.
 - [x] Confirm the capture script and curated gallery include the synthetic **Seven-Night Sleep Summary** at `docs/screenshots/sleep-tracker-seven-night-summary.png`.
-- [ ] Refresh old `sleep-shield*.png` frames if they show an obsolete visible feature name; keeping historical filenames is fine if captions are current.
+- [x] The current README uses Sleep Tracker captures. Older `sleep-shield*.png` assets remain historical; they are not current gallery images.
 - [ ] Recheck the README on GitHub desktop and at a mobile width: no cropped headings, stretched images, broken relative links or truncated steps.
-- [ ] Review `docs/screenshots/manifest.json` to ensure file hashes, sizes and dates describe actual reviewed images; do not change metadata without recapturing.
+- [x] Review `docs/screenshots/manifest.json` to ensure file hashes, sizes and dates describe actual reviewed images; do not change metadata without recapturing.
 
 ## Public and privacy checks
 
 - [ ] Confirm no API keys, `.dev.vars`, real `.env` files, personal check-ins, real browser exports, logins or private screenshots appear in the **full Git history**, not just the current tree.
 - [ ] Review committed test fixtures, historic `docs/review/` assets and old PRs for private content before publishing.
-- [ ] Confirm the README distinguishes optional live research from offline fallback; do not imply successful live retrieval without testing it.
-- [ ] Update the GitHub **About** description: `Social media wellness check-in with five guided steps, personalized reflections, a seven-night Sleep Tracker, optional reduction goals, and progress comparisons. No account required.`
+- [ ] Confirm the README distinguishes optional free-model selection from local educational content; do not imply successful live retrieval without testing it.
+- [ ] Update the GitHub **About** description: `An educational web app for reflecting on social media use, sleep, physical activity, and everyday routines.`
 - [ ] Set the repository website to `https://social-media-sense.akhilsomaiya7.workers.dev/`.
 - [ ] Decide on a license deliberately. Public visibility alone does not grant an open-source license.
 - [ ] After all checks, change visibility yourself under GitHub repository Settings. This documentation PR does **not** make the repository public.

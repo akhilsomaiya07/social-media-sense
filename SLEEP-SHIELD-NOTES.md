@@ -2,7 +2,7 @@
 
 I wanted the finished report to stay a record of someone's answers. That's why I kept Sleep Tracker as an optional tool in My Tools, instead of adding another assessment step.
 
-Sleep Tracker is an optional dedicated tool opened from My Tools, not an assessment step. It does not alter a completed report. Step 3 retains duration, age-related context and pre-bed social-media questions; clock time is required only to activate a plan.
+Sleep Tracker is an optional dedicated tool opened from My Tools, not an assessment step. It does not alter a completed report. Step 3 retains duration, age-related context and its informational low-sleep warning; the separate pre-bed social-media question is in Step 5; clock time is required only to activate a plan.
 
 Existing wind-down choices, midnight calculations, replacement/custom activities, one-night forms, notes, saved-night editing, comparisons and confirmed clearing remain. Saved plans can be resumed without a new assessment. Research and projections remain collapsed disclosures.
 

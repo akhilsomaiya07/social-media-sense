@@ -10,7 +10,7 @@ const output=path.resolve(root,process.env.SCREENSHOT_DIR||'artifacts/screenshot
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 await fs.mkdir(output,{recursive:true});
 // Remove only outputs this script owns; a failed run cannot retain a stale gallery.
-const names=['homepage','assessment-step-1','assessment-age-validation-mobile','assessment-step-2','assessment-step-2-sliders','assessment-step-3','assessment-step-4','assessment-step-5','results-report','results-insights','results-next-steps','health-education','my-tools','sleep-tracker','sleep-tracker-tracking','sleep-tracker-seven-night-summary','reduction-goal','reduction-savings','progress','progress-comparison'];
+const names=['homepage','assessment-custom-platform','results-balance','health-education-optional-risks','assessment-name-validation-mobile','assessment-sleep-warning-mobile','assessment-step-1','assessment-age-validation-mobile','assessment-step-2','assessment-step-2-sliders','assessment-step-3','assessment-step-4','assessment-step-5','results-report','results-insights','results-next-steps','health-education','my-tools','sleep-tracker','sleep-tracker-tracking','sleep-tracker-seven-night-summary','reduction-goal','reduction-savings','progress','progress-comparison'];
 const reportReviews=['no-preference','reduce'].flatMap(mode=>[320,390,768,1280].map(width=>`report-${width}-${mode}.png`));
 for(const name of [...reportReviews,...names.map(n=>n+'.png'),'mobile-results.png','manifest.json','failure.png','failure.txt'])await fs.rm(path.join(output,name),{force:true});
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:process.env.CHROMIUM_PATH?['--no-sandbox','--disable-dev-shm-usage','--use-gl=angle','--use-angle=swiftshader','--disable-gpu-sandbox']:[]});
@@ -72,7 +72,7 @@ async function usePlatform(name,minutes){await page.getByRole('slider',{name:nam
 async function finishAssessment(instagram,showAllSteps=false){
  await usePlatform('Instagram',instagram);await usePlatform('YouTube',60);await usePlatform('TikTok',30);
  await page.click('#flow-next');await page.fill('#sleep-hours','7');await page.fill('#sleep-minutes','30');
- if(showAllSteps)await capture('assessment-step-3',['#checkin']);
+ if(showAllSteps){await capture('assessment-step-3',['#checkin']);await page.fill('#sleep-hours','6');await capture('assessment-sleep-warning-mobile',['#checkin'],390);await page.fill('#sleep-hours','7');}
  await page.click('#flow-next');await page.fill('#activity-hours','0');await page.fill('#activity-minutes','45');
  if(showAllSteps)await capture('assessment-step-4',['#checkin']);
  await page.click('#flow-next');await page.check('input[name="prebed"][value="Sometimes"]');
@@ -88,10 +88,11 @@ try{
  await page.goto('https://showcase.local/');assert.equal(await page.evaluate(()=>localStorage.length),0);await capture('homepage',['header','#home-screen','.creator-credit','footer']);
  await page.click('#home-start');await begin();await finishAssessment(180);
  await page.click('#next-step-progress');await page.click('#save-checkin');await hub();await page.click('#tools-report');await page.click('#start-new-checkin');
- await page.clock.setFixedTime(new Date('2026-01-22T12:00:00Z'));await page.fill('#name','Test User');await page.fill('#age','25');await capture('assessment-step-1',['#checkin']);await page.setViewportSize({width:390,height:900});await page.fill('#age','14');await page.click('#flow-next');assert.equal(await page.locator('#step-count').textContent(),'Step 1 of 5');await capture('assessment-age-validation-mobile',['#checkin'],390);await page.fill('#age','25');await page.click('#flow-next');
+ await page.clock.setFixedTime(new Date('2026-01-22T12:00:00Z'));await page.fill('#name','Test User');await page.fill('#age','25');await page.fill('#name','John@');await page.click('#flow-next');await capture('assessment-name-validation-mobile',['#checkin'],390);await page.fill('#name','Test User');await capture('assessment-step-1',['#checkin']);await page.setViewportSize({width:390,height:900});await page.fill('#age','14');await page.click('#flow-next');assert.equal(await page.locator('#step-count').textContent(),'Step 1 of 5');await capture('assessment-age-validation-mobile',['#checkin'],390);await page.fill('#age','25');await page.click('#flow-next');
  await usePlatform('Instagram',120);await usePlatform('YouTube',60);await usePlatform('TikTok',30);
  await capture('assessment-step-2',['.assessment-nav','.flow-progress','[data-step="2"] > .section-title','[data-step="2"] > .help','#platform-total-wrap','.platform-reference-legend','.platform-reference-info']);
  await capture('assessment-step-2-sliders',['.platform-row:nth-child(-n+4)']);
+ await page.click('#add-platform');await page.locator('.platform-custom-row').last().locator('input[type="text"]').fill('Community');await capture('assessment-custom-platform',['.platform-custom-row','#add-platform']);
  await finishAssessment(120,true);assert.equal(await page.locator('#daily').textContent(),'3h 30m');
  await capture('results-report',['.result-top','#result-title','#report-snapshot']);
  await capture('results-insights',['#report-insights']);
@@ -124,8 +125,18 @@ try{
  assert.equal(await page.locator('#goal-year').textContent(),'182.5');
  await hub();await tool('progress');assert.match(await page.locator('#progress-summary').textContent(),/60 minutes less/);await page.click('#save-checkin');await capture('progress',['#progress-screen']);
  await page.locator('#progress-details > summary').click();await capture('progress-comparison',['#progress-details']);
+ // A separate low-use, all-Never example shows optional risks and eligible celebration.
+ await hub();await page.click('#tools-report');await page.click('#start-new-checkin');await begin();
+ await usePlatform('Instagram',30);await page.click('#flow-next');await page.fill('#sleep-hours','8');await page.fill('#sleep-minutes','0');await page.click('#flow-next');await page.fill('#activity-hours','0');await page.fill('#activity-minutes','45');await page.click('#flow-next');
+ for(const key of ['prebed','bedtime','tasks','movement','people','longer'])await page.check(`input[name="${key}"][value="Never"]`);
+ await page.click('#flow-next');await page.locator('#result').waitFor({state:'visible'});await page.waitForFunction(()=>document.getElementById('education-live-status').textContent.includes('Evidence-based educational resources'));
+ assert(await page.locator('#balance-celebrate').isVisible());await capture('results-balance',['#report-insights']);
+ await page.locator('#report-health > summary').click();await page.locator('#report-health-details > summary').click();
+ assert.equal(await page.locator('#education-risks-toggle').getAttribute('aria-expanded'),'false');assert(!await page.locator('#education-risks-section').isVisible());
+ await capture('health-education-optional-risks',['#education-guidance','.report-health-topic.health-education:has(#education-benefits)','#education-risks-toggle']);
+ await page.click('#education-risks-toggle');assert.equal(await page.locator('#education-risks-toggle').getAttribute('aria-expanded'),'true');assert(await page.locator('#education-risks-section').isVisible());await page.click('#education-risks-toggle');assert(!await page.locator('#education-risks-section').isVisible());
  assert.deepEqual(errors,[]);assert.equal(captures.length,names.length+reportReviews.length);
- await fs.writeFile(path.join(output,'manifest.json'),JSON.stringify({sourceCommit:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),productionReference:{commit:'4f2b0428995a746b3c1dac5a405ce6dc3e8ed85e',workerVersion:'c085db03',checked:'2026-11-09',captureSource:'local checkout with identical application assets'},fixture:'Synthetic Test User, age 25; 270m prior / 210m current; fixed Jan 2026 UTC dates',research:'Bundled curated educational resources; no provider requests',browser:browser.version(),captures},null,2)+'\n');
+ await fs.writeFile(path.join(output,'manifest.json'),JSON.stringify({sourceCommit:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),productionReference:{verified:false,captureSource:'local checkout; production equivalence not established by this script'},fixture:'Synthetic Test User, age 25; 270m prior / 210m current plus 30m all-Never example; fixed Jan 2026 UTC dates',research:'Bundled curated educational resources; no provider requests',browser:browser.version(),captures},null,2)+'\n');
  console.log(`PASS: ${captures.length} complete section captures, isolated synthetic storage, fallback research and no overflow.`);
 }catch(error){await fs.writeFile(path.join(output,'failure.txt'),String(error.stack||error));await page.screenshot({path:path.join(output,'failure.png')}).catch(()=>{});throw error;}
 finally{await context.close();await browser.close();}
