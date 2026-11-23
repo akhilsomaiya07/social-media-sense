@@ -13,7 +13,7 @@ npx netlify-cli login
 npx netlify-cli deploy --build --prod
 ```
 
-Select your existing Netlify project when prompted. This deploys the function as well as the static app. The function adapter is retained only to return a safe retirement response for older clients.
+Select your existing Netlify project when prompted. This deploys the function as well as the static app. The function adapter returns local mode without Cloudflare runtime bindings.
 
 3. Complete a new check-in on your Netlify site.
 

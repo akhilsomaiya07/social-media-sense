@@ -28,3 +28,9 @@ The model must copy reviewed statements and source IDs exactly. Invented text, s
 No live AI calls were made during implementation. Mocked success does not verify a currently available free provider. Sleep Tracker is unchanged and retains its existing fallback; its legacy payload does not enable this AI path. The Netlify adapter supplies no Cloudflare bindings and stays in local mode. Assessment results and saved records remain independent.
 
 Official references: [chat completions](https://openrouter.ai/docs/api-reference/chat-completion), [provider routing](https://openrouter.ai/docs/guides/routing/provider-selection), [free models](https://openrouter.ai/collections/free-models).
+
+## Safe diagnostics and redirects
+
+The server emits fixed `health_selection` categories for local fallback paths, including configuration, rate limits, network failures, timeout, upstream HTTP rejection and output-validation failures. Logs do not include prompts, answers, credentials or provider text. HTTP 200 can still mean `mode: "local"`; only a validated selection returns `mode: "ai"`. A cache hit is not proof of a fresh provider request.
+
+Provider requests use `redirect: 'manual'` for Cloudflare compatibility. All 3xx responses are rejected without forwarding authorization to another destination. These code safeguards do not establish that a particular configured provider is available or succeeded in production.
