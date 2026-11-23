@@ -22,47 +22,33 @@ Production homepage and read-only DOM inspection confirmed required name/age fie
 | Reduction Goal | More than 120 minutes required, explicit saved-baseline goal save, draft protection and projected savings. |
 | Progress | Explicit summary saves/comparisons, confirmed clearing with linked goals, independent sleep records. |
 
-## Gallery inventory and pending capture
+## Capture and verification
 
-No image was replaced or added in this review. Chromium could not launch: `socket() failed: Operation not permitted`. The existing curated manifest is unchanged and still describes its original images. Image paths were checked against the GitHub tree; image bytes and rendered GitHub presentation were not visually reverified. Do not describe this gallery as refreshed.
+GitHub Actions run [45092783491](https://github.com/akhilsomaiya07/social-media-sense/actions/runs/45092783491) captured 25 gallery images and eight responsive report reviews. External requests were blocked; all entries and storage were synthetic. The manifest records the actual checkout commit, browser, viewports and hashes. All primary images were visually reviewed. Desktop captures use 1280px, mobile examples 390px; report checks cover 320/390/768/1280px. No source information was edited or shortened.
 
-| README image | Refresh status / reason |
-| --- | --- |
-| `docs/screenshots/homepage.png` | Retained pending visual comparison; freshness not certified. |
-| `docs/screenshots/assessment-step-1.png` | Required name/age labels and name feedback changed. |
-| `docs/screenshots/assessment-age-validation-mobile.png` | Retained pending visual comparison; freshness not certified. |
-| `docs/screenshots/assessment-step-2.png` | Retained pending visual comparison; freshness not certified. |
-| `docs/screenshots/assessment-step-2-sliders.png` | Retained pending visual comparison; freshness not certified. |
-| `docs/screenshots/assessment-step-3.png` | Pre-bed question moved; age-specific warning added. |
-| `docs/screenshots/assessment-step-4.png` | Retained pending visual comparison; freshness not certified. |
-| `docs/screenshots/assessment-step-5.png` | Six fields now include the separate pre-bed question. |
-| `docs/screenshots/results-report.png` | Retained pending visual comparison; freshness not certified. |
-| `docs/screenshots/results-insights.png` | Always-visible answer-explanation note added. |
-| `docs/screenshots/results-next-steps.png` | Health-information presentation changed. |
-| `docs/screenshots/health-education.png` | Personalized risk toggle, separate guidance and full source-list layout changed. |
-| `docs/screenshots/my-tools.png` | Retained pending visual comparison; freshness not certified. |
-| `docs/screenshots/sleep-tracker.png` | Retained pending visual comparison; freshness not certified. |
-| `docs/screenshots/sleep-tracker-tracking.png` | Retained pending visual comparison; freshness not certified. |
-| `docs/screenshots/sleep-tracker-seven-night-summary.png` | Retained pending visual comparison; freshness not certified. |
-| `docs/screenshots/reduction-goal.png` | Retained pending visual comparison; freshness not certified. |
-| `docs/screenshots/reduction-savings.png` | Retained pending visual comparison; freshness not certified. |
-| `docs/screenshots/progress.png` | Retained pending visual comparison; freshness not certified. |
-| `docs/screenshots/progress-comparison.png` | Retained pending visual comparison; freshness not certified. |
+Changed or added images:
 
-The capture script now requests additional `assessment-name-validation-mobile.png` and `assessment-sleep-warning-mobile.png` examples at 390px, restores valid inputs afterward, and stops copying a stale production version into future manifests. These are unexecuted capture additions, not published images. Desktop framing remains 1280px; the report-review matrix remains 320/390/768/1280px. All use synthetic data and block external requests.
+- `assessment-step-1.png`
+- `assessment-name-validation-mobile.png`
+- `assessment-age-validation-mobile.png`
+- `assessment-step-2-sliders.png`
+- `assessment-custom-platform.png`
+- `assessment-step-3.png`
+- `assessment-sleep-warning-mobile.png`
+- `assessment-step-5.png`
+- `results-balance.png`
+- `results-next-steps.png`
+- `health-education.png`
+- `health-education-optional-risks.png`
+- `sleep-tracker-tracking.png`
 
-Still pending: execute the complete capture, review every image, add the two new examples to README only after publication, confirm custom-platform and celebration coverage, compare all tool views, and inspect the actual GitHub README at desktop/mobile widths. Do not change old manifest hashes or dates to imply a new capture.
+All other existing gallery images were recaptured and retained when identical. Historical review assets remain unchanged. The custom-platform crop includes a small edge of adjacent content; its fields and buttons are complete.
 
-## Checks actually run
+Passed: npm ci, build, unit suite, age browser checks at four widths, Cloudflare dry run and screenshot capture. Optional risks expand/collapse checks and no-overflow assertions passed. Motion and routing browser tests failed at stale assertions expecting Age focus instead of the now-required Name field (test-motion.mjs:108, test-routing.mjs:24). Worker routing unit checks passed. No tests were weakened. Wrangler warned about existing observability.issue_detection configuration.
 
-- PASS: `npm run build`.
-- PASS: `npm test` (complete unit suite, including name, sleep thresholds and relocated pre-bed validation).
-- PASS: `node --check scripts/capture-showcase.mjs`.
-- PASS: all 20 README image targets exist in the GitHub tree; local relative links in current README/docs resolve after adding this review file.
-- BLOCKED: `npm run screenshots` with installed Playwright/Chromium override, before the first image. No browser/layout pass or fresh screenshot is claimed.
-- NOT VERIFIED: production deployment identity, complete production journey, saved-tool browser scenarios, external source-link availability, actual GitHub Markdown rendering, image decoding/visual freshness and successful OpenRouter access.
+Local Chromium launch was blocked by socket permissions; CI supplied the real captures. Production deployment identity and full live journey, external link availability, live AI success and GitHub mobile rendering remain unverified. GitHub desktop rendering was inspected before the final image update and will require final review. This is not a complete browser-regression pass.
 
-Application files, dependencies, workflow, deployment configuration, source claims, storage behavior and approved README disclaimer were not changed. The only executable change is the documentation capture script. Historical QA statements are not fresh test results.
+No application files, dependencies, workflow or deployment configuration changed. The approved disclaimer is preserved.
 
 ## Repository metadata
 

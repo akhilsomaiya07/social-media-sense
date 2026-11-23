@@ -83,7 +83,7 @@ After Step 5, the app displays a short loading transition, followed by **only th
 
 **1. Your Time.** Estimated daily and weekly totals, plus top platforms. The yearly projection and assumptions are available in expandable details. Calculations use the entered daily average: **weekly = daily × 7** and **yearly = daily × 365**. They do not represent measured historical usage.
 
-**2. Your Everyday Balance.** A summary of the person's reported routine, **One optional example** when relevant, and general sleep context. A **Sometimes** or **Often** answer flags an observation for reflection. If every routine answer is **Never**, the report acknowledges that no disruption was reported within these questions; it does not certify that the behavior is risk-free. A conditional balance celebration is available for eligible results.
+**2. Your Everyday Balance.** A summary of the person's reported routine, with conditional positive feedback. General sleep context remains available under the report's expandable details. A **Sometimes** or **Often** answer flags an observation for reflection. If every routine answer is **Never**, the report acknowledges that no disruption was reported within these questions; it does not certify that the behavior is risk-free. A conditional balance celebration is available for eligible results.
 
 **3. Make Room for What Matters.** One optional suggestion based on the actual answers, along with ways to save the check-in, explore tools and inspect educational sources. Reported bedtime interference takes priority for **Sleep Tracker**. Other disruption may lead to **Reduction Goal** when the usage-based eligibility rule is met; otherwise **Progress** remains an option. The two-hour reference alone is not used to diagnose or label someone.
 
@@ -123,15 +123,17 @@ Explicitly save summary values and compare later entries for estimated usage, pl
 
 ## See the project in action
 
-The gallery below contains earlier real browser captures with fictional data. **It has not yet been refreshed for the latest changes.** Step 1, Step 3, Step 5 and the report/health-information views need replacement; other images await comparison. The new name-error and sleep-warning examples are not yet shown. See the [refresh inventory and verification limits](docs/REPOSITORY-REFRESH.md). Existing images and their original capture manifest are retained, not relabeled as new evidence.
+These are real browser captures of the current checkout, using fictional answers and isolated browser storage. Desktop views use a 1280px viewport; the mobile validation and sleep-warning examples use 390px. Each image keeps its natural proportions and can be opened at full size. Educational content comes from the bundled local library, with external requests blocked during capture. See the [capture inventory and verification limits](docs/REPOSITORY-REFRESH.md). These are local-checkout captures, not evidence of a production deployment version.
 
 ### Homepage
 
-[![Previously captured Social Media Sense homepage](docs/screenshots/homepage.png)](docs/screenshots/homepage.png)
+[![Social Media Sense homepage](docs/screenshots/homepage.png)](docs/screenshots/homepage.png)
 
-### Step 1: Age and the warning message
+### Step 1: Required name, age and validation
 
-[![Social Media Sense Step 1 with age 15 to 100 guidance](docs/screenshots/assessment-step-1.png)](docs/screenshots/assessment-step-1.png)
+[![Required name and age fields with valid fictional entries](docs/screenshots/assessment-step-1.png)](docs/screenshots/assessment-step-1.png)
+
+[![Mobile inline error for an unsupported character in a nickname](docs/screenshots/assessment-name-validation-mobile.png)](docs/screenshots/assessment-name-validation-mobile.png)
 
 [![Mobile underage warning for a submitted age of 14](docs/screenshots/assessment-age-validation-mobile.png)](docs/screenshots/assessment-age-validation-mobile.png)
 
@@ -143,19 +145,25 @@ The red warning explains the requirement and keeps the user on Step 1. It is a v
 
 [![Platform sliders showing reported durations and reference markers](docs/screenshots/assessment-step-2-sliders.png)](docs/screenshots/assessment-step-2-sliders.png)
 
+[![Custom platform fields, sliders, Remove and Add controls](docs/screenshots/assessment-custom-platform.png)](docs/screenshots/assessment-custom-platform.png)
+
 ### Steps 3 to 5: Thinking about your routine
 
-**Earlier Step 3 capture: the pre-bed question has since moved to Step 5**
+**Step 3: Sleep duration and age-specific guidance**
 
-[![Sleep step, age context and pre-bed question](docs/screenshots/assessment-step-3.png)](docs/screenshots/assessment-step-3.png)
+[![Sleep duration and age context without the separate pre-bed question](docs/screenshots/assessment-step-3.png)](docs/screenshots/assessment-step-3.png)
+
+[![Mobile non-blocking sleep warning for a fictional adult reporting 6 hours 30 minutes](docs/screenshots/assessment-sleep-warning-mobile.png)](docs/screenshots/assessment-sleep-warning-mobile.png)
+
+The warning provides general CDC guidance. A valid lower sleep duration still allows the user to continue.
 
 **Step 4: Physical activity**
 
 [![Activity duration entry](docs/screenshots/assessment-step-4.png)](docs/screenshots/assessment-step-4.png)
 
-**Earlier Step 5 capture: the separate pre-bed question is now also present**
+**Step 5: Five interruptions and a separate pre-bed habit**
 
-[![All five daily-routine questions and completion action](docs/screenshots/assessment-step-5.png)](docs/screenshots/assessment-step-5.png)
+[![Five routine-disruption questions, separate pre-bed use and completion action](docs/screenshots/assessment-step-5.png)](docs/screenshots/assessment-step-5.png)
 
 ### What the results look like
 
@@ -167,6 +175,10 @@ The red warning explains the requirement and keeps the user on Step 1. It is a v
 
 [![Reported everyday-routine interruptions](docs/screenshots/results-insights.png)](docs/screenshots/results-insights.png)
 
+**An eligible no-disruption example**
+
+[![Positive feedback and optional celebration for a fictional all-Never check-in](docs/screenshots/results-balance.png)](docs/screenshots/results-balance.png)
+
 **Make Room for What Matters**
 
 [![Suggested next step, save link and educational sources](docs/screenshots/results-next-steps.png)](docs/screenshots/results-next-steps.png)
@@ -174,6 +186,10 @@ The red warning explains the requirement and keeps the user on Step 1. It is a v
 **Health Information and Sources**
 
 [![Age-relevant local educational benefits, risks and linked sources](docs/screenshots/health-education.png)](docs/screenshots/health-education.png)
+
+For a fictional 30-minute check-in with all five interruption answers set to Never, general risks are available through a smaller optional control:
+
+[![Benefits and the View potential risks control for a no-disruption check-in](docs/screenshots/health-education-optional-risks.png)](docs/screenshots/health-education-optional-risks.png)
 
 ### My Tools
 
@@ -270,7 +286,7 @@ The repository retains a Netlify adapter, but **Cloudflare Workers is the curren
 
 ## Current verification and what's still limited
 
-The latest documentation review passed the build and full unit suite. Local screenshot capture could not launch Chromium because the environment denied its socket operation. Production DOM inspection confirmed required name/age, the sleep warning and the Step 5 pre-bed placement, but did not establish a deployment SHA or complete a production assessment. This is not a fresh end-to-end browser pass. See [the review record](docs/REPOSITORY-REFRESH.md).
+The latest review passed the build, unit suite, age browser checks at 320/390/768/1280px, Cloudflare bundle dry run and screenshot capture in GitHub Actions. Motion and routing browser checks stopped at older assertions that expect Age to receive focus when both required fields are empty; the current form focuses Name first. Those suites are not reported as passing. Production DOM inspection confirmed required name/age, the sleep-warning element and the Step 5 pre-bed placement, but did not establish a deployment SHA or complete a production assessment. See [the review record](docs/REPOSITORY-REFRESH.md).
 
 In October 2026, the core five-step assessment, validation, custom platform removal, results calculations and normal mobile layouts were tested with synthetic answers. A 200-character nickname originally caused horizontal overflow; the fix was verified on the deployed Cloudflare version at **320, 375, 390 and 1366 pixels** after deployment completed. Both ordinary and empty nicknames also passed at that time; empty names are now rejected by Step 1. The source build and unit tests passed. These are targeted QA results, not a certification of every device or flow.
 

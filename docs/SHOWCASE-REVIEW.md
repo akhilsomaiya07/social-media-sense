@@ -1,5 +1,7 @@
 # How I improved the screenshot gallery
 
+Historical review of the gallery at the base commit below. Relative image links now show the current gallery; see [the current refresh record](REPOSITORY-REFRESH.md) for new captures and verification limits.
+
 I reviewed the original captures and noticed that some images cut off the parts I wanted people to see. These notes record what I changed and how I checked the revised gallery.
 
 Base: `fda21b1dd38066d3e9ffa48e4d049fa94608a611` (main, merged PR #27).
