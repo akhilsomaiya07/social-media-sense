@@ -31,16 +31,10 @@ I wanted people to think about **what that time means to them**. Does it affect 
 
 I also wanted the results to feel fair. Someone who reports more time online shouldn't automatically be told they have a problem. Likewise, someone with a smaller total can still have a habit they'd like to work on.
 
-<table>
-  <tr>
-    <td>
-      <strong>Note: About This Project</strong>
-      <p>
-        Social Media Sense is an independent, non-commercial prototype created as a Handshake portfolio project. It is not a company, commercial product, or medical assessment. It is intended for educational use and personal reflection.
-      </p>
-    </td>
-  </tr>
-</table>
+> [!IMPORTANT]
+> **IMPORTANT: ABOUT THIS PROJECT**
+>
+> Social Media Sense is an independent, non-commercial prototype created as a **Handshake portfolio project**. It is not a company, commercial product, or medical assessment. It is intended for educational use and personal reflection.
 
 ## What you can do with it
 
